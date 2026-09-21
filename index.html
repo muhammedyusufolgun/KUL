@@ -1,0 +1,2002 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Soru Hazırlama Asistanı</title>
+<style>
+:root{
+  --bg:#ffffff;
+  --panel:#ffffff;
+  --border:#dbe3ea;
+  --text:#0f172a;
+  --muted:#64748b;
+  --blue:#0284c7;
+  --blue-soft:#e0f2fe;
+  --red:#dc2626;
+  --green:#16a34a;
+  --gray:#e5e7eb;
+  --shadow:0 4px 18px rgba(15,23,42,.06);
+  --radius:6px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:#ffffff;
+  color:var(--text);
+  overflow:hidden;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{height:100%;display:flex;flex-direction:column}
+.topbar{
+  position:sticky;top:0;z-index:1000;
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+  box-shadow:var(--shadow);
+}
+.header-main{
+  display:grid;
+  grid-template-columns:minmax(360px,1fr) auto;
+  gap:20px;
+  align-items:center;
+  padding:12px 18px 10px;
+}
+.brand{display:flex;align-items:center;min-width:0}
+.brand-text{min-width:0}
+.brand-title{font-size:21px;font-weight:700;line-height:1.12}
+.brand-sub{font-size:12.5px;color:var(--muted);margin-top:4px}
+.doc-name{
+  margin-top:8px;
+  display:inline-flex;align-items:center;gap:7px;
+  max-width:100%;
+  padding:4px 8px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  background:#f8fafc;
+  font-size:12.5px;
+  color:#334155;
+}
+.doc-name b{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;
+  max-width:620px;
+}
+.gauges{display:flex;gap:10px;align-items:end}
+.gauge-card{
+  width:118px;
+  padding:5px 7px 6px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  background:#fff;
+}
+.gauge-svg{display:block;width:100%;height:50px}
+.gauge-label{text-align:center;font-size:11px;color:var(--muted);margin-top:-2px}
+.gauge-value{
+  font-size:17px;font-weight:800;fill:var(--text);
+  text-anchor:middle;
+}
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  padding:10px 18px 12px;
+  border-top:1px solid #eef2f7;
+  align-items:flex-end;
+}
+.toolbar-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:flex-end;
+  width:100%;
+}
+.toolbar-row.actions{
+  padding-top:2px;
+  border-top:1px dashed #e2e8f0;
+  margin-top:2px;
+}
+.toolbar-row.actions .push-right{margin-left:auto}
+.author-line{
+  width:100%;
+  text-align:right;
+  padding:0 18px 8px;
+  color:#cbd5e1;
+  font-size:10.5px;
+  letter-spacing:.2px;
+  user-select:none;
+}
+.toolbar .field{flex:0 0 auto}
+.toolbar .field:first-child{min-width:132px}
+.toolbar .field select,
+.toolbar .field .input{
+  width:auto;
+  min-width:max-content;
+}
+#questionType{min-width:230px}
+#answerMode{min-width:170px}
+#questionCount{width:118px;min-width:118px}
+.toolbar .btn,.toolbar .file-btn{flex:0 0 auto}
+.toolbar .push-right{margin-left:auto}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label{font-size:11.5px;color:#475569;font-weight:600}
+.input,select{
+  height:36px;border:1px solid var(--border);border-radius:6px;
+  background:#fff;padding:0 30px 0 10px;color:var(--text);outline:none;
+  white-space:nowrap;
+}
+select{width:max-content;max-width:none;text-overflow:clip}
+.input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(2,132,199,.12)}
+.file-btn,.btn{
+  height:36px;border-radius:6px;border:1px solid var(--border);
+  background:#fff;color:#0f172a;padding:0 12px;font-weight:600;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  white-space:nowrap;
+}
+.file-btn:hover,.btn:hover{background:#f8fafc}
+.btn.primary{
+  background:#dcfce7;color:#166534;border-color:#86efac;
+}
+.btn.primary:hover{background:#bbf7d0}
+.btn.change{
+  background:#f3e8ff;color:#6b21a8;border-color:#d8b4fe;
+}
+.btn.change:hover{background:#e9d5ff}
+.btn.shuffle{
+  background:#e0f2fe;color:#075985;border-color:#7dd3fc;
+}
+.btn.shuffle:hover{background:#bae6fd}
+.btn.test{
+  background:#ffedd5;color:#9a3412;border-color:#fdba74;
+}
+.btn.test:hover{background:#fed7aa}
+.btn.answers{
+  background:#fee2e2;color:#991b1b;border-color:#fca5a5;
+}
+.btn.answers:hover{background:#fecaca}
+.btn.export{
+  background:#f1f5f9;color:#334155;border-color:#cbd5e1;
+}
+.btn.export:hover{background:#e2e8f0}
+.file-input{display:none}
+
+.progress-wrap{
+  display:none;
+  padding:0 18px 12px;
+}
+.progress-row{display:flex;align-items:center;gap:10px}
+.progress{
+  flex:1;height:10px;border-radius:999px;background:#e5e7eb;overflow:hidden;
+}
+.progress-bar{height:100%;width:0;background:var(--blue);transition:width .18s ease}
+.progress-text{width:48px;text-align:right;font-size:12px;font-weight:700}
+
+.content{flex:1;overflow:auto;padding:18px}
+.panel{
+  max-width:1500px;margin:0 auto 16px;
+  background:#fff;border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+}
+.panel-head{
+  padding:12px 14px;border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+}
+.panel-title{font-weight:700;font-size:15px}
+.panel-sub{font-size:12px;color:var(--muted)}
+.panel-head-actions{
+  display:flex;gap:8px;align-items:flex-end;flex:0 0 auto;
+}
+.mini-toggle{
+  min-width:58px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:6px;
+  padding:5px 8px 6px;
+  color:#334155;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  font-size:11px;
+  font-weight:650;
+}
+.mini-toggle:hover{background:#f8fafc}
+.mini-toggle .arrow{font-size:16px;line-height:1;font-weight:800}
+.panel-body{padding:14px}
+.empty{
+  text-align:center;padding:58px 20px;color:var(--muted)
+}
+.empty .icon{font-size:42px;margin-bottom:8px}
+.source-preview{
+  max-height:180px;overflow:auto;white-space:pre-wrap;
+  background:#f8fafc;border:1px solid var(--border);border-radius:6px;
+  padding:10px;font-size:12px;line-height:1.55;color:#334155;
+}
+.questions{display:flex;flex-direction:column;gap:16px}
+.question{
+  border:1px solid var(--border);border-radius:6px;background:#fff;
+  padding:14px 15px;
+}
+.q-head{display:flex;gap:10px;align-items:flex-start}
+.q-num{
+  width:30px;height:30px;min-width:30px;border-radius:50%;
+  background:var(--blue-soft);color:#0369a1;font-weight:800;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+}
+.q-text{font-weight:650;line-height:1.55;padding-top:3px}
+.answer{
+  margin-top:10px;margin-left:40px;padding:10px 12px;
+  border-left:3px solid var(--green);
+  background:#f0fdf4;border-radius:0 6px 6px 0;
+  line-height:1.55;font-size:13px;
+}
+.options{margin:8px 0 0 40px;display:grid;gap:4px}
+.option{
+  border:1px solid var(--border);border-radius:6px;
+  padding:9px 10px;background:#fff;display:flex;gap:8px;align-items:flex-start;
+  font-size:13px;line-height:1.45;
+}
+.option.correct{border-color:#86efac;background:#f0fdf4}
+.option.wrong-selected{border-color:#fecaca;background:#fef2f2}
+.option input{margin-top:2px}
+.option-letter{font-weight:800;min-width:20px}
+.test-status-row{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  padding:0 18px 10px;
+  background:#fff;
+}
+.test-status{
+  display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;
+}
+.stat{
+  padding:7px 10px;border:1px solid var(--border);border-radius:6px;
+  background:#fff;font-size:12px
+}
+.stat b{font-size:14px}
+.toast{
+  position:fixed;right:18px;bottom:18px;z-index:3000;
+  min-width:260px;max-width:440px;
+  padding:12px 14px;border-radius:6px;
+  background:#0f172a;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.2);
+  display:none;font-size:13px;line-height:1.45
+}
+@media(max-width:1100px){
+  .header-main{grid-template-columns:1fr}
+  .gauges{justify-content:flex-start}
+}
+@media(max-width:760px){
+  .gauges{overflow:auto}
+  .gauge-card{min-width:108px}
+  .toolbar-row.actions .push-right{margin-left:0}
+  .toolbar-row.actions .btn{flex:1 1 auto}
+  .header-main{padding:10px}
+  .content{padding:10px}
+}
+@page{
+  size:A4;
+  margin:16mm 12mm 18mm;
+  @bottom-center{
+    content:"Sayfa " counter(page) " / " counter(pages);
+    font-family:"Segoe UI",Arial,sans-serif;
+    font-size:9pt;
+    color:#64748b;
+  }
+}
+@media print{
+  html,body{height:auto!important;overflow:visible!important;background:#fff}
+  .app{height:auto!important;display:block!important}
+  .topbar{
+    display:block!important;
+    position:static!important;
+    box-shadow:none!important;
+    border-bottom:1px solid #cbd5e1!important;
+    margin-bottom:10px;
+    break-after:avoid;
+  }
+  .header-main{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    padding:0 0 5px!important;
+    gap:8px!important;
+  }
+  .toolbar,.progress-wrap,.test-status-row,.source-panel,.toast,.no-print{display:none!important}
+  .brand-title{font-size:15pt!important}
+  .brand-sub{font-size:8.5pt!important;margin-top:1px!important}
+  .doc-name{font-size:8.5pt!important;background:#fff!important;margin-top:4px!important;padding:2px 5px!important}
+  .gauges{display:flex!important}
+  .gauge-card{box-shadow:none!important;padding:2px 4px!important;width:102px!important}
+  .content{overflow:visible!important;padding:0!important}
+  .panel{border:none;box-shadow:none;margin:0;max-width:none}
+  .panel-head{padding:0 0 10px;border-bottom:2px solid #111}
+  .panel-body{padding:10px 0}
+  .question{break-inside:avoid;border:none;border-bottom:none;border-radius:0;padding:0 0 9pt;margin:0 0 9pt}
+  .q-num{background:#fff;border:1px solid #999}
+  .answer{background:#fff}
+  .option{background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="header-main">
+      <div class="brand">
+        <div class="brand-text">
+          <div class="brand-title">Soru Hazırlama Asistanı</div>
+          <div class="brand-sub">(Belge Tabanlı Soru Hazırlama ve Test Modülü)</div>
+          <div class="doc-name" title="Seçilen belge">
+            <span>📄</span>
+            <span>Seçilen Belge:</span>
+            <b id="selectedFileName">Henüz belge seçilmedi</b>
+          </div>
+        </div>
+      </div>
+
+      <div class="gauges">
+        <div class="gauge-card">
+          <svg class="gauge-svg" viewBox="0 0 120 65" aria-label="Toplam Adet">
+            <path d="M15 52 A45 45 0 0 1 105 52" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/>
+            <path id="gTotal" d="M15 52 A45 45 0 0 1 105 52" fill="none" stroke="#0284c7" stroke-width="12" stroke-linecap="round" pathLength="100" stroke-dasharray="100 100"/>
+            <text id="vTotal" x="60" y="48" class="gauge-value">0</text>
+          </svg>
+          <div class="gauge-label">Toplam Adet</div>
+        </div>
+        <div class="gauge-card">
+          <svg class="gauge-svg" viewBox="0 0 120 65" aria-label="Tamamlanma Oranı">
+            <path d="M15 52 A45 45 0 0 1 105 52" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/>
+            <path id="gRate" d="M15 52 A45 45 0 0 1 105 52" fill="none" stroke="#16a34a" stroke-width="12" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100"/>
+            <text id="vRate" x="60" y="48" class="gauge-value">0%</text>
+          </svg>
+          <div class="gauge-label">Tamamlanma Oranı</div>
+        </div>
+        <div class="gauge-card">
+          <svg class="gauge-svg" viewBox="0 0 120 65" aria-label="Kalan Adet">
+            <path d="M15 52 A45 45 0 0 1 105 52" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/>
+            <path id="gRemain" d="M15 52 A45 45 0 0 1 105 52" fill="none" stroke="#dc2626" stroke-width="12" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100"/>
+            <text id="vRemain" x="60" y="48" class="gauge-value">0</text>
+          </svg>
+          <div class="gauge-label">Kalan Adet</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toolbar no-print">
+      <div class="toolbar-row settings">
+        <button id="refreshBtn" class="btn export">↻ Yenile</button>
+
+        <div class="field">
+          <label>Belge</label>
+          <label class="file-btn">
+            📂 Dosya Seç
+            <input id="fileInput" class="file-input" type="file" accept=".pdf,.txt,.docx,.doc,.xlsx,.xlss,.xls">
+          </label>
+        </div>
+
+        <div class="field">
+          <label>Soru Türü</label>
+          <select id="questionType">
+            <option value="classic">1) Klasik (Soru-Cevap)</option>
+            <option value="mcq">2) Çoktan Seçmeli (Şıklı)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Cevaplar</label>
+          <select id="answerMode">
+            <option value="hide">Cevapları Gizle</option>
+            <option value="show">Cevapları Göster</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Adet</label>
+          <input id="questionCount" class="input" type="number" min="1" max="1000" step="1" list="countOptions" >
+          <datalist id="countOptions">
+            <option value="5"><option value="10"><option value="20"><option value="30">
+            <option value="50"><option value="100"><option value="200"><option value="500">
+          </datalist>
+        </div>
+      </div>
+
+      <div class="toolbar-row actions">
+        <button id="generateBtn" class="btn primary">⚙️ Soru Hazırla</button>
+        <button id="changeBtn" class="btn change">✦ Değiştir</button>
+        <button id="shuffleBtn" class="btn shuffle">🔀 Karıştır</button>
+        <button id="testBtn" class="btn test" style="display:none">🧪 Test</button>
+        <button id="reportBtn" class="btn answers" style="display:none">📊 Bitir/Cevaplar</button>
+        <button id="printBtn" class="btn export push-right">🖨️ PDF / Kaydet</button>
+        <button id="wordBtn" class="btn export">📘 Word İndir</button>
+      </div>
+    </div>
+    <div class="author-line no-print">Muhammed Yusuf OLGUN</div>
+
+    <div class="test-status-row no-print">
+      <div class="test-status" id="testStats" style="display:none">
+        <div class="stat">Geçen Süre: <b id="statElapsed">00:00:00</b></div>
+        <div class="stat">Doğru: <b id="statCorrect">0</b></div>
+        <div class="stat">Yanlış: <b id="statWrong">0</b></div>
+        <div class="stat">Başarı Oranı: <b id="statRate">0%</b></div>
+      </div>
+    </div>
+
+    <div class="progress-wrap no-print" id="progressWrap">
+      <div class="progress-row">
+        <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="progress-text" id="progressText">0%</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="panel source-panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Belge İçeriği</div>
+          <div class="panel-sub" id="sourceMeta">Dosya seçildiğinde metin burada önizlenir.</div>
+        </div>
+        <div class="panel-head-actions no-print">
+          <button id="hideSourceBtn" class="mini-toggle" type="button">
+            <span class="arrow">↑</span>
+            <span>Gizle</span>
+          </button>
+          <button id="showSourceBtn" class="mini-toggle" type="button">
+            <span class="arrow">↓</span>
+            <span>Göster</span>
+          </button>
+        </div>
+      </div>
+      <div class="panel-body" id="sourceBody">
+        <div class="source-preview" id="sourcePreview">Henüz belge yüklenmedi.</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Hazırlanan Sorular</div>
+          <div class="panel-sub" id="questionMeta">Henüz soru hazırlanmadı.</div>
+        </div>
+      </div>
+      <div class="panel-body" id="questionContainer">
+        <div class="empty">
+          Bir belge seçin, soru türünü belirleyin ve <b>Soru Hazırla</b> düğmesine basın.
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   ÇALIŞMA ASİSTANI - TAMAMEN YEREL / ÇEVRİMDIŞI
+   Hiçbir fetch(), XHR, WebSocket veya dış API çağrısı yoktur.
+   ========================================================= */
+
+const state = {
+  fileName: "",
+  sourceText: "",
+  questions: [],
+  testMode: false,
+  testStartedAt: null,
+  testTimerId: null,
+  generationVariant: 0,
+  report: {correct:0, wrong:0, rate:0}
+};
+
+const $ = s => document.querySelector(s);
+const els = {
+  refreshBtn: $("#refreshBtn"),
+  fileInput: $("#fileInput"),
+  selectedFileName: $("#selectedFileName"),
+  sourcePreview: $("#sourcePreview"),
+  sourceMeta: $("#sourceMeta"),
+  sourceBody: $("#sourceBody"),
+  hideSourceBtn: $("#hideSourceBtn"),
+  showSourceBtn: $("#showSourceBtn"),
+  questionType: $("#questionType"),
+  answerMode: $("#answerMode"),
+  questionCount: $("#questionCount"),
+  generateBtn: $("#generateBtn"),
+  changeBtn: $("#changeBtn"),
+  shuffleBtn: $("#shuffleBtn"),
+  testBtn: $("#testBtn"),
+  reportBtn: $("#reportBtn"),
+  printBtn: $("#printBtn"),
+  wordBtn: $("#wordBtn"),
+  questionContainer: $("#questionContainer"),
+  questionMeta: $("#questionMeta"),
+  progressWrap: $("#progressWrap"),
+  progressBar: $("#progressBar"),
+  progressText: $("#progressText"),
+  toast: $("#toast"),
+  testStats: $("#testStats"),
+  statElapsed: $("#statElapsed"),
+  statCorrect: $("#statCorrect"),
+  statWrong: $("#statWrong"),
+  statRate: $("#statRate"),
+  gTotal: $("#gTotal"),
+  gRate: $("#gRate"),
+  gRemain: $("#gRemain"),
+  vTotal: $("#vTotal"),
+  vRate: $("#vRate"),
+  vRemain: $("#vRemain")
+};
+
+
+function toast(msg, ms=3400){
+  els.toast.textContent = msg;
+  els.toast.style.display = "block";
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=> els.toast.style.display="none", ms);
+}
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+function setProgress(value){
+  value = Math.max(0, Math.min(100, Math.round(value)));
+  els.progressWrap.style.display = "block";
+  els.progressBar.style.width = value + "%";
+  els.progressText.textContent = value + "%";
+  if(value >= 100){
+    setTimeout(()=>{ els.progressWrap.style.display="none"; }, 800);
+  }
+}
+
+function escapeHtml(s=""){
+  return s.replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[ch]);
+}
+
+function normalizeText(text){
+  return text
+    .replace(/\u0000/g, " ")
+    .replace(/\r/g, "\n")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n[ \t]+/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+/* ---------- DOSYA OKUMA ---------- */
+
+/* ---------- ARAYÜZ DAVRANIŞI ---------- */
+
+function syncQuestionTypeUI(){
+  const isMcq = els.questionType.value === "mcq";
+  els.testBtn.style.display = isMcq ? "inline-flex" : "none";
+  els.reportBtn.style.display = (isMcq && state.testMode) ? "inline-flex" : "none";
+
+  if(!isMcq && state.testMode){
+    state.testMode = false;
+    state.testStartedAt = null;
+    stopTestTimer();
+    els.testStats.style.display = "none";
+    els.reportBtn.style.display = "none";
+    renderQuestions();
+  }
+}
+
+els.questionType.addEventListener("change", syncQuestionTypeUI);
+els.refreshBtn.addEventListener("click", ()=> window.location.reload());
+syncQuestionTypeUI();
+
+els.hideSourceBtn.addEventListener("click", ()=>{
+  els.sourceBody.style.display = "none";
+});
+els.showSourceBtn.addEventListener("click", ()=>{
+  els.sourceBody.style.display = "block";
+});
+
+function formatElapsed(ms){
+  ms = Math.max(0, ms || 0);
+  const total = Math.floor(ms/1000);
+  const h = Math.floor(total/3600);
+  const m = Math.floor((total%3600)/60);
+  const s = total%60;
+  return [h,m,s].map(v=>String(v).padStart(2,"0")).join(":");
+}
+
+function stopTestTimer(){
+  if(state.testTimerId){
+    clearInterval(state.testTimerId);
+    state.testTimerId = null;
+  }
+}
+
+function startTestTimer(){
+  stopTestTimer();
+  const update = ()=>{
+    if(!state.testStartedAt) return;
+    els.statElapsed.textContent = formatElapsed(Date.now() - state.testStartedAt.getTime());
+  };
+  update();
+  state.testTimerId = setInterval(update,1000);
+}
+
+els.fileInput.addEventListener("click", ()=>{
+  // Aynı dosyanın yeniden seçilmesi durumunda da change olayı çalışsın.
+  els.fileInput.value = "";
+});
+
+els.fileInput.addEventListener("change", async e => {
+  const file = e.target.files?.[0];
+  if(!file) return;
+
+  resetQuestions();
+  state.fileName = file.name;
+  els.selectedFileName.textContent = file.name;
+  els.selectedFileName.title = file.name;
+  els.sourcePreview.textContent = "Belge okunuyor...";
+  els.sourceMeta.textContent = "Yerel olarak işleniyor...";
+  setProgress(5);
+
+  try{
+    const ext = file.name.split(".").pop().toLowerCase();
+    let text = "";
+
+    if(ext === "txt"){
+      text = await file.text();
+      setProgress(70);
+    }else if(ext === "docx"){
+      text = await extractDocx(await file.arrayBuffer());
+      setProgress(75);
+    }else if(ext === "xlsx" || ext === "xlss"){
+      text = await extractXlsx(await file.arrayBuffer());
+      setProgress(75);
+    }else if(ext === "pdf"){
+      text = await extractPdfBestEffort(await file.arrayBuffer());
+      setProgress(75);
+    }else if(ext === "doc" || ext === "xls"){
+      text = extractLegacyBinaryBestEffort(await file.arrayBuffer(), ext);
+      setProgress(75);
+      toast(ext.toUpperCase() + " eski ikili formattır. Metin çıkarımı en iyi çaba yöntemiyle yapıldı; DOCX/XLSX tercih edilmesi önerilir.", 6000);
+    }else{
+      throw new Error("Desteklenmeyen dosya türü.");
+    }
+
+    text = normalizeText(text);
+    if(!text || text.length < 20){
+      throw new Error("Belgeden yeterli metin çıkarılamadı. PDF taranmış görüntü ise metin katmanı/OCR bulunmayabilir.");
+    }
+
+    state.sourceText = text;
+    els.sourcePreview.textContent = text.slice(0, 20000) + (text.length > 20000 ? "\n\n… [Önizleme 20.000 karakter ile sınırlandı]" : "");
+    els.sourceMeta.textContent =
+      `Yüklendi • ${text.length.toLocaleString("tr-TR")} karakter • İçeriği görüntülemek için “Göster” düğmesine basın.`;
+    els.sourceBody.style.display = "none";
+    setProgress(100);
+    toast(`Belge başarıyla içeri alındı: ${file.name}`);
+  }catch(err){
+    console.error(err);
+    state.sourceText = "";
+    els.sourcePreview.textContent = "Belge okunamadı.";
+    els.sourceMeta.textContent = `${file.name} • ${err.message || "Okuma hatası."}`;
+    setProgress(100);
+    toast("Belge okunamadı: " + (err.message || err), 6000);
+  }
+});
+
+function resetQuestions(){
+  state.questions = [];
+  state.testMode = false;
+  state.testStartedAt = null;
+  stopTestTimer();
+  state.report = {correct:0, wrong:0, rate:0};
+  els.testStats.style.display = "none";
+  els.reportBtn.style.display = "none";
+  els.statElapsed.textContent = "00:00:00";
+  els.questionMeta.textContent = "Henüz soru hazırlanmadı.";
+  els.questionContainer.innerHTML = `<div class="empty">Bir belge seçin, soru türünü belirleyin ve <b>Soru Hazırla</b> düğmesine basın.</div>`;
+  updateGauges();
+}
+
+/* ---------- ZIP OKUYUCU (DOCX/XLSX) ---------- */
+
+async function unzipEntries(arrayBuffer){
+  const bytes = new Uint8Array(arrayBuffer);
+  const dv = new DataView(arrayBuffer);
+  let eocd = -1;
+
+  for(let i=bytes.length-22; i>=Math.max(0, bytes.length-65557); i--){
+    if(dv.getUint32(i,true) === 0x06054b50){ eocd = i; break; }
+  }
+  if(eocd < 0) throw new Error("ZIP yapısı bulunamadı.");
+
+  const entryCount = dv.getUint16(eocd+10,true);
+  const cdOffset = dv.getUint32(eocd+16,true);
+  let p = cdOffset;
+  const entries = new Map();
+
+  for(let n=0;n<entryCount;n++){
+    if(dv.getUint32(p,true)!==0x02014b50) break;
+
+    const method = dv.getUint16(p+10,true);
+    const compSize = dv.getUint32(p+20,true);
+    const nameLen = dv.getUint16(p+28,true);
+    const extraLen = dv.getUint16(p+30,true);
+    const commentLen = dv.getUint16(p+32,true);
+    const localOffset = dv.getUint32(p+42,true);
+    const name = new TextDecoder().decode(bytes.slice(p+46,p+46+nameLen));
+
+    const lp = localOffset;
+    if(dv.getUint32(lp,true)!==0x04034b50){ p += 46+nameLen+extraLen+commentLen; continue; }
+
+    const lNameLen = dv.getUint16(lp+26,true);
+    const lExtraLen = dv.getUint16(lp+28,true);
+    const dataStart = lp+30+lNameLen+lExtraLen;
+    const comp = bytes.slice(dataStart,dataStart+compSize);
+
+    let data;
+    if(method===0){
+      data = comp;
+    }else if(method===8){
+      data = await inflateRaw(comp);
+    }else{
+      p += 46+nameLen+extraLen+commentLen;
+      continue;
+    }
+
+    entries.set(name, data);
+    p += 46+nameLen+extraLen+commentLen;
+  }
+  return entries;
+}
+
+async function inflateRaw(uint8){
+  if(typeof DecompressionStream === "undefined"){
+    throw new Error("Bu tarayıcı sıkıştırılmış DOCX/XLSX açmak için DecompressionStream desteği sunmuyor.");
+  }
+  const ds = new DecompressionStream("deflate-raw");
+  const stream = new Blob([uint8]).stream().pipeThrough(ds);
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+
+function decodeXmlEntities(s){
+  return s.replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&")
+          .replace(/&quot;/g,'"').replace(/&apos;/g,"'");
+}
+
+async function extractDocx(arrayBuffer){
+  const z = await unzipEntries(arrayBuffer);
+  const data = z.get("word/document.xml");
+  if(!data) throw new Error("DOCX belge metni bulunamadı.");
+  const xml = new TextDecoder("utf-8").decode(data);
+
+  let text = xml
+    .replace(/<w:tab[^>]*\/>/g, "\t")
+    .replace(/<w:br[^>]*\/>/g, "\n")
+    .replace(/<\/w:p>/g, "\n")
+    .replace(/<[^>]+>/g, "");
+
+  return decodeXmlEntities(text);
+}
+
+async function extractXlsx(arrayBuffer){
+  const z = await unzipEntries(arrayBuffer);
+  const shared = [];
+  const ss = z.get("xl/sharedStrings.xml");
+  if(ss){
+    const xml = new TextDecoder("utf-8").decode(ss);
+    const sis = xml.match(/<si[\s\S]*?<\/si>/g) || [];
+    for(const si of sis){
+      const parts = [...si.matchAll(/<t[^>]*>([\s\S]*?)<\/t>/g)].map(m=>decodeXmlEntities(m[1]));
+      shared.push(parts.join(""));
+    }
+  }
+
+  const sheets = [...z.keys()].filter(k=>/^xl\/worksheets\/sheet\d+\.xml$/i.test(k)).sort();
+  let out = [];
+  for(const name of sheets){
+    const xml = new TextDecoder("utf-8").decode(z.get(name));
+    const rows = xml.match(/<row[\s\S]*?<\/row>/g) || [];
+    for(const row of rows){
+      const vals = [];
+      const cells = row.match(/<c[\s\S]*?<\/c>/g) || [];
+      for(const c of cells){
+        const type = (c.match(/\bt="([^"]+)"/)||[])[1] || "";
+        const v = (c.match(/<v>([\s\S]*?)<\/v>/)||[])[1];
+        const inline = (c.match(/<t[^>]*>([\s\S]*?)<\/t>/)||[])[1];
+        let value = "";
+        if(type==="s" && v!=null) value = shared[Number(v)] ?? "";
+        else if(type==="inlineStr" && inline!=null) value = decodeXmlEntities(inline);
+        else if(v!=null) value = decodeXmlEntities(v);
+        if(value!=="") vals.push(value);
+      }
+      if(vals.length) out.push(vals.join(" | "));
+    }
+  }
+  return out.join("\n");
+}
+
+/* ---------- PDF: GELİŞMİŞ YEREL METİN ÇIKARIMI ---------- */
+
+function pdfLatin(bytes){
+  return new TextDecoder("latin1").decode(bytes);
+}
+
+function pdfUnescape(s){
+  return s
+    .replace(/\\([nrtbf()\\])/g, (_,c)=>({n:"\n",r:"\r",t:"\t",b:"\b",f:"\f","(":"(",")":")","\\":"\\"}[c]))
+    .replace(/\\([0-7]{1,3})/g, (_,o)=>String.fromCharCode(parseInt(o,8)))
+    .replace(/\\\r?\n/g,"");
+}
+
+function pdfLiteralToBytes(s){
+  const out = [];
+  for(let i=0;i<s.length;i++){
+    if(s[i] !== "\\"){
+      out.push(s.charCodeAt(i) & 255);
+      continue;
+    }
+    i++;
+    if(i>=s.length) break;
+    const c=s[i];
+    const escapes={n:10,r:13,t:9,b:8,f:12,"(":40,")":41,"\\":92};
+    if(c in escapes){ out.push(escapes[c]); continue; }
+    if(/[0-7]/.test(c)){
+      let oct=c;
+      for(let k=0;k<2 && i+1<s.length && /[0-7]/.test(s[i+1]);k++) oct += s[++i];
+      out.push(parseInt(oct,8)&255);
+      continue;
+    }
+    if(c==="\r" && s[i+1]==="\n"){i++; continue;}
+    if(c==="\r" || c==="\n") continue;
+    out.push(c.charCodeAt(0)&255);
+  }
+  return new Uint8Array(out);
+}
+
+function hexToBytes(hex){
+  hex=(hex||"").replace(/\s+/g,"");
+  if(hex.length%2) hex+="0";
+  const out=new Uint8Array(hex.length/2);
+  for(let i=0;i<out.length;i++) out[i]=parseInt(hex.slice(i*2,i*2+2),16)||0;
+  return out;
+}
+
+function decodeUtf16BEHex(hex){
+  hex=(hex||"").replace(/\s+/g,"");
+  const units=[];
+  for(let i=0;i+3<hex.length;i+=4) units.push(parseInt(hex.slice(i,i+4),16));
+  try{return String.fromCodePoint(...units.flatMap((u,idx)=>{
+    if(u>=0xD800 && u<=0xDBFF && idx+1<units.length){
+      const lo=units[idx+1];
+      if(lo>=0xDC00 && lo<=0xDFFF) return [0x10000+((u-0xD800)<<10)+(lo-0xDC00)];
+    }
+    if(u>=0xDC00 && u<=0xDFFF) return [];
+    return [u];
+  }));}catch(_){
+    return units.map(u=>String.fromCharCode(u)).join("");
+  }
+}
+
+async function inflatePdfData(raw){
+  if(typeof DecompressionStream==="undefined") throw new Error("Tarayıcı PDF sıkıştırmasını açamıyor.");
+  for(const fmt of ["deflate","deflate-raw"]){
+    try{
+      const ds=new DecompressionStream(fmt);
+      return new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(ds)).arrayBuffer());
+    }catch(_){}
+  }
+  throw new Error("PDF FlateDecode akışı açılamadı.");
+}
+
+async function decodePdfStream(obj){
+  if(!obj || !obj.stream) return new Uint8Array();
+  let data=obj.stream;
+  const dict=obj.body||"";
+  if(/\/Filter\s*(?:\/FlateDecode|\[[^\]]*\/FlateDecode)/s.test(dict)){
+    data=await inflatePdfData(data);
+  }
+  return data;
+}
+
+function parsePdfDirectObjects(bytes){
+  const latin=pdfLatin(bytes);
+  const map=new Map();
+  const re=/(\d+)\s+(\d+)\s+obj\b/g;
+  let m;
+  while((m=re.exec(latin))){
+    const num=Number(m[1]), gen=Number(m[2]);
+    const bodyStart=re.lastIndex;
+    const end=latin.indexOf("endobj",bodyStart);
+    if(end<0) break;
+    let body=latin.slice(bodyStart,end);
+    let stream=null;
+
+    const sm=/stream(?:\r\n|\n|\r)/.exec(body);
+    if(sm){
+      const streamStartGlobal=bodyStart+sm.index+sm[0].length;
+      let streamEndGlobal=-1;
+      const lenRef=(body.slice(0,sm.index).match(/\/Length\s+(\d+)\s+\d+\s+R/)||[])[1];
+      const lenDirect=(body.slice(0,sm.index).match(/\/Length\s+(\d+)/)||[])[1];
+
+      if(lenDirect){
+        const n=Number(lenDirect);
+        if(Number.isFinite(n) && streamStartGlobal+n<=bytes.length) streamEndGlobal=streamStartGlobal+n;
+      }
+      if(streamEndGlobal<0){
+        const idx=latin.indexOf("endstream",streamStartGlobal);
+        if(idx>=0) streamEndGlobal=idx;
+      }
+      if(streamEndGlobal>=0){
+        let e=streamEndGlobal;
+        while(e>streamStartGlobal && (bytes[e-1]===10 || bytes[e-1]===13)) e--;
+        stream=bytes.slice(streamStartGlobal,e);
+      }
+    }
+    map.set(num,{num,gen,body,stream});
+    re.lastIndex=end+6;
+  }
+  return {map,latin};
+}
+
+async function expandObjectStreams(objMap){
+  const additions=[];
+  for(const obj of objMap.values()){
+    if(!/\/Type\s*\/ObjStm\b/.test(obj.body||"") || !obj.stream) continue;
+    const n=Number((obj.body.match(/\/N\s+(\d+)/)||[])[1]);
+    const first=Number((obj.body.match(/\/First\s+(\d+)/)||[])[1]);
+    if(!n || !Number.isFinite(first)) continue;
+    try{
+      const data=await decodePdfStream(obj);
+      const txt=pdfLatin(data);
+      const header=txt.slice(0,first);
+      const nums=(header.match(/\d+/g)||[]).map(Number);
+      for(let i=0;i<n;i++){
+        const objNum=nums[i*2], off=nums[i*2+1];
+        if(!Number.isFinite(objNum)||!Number.isFinite(off)) continue;
+        const nextOff=i+1<n ? nums[(i+1)*2+1] : txt.length-first;
+        const body=txt.slice(first+off, first+nextOff).trim();
+        additions.push([objNum,{num:objNum,gen:0,body,stream:null,embedded:true}]);
+      }
+    }catch(_){}
+  }
+  for(const [n,o] of additions) if(!objMap.has(n)) objMap.set(n,o);
+}
+
+function refNum(text, key){
+  const m=(text||"").match(new RegExp("\\/"+key+"\\s+(\\d+)\\s+\\d+\\s+R"));
+  return m ? Number(m[1]) : null;
+}
+
+function allRefs(text){
+  return [...(text||"").matchAll(/(\d+)\s+\d+\s+R/g)].map(m=>Number(m[1]));
+}
+
+function extractBalancedDict(text,start){
+  let depth=0;
+  for(let i=start;i<text.length-1;i++){
+    const pair=text.slice(i,i+2);
+    if(pair==="<<"){depth++;i++;continue;}
+    if(pair===">>"){depth--;i++;if(depth===0)return text.slice(start,i+1);}
+  }
+  return "";
+}
+
+function fontResourceMap(resourceText,objMap){
+  const out=new Map();
+  let source=resourceText||"";
+  const resRef=refNum(source,"Resources");
+  if(resRef && objMap.has(resRef)) source=objMap.get(resRef).body||source;
+
+  const fIdx=source.search(/\/Font\s*<</);
+  if(fIdx<0) return out;
+  const dictStart=source.indexOf("<<",fIdx);
+  const dict=extractBalancedDict(source,dictStart);
+  for(const m of dict.matchAll(/\/([A-Za-z0-9_.+-]+)\s+(\d+)\s+\d+\s+R/g)){
+    out.set(m[1],Number(m[2]));
+  }
+  return out;
+}
+
+async function parseToUnicode(fontObj,objMap){
+  if(!fontObj) return null;
+  const tu=refNum(fontObj.body,"ToUnicode");
+  if(!tu || !objMap.has(tu)) return null;
+  let txt="";
+  try{ txt=pdfLatin(await decodePdfStream(objMap.get(tu))); }catch(_){ return null; }
+  const map=new Map();
+
+  for(const block of txt.matchAll(/beginbfchar([\s\S]*?)endbfchar/g)){
+    for(const m of block[1].matchAll(/<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>/g)){
+      map.set(m[1].toUpperCase(),decodeUtf16BEHex(m[2]));
+    }
+  }
+
+  for(const block of txt.matchAll(/beginbfrange([\s\S]*?)endbfrange/g)){
+    const body=block[1];
+
+    for(const m of body.matchAll(/<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>/g)){
+      const a=parseInt(m[1],16), b=parseInt(m[2],16);
+      const width=m[1].length;
+      let dst=parseInt(m[3],16);
+      const dstWidth=m[3].length;
+      if(Number.isFinite(a)&&Number.isFinite(b)&&Number.isFinite(dst) && b-a<4096){
+        for(let x=a;x<=b;x++,dst++){
+          map.set(x.toString(16).toUpperCase().padStart(width,"0"),
+                  decodeUtf16BEHex(dst.toString(16).toUpperCase().padStart(dstWidth,"0")));
+        }
+      }
+    }
+
+    for(const m of body.matchAll(/<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*\[([\s\S]*?)\]/g)){
+      const a=parseInt(m[1],16), b=parseInt(m[2],16), width=m[1].length;
+      const vals=[...m[3].matchAll(/<([0-9A-Fa-f]+)>/g)].map(x=>decodeUtf16BEHex(x[1]));
+      for(let x=a,i=0;x<=b && i<vals.length;x++,i++){
+        map.set(x.toString(16).toUpperCase().padStart(width,"0"),vals[i]);
+      }
+    }
+  }
+
+  const lens=[...new Set([...map.keys()].map(k=>k.length/2))].sort((a,b)=>b-a);
+  return map.size ? {map,lens} : null;
+}
+
+function decodePdfTextBytes(bytes,cmap){
+  if(cmap){
+    let out="",i=0;
+    while(i<bytes.length){
+      let found=false;
+      for(const n of cmap.lens){
+        if(i+n>bytes.length) continue;
+        let hex="";
+        for(let k=0;k<n;k++) hex+=bytes[i+k].toString(16).padStart(2,"0").toUpperCase();
+        if(cmap.map.has(hex)){
+          out+=cmap.map.get(hex);
+          i+=n;
+          found=true;
+          break;
+        }
+      }
+      if(!found){
+        const b=bytes[i++];
+        out+=b>=32 ? String.fromCharCode(b) : "";
+      }
+    }
+    return out;
+  }
+
+  try{
+    return new TextDecoder("windows-1254").decode(bytes);
+  }catch(_){
+    return pdfLatin(bytes);
+  }
+}
+
+function parseArrayStrings(arrayText){
+  const items=[];
+  const re=/\((?:\\.|[^\\)])*\)|<[0-9A-Fa-f\s]+>|-?\d+(?:\.\d+)?/g;
+  let m;
+  while((m=re.exec(arrayText))){
+    const t=m[0];
+    if(t[0]==="(") items.push({type:"str",bytes:pdfLiteralToBytes(t.slice(1,-1))});
+    else if(t[0]==="<") items.push({type:"str",bytes:hexToBytes(t.slice(1,-1))});
+    else items.push({type:"num",value:Number(t)});
+  }
+  return items;
+}
+
+async function extractContentText(contentObj,fontMaps){
+  if(!contentObj) return "";
+  let txt="";
+  try{txt=pdfLatin(await decodePdfStream(contentObj));}
+  catch(_){return "";}
+
+  let currentFont=null;
+  let out="";
+  const tokenRe=/\/([A-Za-z0-9_.+-]+)\s+[-+]?\d*\.?\d+\s+Tf|\((?:\\.|[^\\)])*\)\s*Tj|<[0-9A-Fa-f\s]+>\s*Tj|\[(?:[^\[\]]|\((?:\\.|[^\\)])*\))*\]\s*TJ|\((?:\\.|[^\\)])*\)\s*'|\((?:\\.|[^\\)])*\)\s+[-+]?\d*\.?\d+\s+[-+]?\d*\.?\d+\s*"/g;
+  let m;
+
+  while((m=tokenRe.exec(txt))){
+    const tok=m[0];
+
+    const fm=tok.match(/^\/([A-Za-z0-9_.+-]+)\s+[-+]?\d*\.?\d+\s+Tf$/);
+    if(fm){
+      currentFont=fm[1];
+      continue;
+    }
+
+    const cmap=fontMaps.get(currentFont)||null;
+
+    if(/\s*Tj$/.test(tok)){
+      if(tok[0]==="("){
+        const raw=tok.slice(1,tok.lastIndexOf(")"));
+        out+=decodePdfTextBytes(pdfLiteralToBytes(raw),cmap);
+      }else{
+        const raw=tok.slice(1,tok.lastIndexOf(">"));
+        out+=decodePdfTextBytes(hexToBytes(raw),cmap);
+      }
+      out+=" ";
+      continue;
+    }
+
+    if(/\s*TJ$/.test(tok)){
+      const a=tok.slice(1,tok.lastIndexOf("]"));
+      for(const item of parseArrayStrings(a)){
+        if(item.type==="str") out+=decodePdfTextBytes(item.bytes,cmap);
+        else if(item.type==="num" && item.value < -120) out+=" ";
+      }
+      out+=" ";
+      continue;
+    }
+
+    if(/\s*'$/.test(tok) || /\s*"$/.test(tok)){
+      const first=tok.indexOf("("), last=tok.lastIndexOf(")");
+      if(first>=0 && last>first){
+        out+="\n"+decodePdfTextBytes(pdfLiteralToBytes(tok.slice(first+1,last)),cmap)+" ";
+      }
+    }
+  }
+
+  // Text-position operators often indicate paragraph/line changes.
+  if(out.trim()){
+    const breaks=(txt.match(/\bT\*|\bTd\b|\bTD\b/g)||[]).length;
+    if(breaks>2) out=out.replace(/ {2,}/g," ");
+  }
+  return out;
+}
+
+function fallbackPdfStrings(str){
+  const chunks=[];
+  const blocks=str.match(/BT[\s\S]*?ET/g)||[str];
+  for(const block of blocks){
+    for(const m of block.matchAll(/\((?:\\.|[^\\)])*\)\s*Tj/g)){
+      chunks.push(pdfUnescape(m[0].replace(/\)\s*Tj$/,"").slice(1)));
+    }
+    for(const m of block.matchAll(/\[(.*?)\]\s*TJ/gs)){
+      const parts=[...m[1].matchAll(/\((?:\\.|[^\\)])*\)/g)].map(x=>pdfUnescape(x[0].slice(1,-1)));
+      if(parts.length) chunks.push(parts.join(""));
+    }
+  }
+  return chunks.join("\n");
+}
+
+async function extractPdfBestEffort(arrayBuffer){
+  const bytes=new Uint8Array(arrayBuffer);
+  const {map:objMap,latin}=parsePdfDirectObjects(bytes);
+  await expandObjectStreams(objMap);
+
+  const fontCache=new Map();
+  async function cmapForFont(fontRef){
+    if(fontCache.has(fontRef)) return fontCache.get(fontRef);
+    const cmap=await parseToUnicode(objMap.get(fontRef),objMap);
+    fontCache.set(fontRef,cmap);
+    return cmap;
+  }
+
+  let pages=[...objMap.values()].filter(o=>/\/Type\s*\/Page\b/.test(o.body||"") && !/\/Type\s*\/Pages\b/.test(o.body||""));
+  if(!pages.length){
+    pages=[...objMap.values()].filter(o=>/\/Contents\b/.test(o.body||""));
+  }
+
+  let result=[];
+  for(const page of pages){
+    const fonts=fontResourceMap(page.body,objMap);
+    const fontMaps=new Map();
+    for(const [name,ref] of fonts){
+      fontMaps.set(name,await cmapForFont(ref));
+    }
+
+    let contentRefs=[];
+    const arr=(page.body.match(/\/Contents\s*\[([\s\S]*?)\]/)||[])[1];
+    if(arr) contentRefs=allRefs(arr);
+    else{
+      const one=refNum(page.body,"Contents");
+      if(one) contentRefs=[one];
+    }
+
+    let pageText="";
+    for(const ref of contentRefs){
+      pageText += await extractContentText(objMap.get(ref),fontMaps);
+    }
+    pageText=pageText.replace(/[ \t]{2,}/g," ").replace(/\s+\n/g,"\n").trim();
+    if(pageText) result.push(pageText);
+  }
+
+  let out=result.join("\n\n");
+
+  // Fallback: scan all decoded streams if page/resource parsing did not recover enough text.
+  if(out.length<40){
+    const chunks=[];
+    for(const obj of objMap.values()){
+      if(!obj.stream) continue;
+      try{
+        const d=await decodePdfStream(obj);
+        const t=fallbackPdfStrings(pdfLatin(d));
+        if(t.trim().length>5) chunks.push(t);
+      }catch(_){}
+    }
+    out=(out+"\n"+chunks.join("\n")).trim();
+  }
+
+  // Last fallback: raw PDF text operators.
+  if(out.length<40) out=(out+"\n"+fallbackPdfStrings(latin)).trim();
+
+  return out;
+}
+
+/* ---------- DOC/XLS: ESKİ BINARY EN İYİ ÇABA ---------- */
+
+function extractLegacyBinaryBestEffort(arrayBuffer, ext){
+  const bytes = new Uint8Array(arrayBuffer);
+  let ascii = "";
+  let cur = "";
+
+  for(const b of bytes){
+    if((b>=32 && b<=126) || b===10 || b===13 || b===9){
+      cur += String.fromCharCode(b);
+    }else{
+      if(cur.length >= 5) ascii += cur + "\n";
+      cur = "";
+    }
+  }
+  if(cur.length>=5) ascii += cur;
+
+  let unicode = "";
+  for(let i=0;i<bytes.length-1;i+=2){
+    const code = bytes[i] | (bytes[i+1]<<8);
+    if((code>=32 && code<0xD800) || code===10 || code===13 || code===9){
+      unicode += String.fromCharCode(code);
+    }else{
+      unicode += " ";
+    }
+  }
+
+  const combined = (unicode + "\n" + ascii)
+    .replace(/[^\S\r\n]{3,}/g," ")
+    .replace(/\n{3,}/g,"\n\n");
+
+  return combined;
+}
+
+/* ---------- SORU ÜRETİMİ ---------- */
+
+function splitSentences(text){
+  const cleaned = text
+    .replace(/\n+/g, ". ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const list = cleaned
+    .split(/(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ0-9])/u)
+    .map(s=>s.trim())
+    .filter(s=>s.length>=35 && s.length<=420)
+    .filter(s=>!/^(sayfa|page)\s*\d+/i.test(s));
+
+  return [...new Set(list)];
+}
+
+const STOP = new Set(("ve veya ile için ancak fakat gibi göre olan olarak daha çok bu şu bir iki üç de da mi mı mu mü " +
+"the and or for with from that this these those is are was were be been to of in on at by as an a " +
+"ise kadar sonra önce üzerinden içinde arasında ayrıca nedeniyle ilişkin ilgili").split(/\s+/));
+
+function wordsOf(s){
+  return (s.toLocaleLowerCase("tr-TR").match(/[a-zçğıöşü0-9][a-zçğıöşü0-9_-]{2,}/giu)||[])
+    .filter(w=>!STOP.has(w) && !/^\d+$/.test(w));
+}
+
+function keywordScore(word, sentence, freq){
+  let score = (freq.get(word)||1);
+  if(word.length>=8) score += 2;
+  if(/^[A-ZÇĞİÖŞÜ]/.test(word)) score += 1;
+  if(sentence.toLocaleLowerCase("tr-TR").includes(word)) score += .3;
+  return score;
+}
+
+function buildCorpus(text){
+  const sentences = splitSentences(text);
+  const freq = new Map();
+  for(const s of sentences){
+    for(const w of new Set(wordsOf(s))){
+      freq.set(w,(freq.get(w)||0)+1);
+    }
+  }
+  const terms = [...freq.entries()]
+    .sort((a,b)=>b[1]-a[1] || b[0].length-a[0].length)
+    .map(([w])=>w)
+    .filter(w=>w.length>=4)
+    .slice(0,500);
+  return {sentences,freq,terms};
+}
+
+function topicFromSentence(sentence, freq){
+  const candidates = wordsOf(sentence);
+  if(!candidates.length) return "bu konu";
+  return [...new Set(candidates)]
+    .sort((a,b)=>keywordScore(b,sentence,freq)-keywordScore(a,sentence,freq))[0];
+}
+
+function titleCaseTR(s){
+  return s ? s.charAt(0).toLocaleUpperCase("tr-TR")+s.slice(1) : s;
+}
+
+function chooseDistinct(arr, count, exclude=[]){
+  const ex = new Set(exclude.map(x=>x.toLocaleLowerCase("tr-TR")));
+  const pool = arr.filter(x=>!ex.has(x.toLocaleLowerCase("tr-TR")));
+  shuffleInPlace(pool);
+  return pool.slice(0,count);
+}
+
+function shuffleInPlace(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function pickBestSentences(corpus, requested){
+  const scored = corpus.sentences.map((s,i)=>{
+    const unique = [...new Set(wordsOf(s))];
+    const sum = unique.reduce((a,w)=>a+(corpus.freq.get(w)||0),0);
+    const density = sum / Math.max(1,unique.length);
+    const lengthFit = 1 - Math.min(1,Math.abs(s.length-150)/220);
+    return {s,i,score:density + lengthFit*2 + Math.random()*.5};
+  }).sort((a,b)=>b.score-a.score);
+
+  const out = [];
+  const seenTopics = new Set();
+  for(const item of scored){
+    const topic = topicFromSentence(item.s,corpus.freq);
+    if(seenTopics.has(topic) && out.length < Math.min(requested,20)) continue;
+    seenTopics.add(topic);
+    out.push(item.s);
+    if(out.length>=requested) break;
+  }
+  if(out.length<requested){
+    for(const x of scored){
+      if(!out.includes(x.s)) out.push(x.s);
+      if(out.length>=requested) break;
+    }
+  }
+  return out;
+}
+
+function generateClassic(corpus, requested){
+  const base = pickBestSentences(corpus, Math.min(requested, corpus.sentences.length));
+  const questions = base.map((sentence,idx)=>{
+    const topic = topicFromSentence(sentence,corpus.freq);
+    const templates = [
+      `Metne göre “${titleCaseTR(topic)}” konusu nasıl açıklanmaktadır?`,
+      `Belgede “${titleCaseTR(topic)}” ile ilgili verilen temel bilgi nedir?`,
+      `Metindeki bilgiye göre “${titleCaseTR(topic)}” hakkında ne söylenebilir?`,
+      `“${titleCaseTR(topic)}” kavramını belge içeriğine göre açıklayınız.`,
+      `Belgeye dayanarak “${titleCaseTR(topic)}” konusunun önemini açıklayınız.`,
+      `Metinde “${titleCaseTR(topic)}” hakkında hangi bilgi öne çıkmaktadır?`,
+      `“${titleCaseTR(topic)}” ile ilgili metinde belirtilen hususu yazınız.`,
+      `Belge içeriğine göre “${titleCaseTR(topic)}” hangi bağlamda ele alınmaktadır?`
+    ];
+    const offset = state.generationVariant % templates.length;
+    return {
+      id: crypto.randomUUID ? crypto.randomUUID() : "q"+Date.now()+Math.random(),
+      type:"classic",
+      question:templates[(idx+offset)%templates.length],
+      answer:sentence
+    };
+  });
+  return expandQuestionsIfNeeded(questions, requested, "classic", corpus);
+}
+
+function generateMcq(corpus, requested){
+  const base = pickBestSentences(corpus, Math.min(requested, corpus.sentences.length));
+  const questions = [];
+
+  for(let i=0;i<base.length;i++){
+    const sentence = base[i];
+    const correct = topicFromSentence(sentence,corpus.freq);
+    if(!correct) continue;
+
+    const re = new RegExp(`\\b${escapeRegExp(correct)}\\b`,"iu");
+    let stem = sentence.replace(re,"_____");
+    const mcqVariant = state.generationVariant % 4;
+    if(stem === sentence){
+      const forms = [
+        `Metne göre aşağıdakilerden hangisi “${titleCaseTR(correct)}” ile doğrudan ilişkilidir?`,
+        `Belge içeriğine göre “${titleCaseTR(correct)}” ile bağlantılı doğru seçenek hangisidir?`,
+        `Metindeki bilgi dikkate alındığında “${titleCaseTR(correct)}” için doğru ifade hangisidir?`,
+        `Aşağıdakilerden hangisi belgede “${titleCaseTR(correct)}” ile ilişkilendirilmektedir?`
+      ];
+      stem = forms[mcqVariant];
+    }else{
+      const forms = [
+        `Aşağıdaki cümlede boş bırakılan yere hangi ifade gelmelidir?\n“${stem}”`,
+        `Belgedeki ifadeyi tamamlayan doğru seçenek hangisidir?\n“${stem}”`,
+        `Metne göre aşağıdaki boşluğu doğru biçimde tamamlayınız.\n“${stem}”`,
+        `Aşağıdaki belge cümlesinde eksik bırakılan ifade hangisidir?\n“${stem}”`
+      ];
+      stem = forms[mcqVariant];
+    }
+
+    const optionCount = corpus.terms.length>=5 ? (Math.random()<.5?4:5) : 4;
+    let distractors = chooseDistinct(
+      corpus.terms.filter(t=>t.length>=4 && t!==correct),
+      optionCount-1,
+      [correct]
+    );
+
+    while(distractors.length<optionCount-1){
+      distractors.push("diğer ifade " + (distractors.length+1));
+    }
+
+    const options = [correct,...distractors].map(x=>titleCaseTR(x));
+    shuffleInPlace(options);
+    const correctIndex = options.findIndex(x=>x.toLocaleLowerCase("tr-TR")===titleCaseTR(correct).toLocaleLowerCase("tr-TR"));
+
+    questions.push({
+      id: crypto.randomUUID ? crypto.randomUUID() : "q"+Date.now()+Math.random(),
+      type:"mcq",
+      question:stem,
+      sourceSentence:sentence,
+      options,
+      correctIndex,
+      selectedIndex:null
+    });
+  }
+
+  return expandQuestionsIfNeeded(questions, requested, "mcq", corpus);
+}
+
+function escapeRegExp(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); }
+
+function expandQuestionsIfNeeded(questions, requested, type, corpus){
+  if(!questions.length) return questions;
+  const base = [...questions];
+  let i=0;
+  while(questions.length<requested){
+    const q = JSON.parse(JSON.stringify(base[i%base.length]));
+    q.id = "q"+Date.now()+"_"+Math.random();
+    if(type==="classic"){
+      q.question = q.question.replace(/\?$/, ` (Tekrar ${Math.floor(i/base.length)+2})?`);
+    }else{
+      shuffleMcqOptions(q);
+    }
+    questions.push(q);
+    i++;
+  }
+  return questions.slice(0,requested);
+}
+
+function shuffleMcqOptions(q){
+  const correctText = q.options[q.correctIndex];
+  shuffleInPlace(q.options);
+  q.correctIndex = q.options.indexOf(correctText);
+  q.selectedIndex = null;
+}
+
+els.generateBtn.addEventListener("click", async ()=>{
+  if(!state.sourceText){
+    toast("Önce bir belge seçin.");
+    return;
+  }
+  const rawCount = els.questionCount.value.trim();
+  if(!rawCount){
+    toast("Lütfen Adet alanına bir değer girin veya listeden seçim yapın.");
+    els.questionCount.focus();
+    return;
+  }
+  let count = Number(rawCount);
+  if(!Number.isFinite(count) || count<1){
+    toast("Adet 1 veya daha büyük bir sayı olmalıdır.");
+    els.questionCount.focus();
+    return;
+  }
+  count = Math.min(1000,Math.floor(count));
+  els.questionCount.value = count;
+
+  setProgress(5);
+  await sleep(40);
+  const corpus = buildCorpus(state.sourceText);
+  setProgress(30);
+  await sleep(40);
+
+  if(corpus.sentences.length===0){
+    toast("Belgede soru üretmeye uygun yeterli cümle bulunamadı.");
+    setProgress(100);
+    return;
+  }
+
+  const type = els.questionType.value;
+  state.generationVariant++;
+  state.questions = type==="mcq" ? generateMcq(corpus,count) : generateClassic(corpus,count);
+  state.testMode = false;
+  state.testStartedAt = null;
+  stopTestTimer();
+  els.reportBtn.style.display = "none";
+  setProgress(80);
+  await sleep(40);
+
+  renderQuestions();
+  setProgress(100);
+  toast(`${state.questions.length} soru hazırlandı.`);
+});
+
+/* ---------- GÖRÜNTÜLEME ---------- */
+
+els.answerMode.addEventListener("change", renderQuestions);
+
+function renderQuestions(){
+  if(!state.questions.length){
+    els.questionContainer.innerHTML = `<div class="empty">Henüz soru hazırlanmadı.</div>`;
+    return;
+  }
+
+  const showAnswers = els.answerMode.value==="show";
+  const letters = ["a","b","c","d","e"];
+  const html = state.questions.map((q,idx)=>{
+    let body = "";
+    if(q.type==="classic"){
+      body = showAnswers
+        ? `<div class="answer"><b>Cevap:</b> ${escapeHtml(q.answer)}</div>`
+        : "";
+    }else{
+      const opts = q.options.map((o,oi)=>{
+        const isCorrect = oi===q.correctIndex;
+        const isSelected = oi===q.selectedIndex;
+        const cls = (showAnswers && isCorrect) ||
+                    (state.testMode && state.report._reported && isCorrect)
+                    ? "option correct"
+                    : (state.testMode && state.report._reported && isSelected && !isCorrect
+                      ? "option wrong-selected"
+                      : "option");
+        const checked = isSelected ? "checked" : "";
+        const input = state.testMode
+          ? `<input type="radio" name="${q.id}" value="${oi}" ${checked} data-q="${idx}">`
+          : "";
+        return `<label class="${cls}">
+          ${input}
+          <span class="option-letter">${letters[oi]})</span>
+          <span>${escapeHtml(o)}</span>
+        </label>`;
+      }).join("");
+      body = `<div class="options">${opts}</div>`;
+
+    }
+
+    return `<article class="question">
+      <div class="q-head">
+        <div class="q-num">${idx+1}</div>
+        <div class="q-text">${escapeHtml(q.question).replace(/\n/g,"<br>")}</div>
+      </div>
+      ${body}
+    </article>`;
+  }).join("");
+
+  els.questionContainer.innerHTML = `<div class="questions">${html}</div>`;
+  els.questionMeta.textContent =
+    `${state.questions.length} soru • ${state.questions[0].type==="mcq"?"Çoktan Seçmeli":"Klasik"} • ${state.testMode?"Test Modu":"Çalışma Modu"}`;
+
+  if(state.testMode){
+    els.questionContainer.querySelectorAll('input[type="radio"]').forEach(r=>{
+      r.addEventListener("change", e=>{
+        const qi = Number(e.target.dataset.q);
+        state.questions[qi].selectedIndex = Number(e.target.value);
+        delete state.report._reported;
+        updateGauges();
+      });
+    });
+  }
+  updateGauges();
+}
+
+/* ---------- TEST / KARIŞTIR / RAPOR ---------- */
+
+els.changeBtn.addEventListener("click", async ()=>{
+  if(!state.sourceText){
+    toast("Önce bir belge seçin.");
+    return;
+  }
+  const rawCount = els.questionCount.value.trim();
+  if(!rawCount){
+    toast("Lütfen Adet alanına bir değer girin veya listeden seçim yapın.");
+    els.questionCount.focus();
+    return;
+  }
+
+  let count = Number(rawCount);
+  if(!Number.isFinite(count) || count < 1){
+    toast("Adet 1 veya daha büyük bir sayı olmalıdır.");
+    els.questionCount.focus();
+    return;
+  }
+  count = Math.min(1000, Math.floor(count));
+
+  const previousTexts = new Set(state.questions.map(q => q.question));
+  const corpus = buildCorpus(state.sourceText);
+  const type = els.questionType.value;
+
+  setProgress(10);
+  await sleep(30);
+
+  let fresh = [];
+  for(let attempt=0; attempt<12; attempt++){
+    state.generationVariant++;
+    fresh = type==="mcq" ? generateMcq(corpus,count) : generateClassic(corpus,count);
+
+    const allChanged = fresh.length === count &&
+      fresh.every(q => !previousTexts.has(q.question));
+
+    if(allChanged) break;
+  }
+
+  // Son güvence: Aynı metin kalmışsa görünür olarak farklılaştır.
+  fresh = fresh.map((q,idx)=>{
+    if(previousTexts.has(q.question)){
+      q.question = q.question.replace(/\?$/, "") + ` — Alternatif ${state.generationVariant + idx + 1}?`;
+    }
+    return q;
+  });
+
+  state.questions = fresh;
+  state.testMode = false;
+  state.testStartedAt = null;
+  stopTestTimer();
+  els.reportBtn.style.display = "none";
+  els.testStats.style.display = "none";
+
+  setProgress(80);
+  await sleep(30);
+  renderQuestions();
+  setProgress(100);
+  toast("Tüm sorular yeni sorularla değiştirildi.");
+});
+
+els.shuffleBtn.addEventListener("click", ()=>{
+  if(!state.questions.length){ toast("Karıştırmak için önce soru hazırlayın."); return; }
+  shuffleInPlace(state.questions);
+  if(state.questions[0].type==="mcq"){
+    state.questions.forEach(shuffleMcqOptions);
+  }
+  renderQuestions();
+  toast("Sorular ve uygun yerlerde şıklar karıştırıldı.");
+});
+
+els.testBtn.addEventListener("click", ()=>{
+  if(!state.questions.length){ toast("Önce soru hazırlayın."); return; }
+  if(state.questions[0].type!=="mcq"){
+    toast("Tıklanabilir Test modu Çoktan Seçmeli soru türünde kullanılabilir.");
+    return;
+  }
+  state.testMode = true;
+  state.testStartedAt = new Date();
+  state.report = {correct:0,wrong:0,rate:0};
+  els.reportBtn.style.display = "inline-flex";
+  state.questions.forEach(q=>q.selectedIndex=null);
+  els.answerMode.value = "hide";
+  els.testStats.style.display = "flex";
+  els.statElapsed.textContent = "00:00:00";
+  startTestTimer();
+  els.statCorrect.textContent = "0";
+  els.statWrong.textContent = "0";
+  els.statRate.textContent = "0%";
+  renderQuestions();
+  toast("Test modu başlatıldı.");
+});
+
+els.reportBtn.addEventListener("click", ()=>{
+  if(!state.questions.length){ toast("Raporlanacak soru yok."); return; }
+  if(!state.testMode || state.questions[0].type!=="mcq"){
+    toast("Bitir/Cevaplar için önce Çoktan Seçmeli Test modunu başlatın.");
+    return;
+  }
+
+  let correct=0, wrong=0;
+  for(const q of state.questions){
+    if(q.selectedIndex === q.correctIndex) correct++;
+    else wrong++;
+  }
+  const rate = state.questions.length ? Math.round(correct/state.questions.length*100) : 0;
+  stopTestTimer();
+  if(state.testStartedAt){
+    els.statElapsed.textContent = formatElapsed(Date.now() - state.testStartedAt.getTime());
+  }
+  state.report = {correct,wrong,rate,_reported:true};
+
+  els.statCorrect.textContent = correct;
+  els.statWrong.textContent = wrong;
+  els.statRate.textContent = rate+"%";
+  els.testStats.style.display = "flex";
+  renderQuestions();
+  toast(`Cevaplar değerlendirildi. Başarı oranı: %${rate}`);
+});
+
+function updateGauges(){
+  const total = state.questions.length;
+  const answered = state.testMode
+    ? state.questions.filter(q=>q.selectedIndex!==null).length
+    : total;
+  const remain = Math.max(0,total-answered);
+  const rate = total ? Math.round(answered/total*100) : 0;
+
+  els.vTotal.textContent = total;
+  els.vRate.textContent = rate+"%";
+  els.vRemain.textContent = remain;
+
+  els.gTotal.setAttribute("stroke-dasharray", total ? "100 100" : "0 100");
+  els.gRate.setAttribute("stroke-dasharray", `${rate} 100`);
+  const remainRate = total ? Math.round(remain/total*100) : 0;
+  els.gRemain.setAttribute("stroke-dasharray", `${remainRate} 100`);
+}
+
+function formatDateTime(d){
+  return new Intl.DateTimeFormat("tr-TR",{
+    day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"
+  }).format(d);
+}
+
+/* ---------- DIŞA AKTARMA ---------- */
+
+els.printBtn.addEventListener("click", ()=>{
+  if(!state.questions.length){
+    toast("Yazdırılacak soru yok.");
+    return;
+  }
+
+  const showAnswers = els.answerMode.value==="show";
+  const reportedTest = !!(state.testMode && state.report._reported);
+  const letters = ["a","b","c","d","e"];
+  const total = state.questions.length;
+  const answered = state.testMode
+    ? state.questions.filter(q=>q.selectedIndex!==null).length
+    : total;
+  const remain = Math.max(0,total-answered);
+  const completion = total ? Math.round(answered/total*100) : 0;
+
+  const questionsHtml = state.questions.map((q,i)=>{
+    let out = `<section class="pq"><div class="q"><b>${i+1}. ${escapeHtml(q.question).replace(/\n/g,"<br>")}</b></div>`;
+    if(q.type==="classic"){
+      if(showAnswers){
+        out += `<div class="ans"><b>Cevap:</b> ${escapeHtml(q.answer)}</div>`;
+      }
+    }else{
+      out += `<div class="opts">`;
+      q.options.forEach((o,oi)=>{
+        const isCorrect = oi===q.correctIndex;
+        const isWrongSelected = reportedTest && q.selectedIndex===oi && !isCorrect;
+        const shouldShowCorrect = (showAnswers || reportedTest) && isCorrect;
+        let cls = "";
+        if(shouldShowCorrect) cls = " opt-correct";
+        else if(isWrongSelected) cls = " opt-wrong";
+        out += `<div class="opt${cls}">${letters[oi]}) ${escapeHtml(o)}</div>`;
+      });
+      out += `</div>`;
+
+    }
+    out += `</section>`;
+    return out;
+  }).join("");
+
+  const printHtml = `<!doctype html>
+  <html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <title>Soru Hazırlama Asistanı</title>
+    <style>
+      @page{
+        size:A4;
+        margin:12mm 11mm 16mm;
+      }
+      *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      body{
+        margin:0;
+        font-family:"Segoe UI",Arial,sans-serif;
+        color:#0f172a;
+        font-size:10.5pt;
+        line-height:1.3;
+      }
+      .head{
+        border-bottom:1px solid #cbd5e1;
+        padding-bottom:5px;
+        margin-bottom:8px;
+      }
+      .top{
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        gap:12px;
+      }
+      .title{font-size:15pt;font-weight:700;line-height:1.1;margin:0}
+      .sub{font-size:8.5pt;color:#64748b;margin-top:1px}
+      .doc{
+        margin-top:4px;
+        border:1px solid #dbe3ea;
+        border-radius:4px;
+        padding:3px 5px;
+        font-size:8.5pt;
+      }
+      .metrics{
+        display:flex;
+        gap:4px;
+        flex:0 0 auto;
+      }
+      .metric{
+        min-width:82px;
+        border:1px solid #dbe3ea;
+        border-radius:4px;
+        padding:3px 5px;
+        text-align:center;
+      }
+      .metric b{display:block;font-size:11pt}
+      .metric span{font-size:7.5pt;color:#64748b}
+      .blue{border-top:3px solid #0284c7}
+      .green{border-top:3px solid #16a34a}
+      .red{border-top:3px solid #dc2626}
+      .pq{
+        break-inside:avoid;
+        page-break-inside:avoid;
+        margin:0 0 10pt 0;
+        padding:0;
+      }
+      .q{margin:0}
+      .opts{margin:0 0 0 22px;line-height:1.2}
+      .opts .opt{margin:0;padding:2px 5px;border-radius:3px}
+      .opts .opt-correct{background:#f0fdf4;border:1px solid #86efac}
+      .opts .opt-wrong{background:#fef2f2;border:1px solid #fecaca}
+      .ans{margin:0 0 0 22px}
+      .footer{
+        position:fixed;
+        bottom:-10mm;
+        left:0;right:0;
+        text-align:center;
+        color:#94a3b8;
+        font-size:8pt;
+      }
+      @media print{
+        .footer::after{
+          content:"";
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="head">
+      <div class="top">
+        <div>
+          <div class="title">Soru Hazırlama Asistanı</div>
+          <div class="sub">(Belge Tabanlı Soru Hazırlama ve Test Modülü)</div>
+          <div class="doc"><b>Seçilen Belge:</b> ${escapeHtml(state.fileName||"-")}</div>
+        </div>
+        <div class="metrics">
+          <div class="metric blue"><b>${total}</b><span>Toplam Adet</span></div>
+          <div class="metric green"><b>${completion}%</b><span>Tamamlanma</span></div>
+          <div class="metric red"><b>${remain}</b><span>Kalan Adet</span></div>
+        </div>
+      </div>
+    </header>
+    ${questionsHtml}
+    <div class="footer">Muhammed Yusuf OLGUN</div>
+    <script>
+      window.addEventListener("load",()=>{
+        setTimeout(()=>window.print(),100);
+      });
+      window.addEventListener("afterprint",()=>window.close());
+    <\/script>
+  </body>
+  </html>`;
+
+  const w = window.open("", "_blank");
+  if(!w){
+    toast("Yazdırma penceresi tarayıcı tarafından engellendi. Açılır pencereye izin verin.");
+    return;
+  }
+  w.document.open();
+  w.document.write(printHtml);
+  w.document.close();
+});
+
+els.wordBtn.addEventListener("click", ()=>{
+  if(!state.questions.length){ toast("Word'e aktarılacak soru yok."); return; }
+
+  const showAnswers = els.answerMode.value==="show";
+  const reportedTest = !!(state.testMode && state.report._reported);
+  const letters = ["a","b","c","d","e"];
+  const body = state.questions.map((q,i)=>{
+    let x = `<div class="question-block"><p style="margin:0"><b>${i+1}. ${escapeHtml(q.question).replace(/\n/g,"<br>")}</b></p>`;
+    if(q.type==="classic"){
+      if(showAnswers) x += `<p style="margin:0 0 0 24px"><b>Cevap:</b> ${escapeHtml(q.answer)}</p>`;
+    }else{
+      x += "<div style='margin:0 0 0 24px'>";
+      q.options.forEach((o,oi)=>{
+        const isCorrect = oi===q.correctIndex;
+        const isWrongSelected = reportedTest && q.selectedIndex===oi && !isCorrect;
+        const shouldShowCorrect = (showAnswers || reportedTest) && isCorrect;
+        let style = "margin:0;line-height:1.2;padding:1pt 3pt";
+        if(shouldShowCorrect) style += ";background:#f0fdf4;border:1px solid #86efac";
+        else if(isWrongSelected) style += ";background:#fef2f2;border:1px solid #fecaca";
+        x += `<p style="${style}">${letters[oi]}) ${escapeHtml(o)}</p>`;
+      });
+      x += "</div>";
+
+    }
+    x += `</div>`;
+    return x;
+  }).join("");
+
+  const totalForExport = state.questions.length;
+  const answeredForExport = state.testMode
+    ? state.questions.filter(q=>q.selectedIndex!==null).length
+    : totalForExport;
+  const remainForExport = Math.max(0,totalForExport-answeredForExport);
+  const completionForExport = totalForExport ? Math.round(answeredForExport/totalForExport*100) : 0;
+
+  const doc = `<!doctype html>
+  <html xmlns:o="urn:schemas-microsoft-com:office:office"
+        xmlns:w="urn:schemas-microsoft-com:office:word"
+        xmlns="http://www.w3.org/TR/REC-html40">
+  <head>
+    <meta charset="utf-8">
+    <style>
+      @page Section1{
+        size:595.3pt 841.9pt;
+        margin:42.5pt 42.5pt 54pt 42.5pt;
+        mso-footer:f1;
+      }
+      div.Section1{page:Section1}
+      body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.35;color:#0f172a}
+      p{margin:0}
+      .head{border-bottom:1px solid #cbd5e1;padding-bottom:5pt;margin-bottom:8pt}
+      .title{font-size:14pt;font-weight:700;margin:0}
+      .sub{font-size:8.5pt;color:#64748b;margin:1pt 0 4pt}
+      .docname{font-size:8.5pt;border:1px solid #dbe3ea;background:#f8fafc;padding:3pt 5pt}
+      .metrics{width:100%;border-collapse:separate;border-spacing:4pt;margin-top:4pt}
+      .metric{border:1px solid #dbe3ea;padding:4pt;text-align:center}
+      .metric b{font-size:12pt}
+      .metric span{display:block;font-size:8pt;color:#64748b;margin-top:1pt}
+      .blue{border-top:4pt solid #0284c7}
+      .green{border-top:4pt solid #16a34a}
+      .red{border-top:4pt solid #dc2626}
+      .question{margin:0}
+      .question-block{margin:0 0 11pt 0;page-break-inside:avoid}
+      *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .footer{font-size:9pt;color:#64748b;text-align:center}
+    </style>
+  </head>
+  <body>
+    <div class="Section1">
+      <div class="head">
+        <p class="title">Soru Hazırlama Asistanı</p>
+        <p class="sub">(Belge Tabanlı Soru Hazırlama ve Test Modülü)</p>
+        <div class="docname"><b>Seçilen Belge:</b> ${escapeHtml(state.fileName||"-")}</div>
+        <table class="metrics"><tr>
+          <td class="metric blue"><b>${totalForExport}</b><span>Toplam Adet</span></td>
+          <td class="metric green"><b>${completionForExport}%</b><span>Tamamlanma Oranı</span></td>
+          <td class="metric red"><b>${remainForExport}</b><span>Kalan Adet</span></td>
+        </tr></table>
+      </div>
+
+      ${body}
+
+      <div style="mso-element:footer" id="f1">
+        <p class="footer">
+          Sayfa <span style='mso-field-code:" PAGE "'></span>
+          / <span style='mso-field-code:" NUMPAGES "'></span>
+        </p>
+      </div>
+    </div>
+  </body>
+  </html>`;
+
+  const blob = new Blob(["\ufeff",doc],{type:"application/msword"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url;
+  a.download=(state.fileName?state.fileName.replace(/\.[^.]+$/,"")+"_":"")+"Soru_Hazirlama_Asistani.doc";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+});
+
+updateGauges();
+</script>
+</body>
+</html>
