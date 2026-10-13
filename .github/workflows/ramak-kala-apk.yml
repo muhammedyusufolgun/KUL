@@ -1,0 +1,43 @@
+name: Ramak Kala Android APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [ramak-kala-android]
+    paths:
+      - 'ramak-kala/**'
+      - '.github/workflows/ramak-kala-apk.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install SDK
+        run: yes | sdkmanager --licenses >/dev/null && sdkmanager "platforms;android-35" "build-tools;35.0.0"
+      - name: Verify project
+        run: |
+          test -f ramak-kala/settings.gradle
+          test -f ramak-kala/app/build.gradle
+          test -f ramak-kala/app/src/main/AndroidManifest.xml
+          test -f ramak-kala/app/src/main/java/tr/olgun/ramakkala/MainActivity.java
+          test -f ramak-kala/app/src/main/assets/index.html
+      - name: Build APK
+        working-directory: ramak-kala
+        run: gradle --no-daemon assembleDebug
+      - name: Verify APK
+        run: |
+          APK=$(find ramak-kala/app/build/outputs/apk/debug -name '*.apk' -print -quit)
+          test -n "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "$APK"
+          cp "$APK" Ramak-Kala.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Ramak-Kala-APK
+          path: Ramak-Kala.apk
+          if-no-files-found: error
