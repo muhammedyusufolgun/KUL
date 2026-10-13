@@ -21,7 +21,9 @@ jobs:
       - name: Check preinstalled Android SDK
         run: |
           echo "ANDROID_HOME=$ANDROID_HOME"
-          command -v sdkmanager
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
+          echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
+          ls "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           command -v java
       - uses: gradle/actions/setup-gradle@v4
         with:
@@ -29,7 +31,7 @@ jobs:
       - name: Install SDK and build APK
         run: |
           set -e
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"
           cd ramak-kala
           gradle --no-daemon --stacktrace assembleDebug
       - name: Verify signature and collect APK
