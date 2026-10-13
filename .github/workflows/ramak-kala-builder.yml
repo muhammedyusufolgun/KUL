@@ -1,0 +1,42 @@
+name: Build Ramak Kala APK
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/ramak-kala-builder.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ramak-kala:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Ramak Kala branch
+        uses: actions/checkout@v4
+        with:
+          ref: ramak-kala-android
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Install SDK and build APK
+        run: |
+          set -e
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          cd ramak-kala
+          gradle --no-daemon --stacktrace assembleDebug
+      - name: Verify signature and collect APK
+        run: |
+          set -e
+          APK=ramak-kala/app/build/outputs/apk/debug/app-debug.apk
+          test -s "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "$APK"
+          cp "$APK" Ramak-Kala.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Ramak-Kala-APK
+          path: Ramak-Kala.apk
+          if-no-files-found: error
