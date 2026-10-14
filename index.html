@@ -60,6 +60,24 @@ $('extractBtn').onclick=async()=>{
   notify(allAnswersMatched()?'Tüm cevaplar eşleştirildi. Test adını girip kaydedebilir veya testi başlatabilirsiniz.':data.questions.length+' soru okundu. Eksik doğru cevapların harflerini A–E olarak yazıp Eşleştir düğmesine basın.');
  }catch(e){notify('İçe aktarma hatası: '+e.message)}
 };
+
+function normalizeQuestionChoices(q){
+ const options=Array.isArray(q.options)?q.options:[];
+ const letters=Array.isArray(q.letters)?q.letters:[];
+ const oldCorrect=Number.isInteger(q.correct)?q.correct:null;
+ const wantedLetter=String(q.correctLetter||((oldCorrect!==null?letters[oldCorrect]:null)||'')).trim().toUpperCase();
+ const seenLetters=new Set(),seenTexts=new Set(),unique=[];
+ for(let i=0;i<options.length;i++){
+  const letter=String(letters[i]||String.fromCharCode(65+i)).trim().toUpperCase();
+  const value=String(options[i]||'').replace(/\s+/g,' ').trim();
+  const textKey=value.toLocaleLowerCase('tr-TR');
+  if(!/^[A-E]$/.test(letter)||!value||seenLetters.has(letter)||seenTexts.has(textKey))continue;
+  seenLetters.add(letter);seenTexts.add(textKey);unique.push({letter,text:value})
+ }
+ const correct=unique.findIndex(x=>x.letter===wantedLetter);
+ return {...q,letters:unique.map(x=>x.letter),options:unique.map(x=>x.text),correct:correct>=0?correct:null,correctLetter:correct>=0?wantedLetter:null,selected:null}
+}
+
 function parseQuestions(text,answerText){
  const answerMap={},sequential=[];
  const answerLines=(String(answerText||'')+'\n'+String(text||'')).replace(/\r/g,'').split('\n');
@@ -99,7 +117,7 @@ function parseQuestions(text,answerText){
   parsed.push({n:b.n,text:q,options:opts.map(o=>o.text),letters:opts.map(o=>o.letter),correctLetter:answerMap[b.n]||null,selected:null})
  }
  if(sequential.length===parsed.length)parsed.forEach((q,i)=>{if(!q.correctLetter)q.correctLetter=sequential[i]});
- return parsed.map(q=>{const oi=q.correctLetter?q.letters.indexOf(q.correctLetter):-1;return {...q,correct:oi>=0?oi:null}})
+ return parsed.map(q=>normalizeQuestionChoices(q))
 }
 function isMatched(q){
  return !!q && Array.isArray(q.options) && Array.isArray(q.letters) && q.options.length>=2 &&
@@ -182,7 +200,7 @@ function renderQuestions(){
    let cls='opt';
    if(data.answersVisible&&q.correct===j)cls+=' correct';
    if(data.answersVisible&&q.selected===j&&q.correct!==j)cls+=' wrong';
-   return '<label class="'+cls+'"><input type="radio" name="q'+i+'" value="'+j+'" '+(q.selected===j?'checked':'')+' '+(!data.running?'disabled':'')+'><span><b>'+esc(q.letters[j]||String.fromCharCode(65+j))+')</b> '+esc(o)+'</span></label>'
+   return '<label class="'+cls+'"><input type="radio" name="answer_question_'+i+'" data-question="'+i+'" value="'+j+'" '+(q.selected===j?'checked':'')+' '+(!data.running?'disabled':'')+'><span><b>'+esc(q.letters[j]||String.fromCharCode(65+j))+')</b> '+esc(o)+'</span></label>'
   }).join(''):'<p class="hint">Bu soruda seçenekler tanınmadı. Kaynak metni kontrol edin.</p>';
   let answerRow='';
   if(data.answersVisible){
@@ -194,7 +212,15 @@ function renderQuestions(){
   }
   return '<article class="q"><div class="qtitle"><span class="num">'+(i+1)+'</span><span>'+esc(q.text)+'</span></div><div class="opts">'+opts+'</div>'+answerRow+'</article>'
  }).join('');
- list.querySelectorAll('input[type=radio]').forEach(inp=>inp.onchange=()=>{if(data.running){const i=+inp.name.slice(1);data.questions[i].selected=+inp.value;updateProgress()}});
+ list.querySelectorAll('input[type=radio]').forEach(inp=>inp.onchange=()=>{
+  if(!data.running)return;
+  const i=Number(inp.dataset.question),j=Number(inp.value);
+  const q=data.questions[i];
+  if(!q||!Number.isInteger(j)||j<0||j>=q.options.length)return;
+  q.selected=j;
+  list.querySelectorAll('input[name="answer_question_'+i+'"]').forEach(other=>{other.checked=Number(other.value)===j});
+  updateProgress()
+ });
  updateProgress()
 }
 function updateProgress(){const total=data.questions.length,answered=data.questions.filter(q=>q.selected!==null).length;$('progressLabel').textContent='İlerleme: '+answered+' / '+total;$('progress').value=total?answered/total*100:0}
@@ -229,14 +255,14 @@ $('toggleAnswersBtn').onclick=()=>{
  renderQuestions()
 };
 function drawChart(c,w,u){const cv=$('chart'),ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);const values=[c,w,u],labels=['Doğru','Yanlış','Cevapsız'],colors=['#86efac','#fda4af','#cbd5e1'],max=Math.max(1,...values);values.forEach((v,i)=>{const x=60+i*190,h=v/max*110;ctx.fillStyle=colors[i];ctx.fillRect(x,130-h,90,h);ctx.fillStyle='#1f2937';ctx.font='bold 18px Arial';ctx.fillText(String(v),x+36,118-h);ctx.font='14px Arial';ctx.fillText(labels[i],x+8,155)});}
-function currentRecord(){return {name:$('testName').value.trim(),questions:data.questions.map(q=>({...q,selected:null})),sourceNames:[...data.sourceNames],updatedAt:new Date().toISOString()}}
+function currentRecord(){return {name:$('testName').value.trim(),questions:data.questions.map(normalizeQuestionChoices),sourceNames:[...data.sourceNames],updatedAt:new Date().toISOString()}}
 function saveCurrent(show=true){if(data.running||data.editingAnswers){notify('Test veya eşleştirme düzenlemesi sırasında kayıt yapılamaz.');return}if(!allAnswersMatched()){notify('Kaydetmeden önce bütün soruları cevaplarıyla eşleştirin.');return}const name=$('testName').value.trim();if(!name){if(show)notify('Kaydetmek için test adı girin.');return}try{const records=readRecords(),r=currentRecord(),i=records.findIndex(x=>x.name.toLocaleLowerCase('tr-TR')===name.toLocaleLowerCase('tr-TR'));if(i>=0)records[i]=r;else records.unshift(r);data.currentSavedName=name;writeRecords(records);$('savedSelect').value=String(Math.max(0,records.findIndex(x=>x.name===name)));if(show)notify('“'+name+'” kaydedildi.')}catch(e){notify('Kayıt başarısız. Tarayıcı depolama sınırı dolmuş olabilir: '+e.message)}}
 $('saveBtn').onclick=()=>saveCurrent(true);
 function loadRecord(i){
  if(data.running){notify('Testi bitirmeden başka kayıt açılamaz.');return}
  const r=readRecords()[i];if(!r)return;
  data.currentSavedName=r.name;$('testName').value=r.name;
- data.questions=(r.questions||[]).map(q=>({...q,options:q.options||[],letters:q.letters||[],correct:Number.isInteger(q.correct)?q.correct:null,selected:null}));
+ data.questions=(r.questions||[]).map(normalizeQuestionChoices);
  data.sourceNames=r.sourceNames||[];data.answersVisible=false;data.running=false;data.finished=false;
  data.editingAnswers=false;data.manualOptionFor=null;data.pendingLetters={};
  clearInterval(data.timerId);$('timer').textContent='Süre: 00:00';
