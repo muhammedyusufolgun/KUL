@@ -40,6 +40,14 @@ jobs:
             test -s "ios/SoruHazirlamaAsistani/Web/lib/$f"
           done
 
+      - name: Test OCR matching, skipped questions, manual letters and repeated tests
+        run: |
+          cd ios
+          npm install --no-save --no-package-lock jsdom@24
+          node tests/quiz.test.cjs
+          node --check SoruHazirlamaAsistani/Web/quiz-fixes.js
+          grep -q 'src="quiz-fixes.js"' SoruHazirlamaAsistani/Web/index.html
+
       - name: Generate Xcode project
         run: |
           cd ios
