@@ -58,6 +58,24 @@ jobs:
               draw.text((x,y),label,font=font,fill=black)
               im.save(d/"ic_launcher.png")
               im.save(d/"ic_launcher_round.png")
+              fgsize=int(size*2.25)
+              fg=Image.new("RGBA",(fgsize,fgsize),(0,0,0,0))
+              fgdraw=ImageDraw.Draw(fg)
+              try:
+                  fgfont=ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",int(fgsize*0.29))
+              except OSError:
+                  fgfont=ImageFont.load_default()
+              fb=fgdraw.textbbox((0,0),"S",font=fgfont)
+              fx=(fgsize-(fb[2]-fb[0]))/2
+              fy=(fgsize-(fb[3]-fb[1]))/2-fb[1]
+              fgdraw.text((fx,fy),"S",font=fgfont,fill=black)
+              fg.save(d/"ic_launcher_foreground.png")
+          # Override Android 8+ adaptive icon XML so its foreground uses the black S.
+          anydpi=root/"mipmap-anydpi-v26"
+          anydpi.mkdir(parents=True,exist_ok=True)
+          adaptive='<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@color/ic_launcher_background"/><foreground android:drawable="@mipmap/ic_launcher_foreground"/></adaptive-icon>'
+          (anydpi/"ic_launcher.xml").write_text(adaptive)
+          (anydpi/"ic_launcher_round.xml").write_text(adaptive)
           # Adaptive icon foreground; Android applies the yellow background below.
           d = root / "drawable"
           d.mkdir(parents=True, exist_ok=True)
