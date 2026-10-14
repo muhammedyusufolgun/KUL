@@ -73,17 +73,8 @@ jobs:
           im.save(d/"ic_launcher_foreground.png")
           values = root / "values"
           values.mkdir(parents=True,exist_ok=True)
-          colors = values / "colors.xml"
-          if colors.exists():
-              txt=colors.read_text()
-              import re
-              if re.search(r'<color name="ic_launcher_background">.*?</color>',txt):
-                  txt=re.sub(r'<color name="ic_launcher_background">.*?</color>',f'<color name="ic_launcher_background">{yellow}</color>',txt)
-              else:
-                  txt=txt.replace("</resources>",f'    <color name="ic_launcher_background">{yellow}</color>\n</resources>')
-              colors.write_text(txt)
-          else:
-              colors.write_text(f'<resources><color name="ic_launcher_background">{yellow}</color></resources>')
+          bg = values / "ic_launcher_background.xml"
+          bg.write_text(f'<resources><color name="ic_launcher_background">{yellow}</color></resources>')
           strings=values/"strings.xml"
           if strings.exists():
               txt=strings.read_text()
