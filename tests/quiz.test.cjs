@@ -188,6 +188,55 @@ async function runFlow(){
    assert.match(e('skippedReport').textContent,/Soru 3/);
    assert.match(e('skippedReport').textContent,/Soru 4/);
  });
+ verify('Saved tests remain available immediately below the heading',()=>{
+  assert.equal(e('quickSavedCard').classList.contains('hidden'),false);
+  assert.ok(e('quickSavedCard').querySelector('[data-quick-open="0"]'));
+  assert.ok([...w.document.querySelector('main.wrap').children].indexOf(e('quickSavedCard'))<[...w.document.querySelector('main.wrap').children].indexOf(e('uploadCard')));
+ });
+ e('homeHeader').click();
+ verify('Tapping heading resets unsaved UI and keeps saved test records',()=>{
+  assert.equal(get('data.questions.length'),0);
+  assert.equal(get('data.questionFiles.length'),0);
+  assert.equal(get('data.answerFiles.length'),0);
+  assert.equal(get('data.running'),false);
+  assert.equal(e('timer').textContent,'Süre: 00:00');
+  assert.equal(e('startBtn').disabled,true);
+  assert.equal(get('readRecords().length'),1);
+  assert.equal(e('quickSavedCard').classList.contains('hidden'),false);
+  assert.equal(e('uploadCard').classList.contains('hidden'),false);
+ });
+ e('quickSavedCard').querySelector('[data-quick-open]').click();
+ verify('Selecting saved test opens matched content ready for Test Başla',()=>{
+  assert.equal(get('data.questions.length'),3);
+  assert.equal(get('allAnswersMatched()'),true);
+  assert.equal(e('startBtn').disabled,false);
+  assert.equal(e('uploadCard').classList.contains('hidden'),true);
+  assert.equal(e('recordCard').classList.contains('hidden'),true);
+  assert.match(e('quickSavedCard').textContent,/Test hazır/);
+ });
+ e('startBtn').click();
+ verify('Saved test can start and finish again after selection',()=>{
+  assert.equal(get('data.running'),true);
+  assert.equal(e('startBtn').disabled,true);
+  assert.equal(e('quickSavedCard').classList.contains('hidden'),true);
+ });
+ e('finishBtn').click();
+ verify('Saved test restores quick chooser after finishing',()=>{
+  assert.equal(get('data.finished'),true);
+  assert.equal(e('quickSavedCard').classList.contains('hidden'),false);
+  assert.equal(e('startBtn').disabled,false);
+ });
+ w.confirm=()=>true;
+ e('quickSavedCard').querySelector('[data-quick-delete]').click();
+ verify('Deleting last saved test clears loaded content and restores first launch',()=>{
+  assert.equal(get('readRecords().length'),0);
+  assert.equal(get('data.questions.length'),0);
+  assert.equal(e('quickSavedCard').classList.contains('hidden'),true);
+  assert.equal(e('recordCard').classList.contains('hidden'),true);
+  assert.equal(e('uploadCard').classList.contains('hidden'),false);
+  assert.equal(e('startBtn').disabled,true);
+  assert.equal(get('data.timerId'),null);
+ });
  w.close();
 }
 runFlow().then(()=>{console.log('\nALL '+passed+' Android logic checks passed')}).catch(e=>{console.error(e.stack);w.close();process.exitCode=1});

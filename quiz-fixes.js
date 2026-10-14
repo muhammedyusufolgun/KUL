@@ -166,7 +166,7 @@ function renderReports(){
  skippedBox.innerHTML=skipped.length?'<b>'+skipped.length+' soru/bölüm pas geçildi. Teste dahil edilmedi.</b>'+
    '<div class="mapping-roster">'+skipped.map(x=>'<div class="mapping-line">'+
    (x.n==null?'Numarası bilinmeyen bölüm':'Soru '+safe(x.n))+': '+safe(x.reason)+'</div>').join('')+'</div>':'';
- el('recordCard').classList.toggle('hidden',(!ready && (total>0||readRecords().length===0))||data.running);
+ el('recordCard').classList.toggle('hidden',!ready||data.running||!!data.fromSaved);
 }
 updateTestControls=function(){
  const ready=allAnswersMatched();
@@ -315,6 +315,113 @@ el('toggleAnswersBtn').onclick=()=>{
  el('toggleAnswersBtn').textContent=data.answersVisible?'Cevapları Gizle':'Cevapları Göster';
  renderQuestions();
 };
-window.__quizDiagnostics={parseReport,strictQuestion,keyData};
-renderManualAnswers();
+// Fresh-start and saved-test navigation. Keep the persistent storage when the title is tapped.
+const quickCard=document.createElement('section');
+quickCard.id='quickSavedCard';quickCard.className='card quick-card hidden';
+quickCard.innerHTML='<h2>Kayıtlı Testler</h2><p class="hint">Bir testi seçtiğinizde sorular ve doğru cevap eşleşmeleri hazır açılır. Ardından Test Başla düğmesine dokunun.</p><div id="quickSavedList"></div>';
+el('uploadCard').insertAdjacentElement('beforebegin',quickCard);
+const oldRenderSaved=renderSaved;
+function renderQuickSaved(){
+ const records=readRecords();
+ const visible=records.length>0&&!data.running;
+ quickCard.classList.toggle('hidden',!visible);
+ const list=el('quickSavedList');
+ list.innerHTML=records.map((record,i)=>{
+  const selected=data.fromSaved&&data.currentSavedName===record.name;
+  const count=Array.isArray(record.questions)?record.questions.length:0;
+  return '<div class="quick-saved-row"><button type="button" class="btn open-saved'+(selected?' active':'')+'" data-quick-open="'+i+'" aria-label="'+safe(record.name)+' testini aç"><b>'+safe(record.name)+'</b><small>'+count+' soru · '+(selected?'Test hazır':'Aç ve çöz')+'</small></button>'+
+    '<button type="button" class="btn quick-delete" data-quick-delete="'+i+'" aria-label="'+safe(record.name)+' kaydını sil">Sil</button></div>';
+ }).join('');
+ list.querySelectorAll('[data-quick-open]').forEach(button=>button.onclick=()=>{
+  loadRecord(Number(button.dataset.quickOpen));
+  if(allAnswersMatched())el('startBtn').scrollIntoView?.({block:'center',behavior:'smooth'});
+ });
+ list.querySelectorAll('[data-quick-delete]').forEach(button=>button.onclick=deleteRecord.bind(null,Number(button.dataset.quickDelete)));
+}
+renderSaved=function(){
+ oldRenderSaved();
+ renderQuickSaved();
+};
+function resetToHome(){
+ clearInterval(data.timerId);data.timerId=null;
+ data.questionFiles=[];data.answerFiles=[];data.sourceNames=[];
+ data.questions=[];data.skippedQuestions=[];data.totalDetected=0;
+ data.answersVisible=false;data.running=false;data.finished=false;
+ data.editingAnswers=false;data.manualOptionFor=null;data.pendingLetters={};
+ data.startAt=0;data.fromSaved=false;data.currentSavedName='';
+ ['filesInput','answerFilesInput','questionPhotos','answerPhotos'].forEach(id=>{el(id).value=''});
+ el('testName').value='';el('savedSelect').value='';
+ filesText();
+ el('timer').textContent='Süre: 00:00';
+ el('progress').value=0;el('progressLabel').textContent='İlerleme: 0 / 0';
+ ['correctCount','wrongCount','unanswered'].forEach(id=>{el(id).textContent='0'});
+ el('rate').textContent='0%';
+ el('metrics').classList.add('hidden');el('chart').classList.add('hidden');
+ el('uploadCard').classList.remove('hidden');
+ el('recordCard').classList.add('hidden');
+ el('toggleAnswersBtn').textContent='Cevapları Göster';
+ renderQuestions();
+ el('questions').innerHTML='<p class="hint">Önce soru ve cevap dosyası veya fotoğrafı ekleyin; ya da yukarıdaki kayıtlı testlerden birini seçin.</p>';
+ el('importStatus').textContent='Dosyaları yükleyin. Fotoğraflar OCR ile okunur; cevap anahtarı ayrı dosya veya fotoğraf olarak eklenebilir.';
+ renderManualAnswers();
+ renderQuickSaved();
+ window.scrollTo?.({top:0,behavior:'instant'});
+}
+const header=el('homeHeader');
+header.onclick=()=>resetToHome();
+header.onkeydown=event=>{
+ if(event.key==='Enter'||event.key===' '){event.preventDefault();resetToHome()}
+};
+const savedLoadRecord=loadRecord;
+loadRecord=function(index){
+ if(data.running)return;
+ if(!readRecords()[index])return;
+ data.fromSaved=true;
+ data.questionFiles=[];data.answerFiles=[];
+ ['filesInput','answerFilesInput','questionPhotos','answerPhotos'].forEach(id=>{el(id).value=''});
+ savedLoadRecord(index);
+ el('uploadCard').classList.add('hidden');
+ el('recordCard').classList.add('hidden');
+ renderQuickSaved();
+ if(!allAnswersMatched()){
+   // Older or corrupted records do not bypass validation.
+   el('uploadCard').classList.remove('hidden');
+   notify('Bu kayıt eşleştirme açısından eksik görünüyor. Teste başlamadan önce kaynağı yeniden yükleyin.');
+ }
+};
+deleteRecord=function(index){
+ const records=readRecords(),record=records[index];
+ if(!record)return;
+ if(!confirm('“'+record.name+'” kaydını kalıcı olarak silmek istediğinize emin misiniz?'))return;
+ const wasSelected=Boolean(data.currentSavedName)&&data.currentSavedName===record.name;
+ records.splice(index,1);
+ writeRecords(records);
+ if(wasSelected||records.length===0)resetToHome();
+ else renderQuickSaved();
+ if(records.length===0)notify('Son kayıt silindi. Yeni test oluşturmak için dosya veya fotoğraf yükleyin.');
+ else notify('“'+record.name+'” silindi. Diğer kayıtlı testler başlığın altında duruyor.');
+};
+const extractOriginal=el('extractBtn').onclick;
+el('extractBtn').onclick=async()=>{
+ data.fromSaved=false;
+ el('uploadCard').classList.remove('hidden');
+ await extractOriginal();
+ renderQuickSaved();
+};
+const originalStart=el('startBtn').onclick;
+el('startBtn').onclick=()=>{
+ originalStart();
+ renderQuickSaved();
+};
+const originalFinish=el('finishBtn').onclick;
+el('finishBtn').onclick=()=>{
+ originalFinish();
+ if(data.fromSaved){
+   el('recordCard').classList.add('hidden');
+   el('uploadCard').classList.add('hidden');
+ }
+ renderQuickSaved();
+};
+window.__quizDiagnostics={parseReport,strictQuestion,keyData,resetToHome};
+resetToHome();
 })();
