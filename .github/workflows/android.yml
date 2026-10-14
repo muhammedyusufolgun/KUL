@@ -25,10 +25,13 @@ jobs:
           java-version: '17'
       - name: Prepare Capacitor Android project
         run: |
+          mkdir -p www
+          cp index.html www/index.html
           npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init "Soru Hazırlama Asistanı" "com.asistan.soruhazirlama" --web-dir .
+          npx cap init "Soru Hazırlama Asistanı" "com.asistan.soruhazirlama" --web-dir www
           npx cap add android
+          npx cap sync android
       - name: Build debug APK
         run: |
           cd android
