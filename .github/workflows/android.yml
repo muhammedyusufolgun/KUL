@@ -32,6 +32,9 @@ jobs:
           npx cap init "Soru Hazırlama Asistanı" "com.asistan.soruhazirlama" --web-dir www
           npx cap add android
           npx cap sync android
+      - name: Resolve Kotlin duplicate classes
+        run: |
+          printf '\nconfigurations.configureEach { exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk8" }\n' >> android/app/build.gradle
       - name: Build debug APK
         run: |
           cd android
