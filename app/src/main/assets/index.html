@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#dbeafe"><title>Test Soru Takip</title>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#dbeafe"><meta name="color-scheme" content="light"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Test Soru Takip"><title>Test Soru Takip</title>
 <style>
 :root{--bg:#f0f7ff;--surface:#fff;--primary:#147dc6;--ink:#173552;--muted:#688198;--line:#d8e6f3;--danger:#d64545;--blue:#147dc6;--green:#138a65;--shadow:0 3px 18px rgba(32,91,143,.08)}
 *{box-sizing:border-box}html{height:100%;-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;min-height:100%;padding-bottom:calc(88px + env(safe-area-inset-bottom));-webkit-tap-highlight-color:transparent}
@@ -15,13 +15,135 @@ nav{position:fixed;z-index:10;bottom:0;left:0;width:100%;border-top:1px solid #c
 .toast{position:fixed;z-index:99;bottom:92px;left:50%;transform:translateX(-50%);padding:11px 16px;color:white;background:#254d6b;border-radius:9px;box-shadow:var(--shadow);max-width:85vw;width:max-content;display:none;text-align:center}.toast.show{display:block}
 dialog{border:1px solid #cfdeeb;border-radius:15px;padding:0;width:min(92vw,390px);box-shadow:0 18px 65px #0b284852}dialog::backdrop{background:#0e29456b}.modal{padding:22px}.modal h2{font-size:18px;margin:0 0 10px}.modal p{color:#476680;margin:0 0 20px}.modal .row{justify-content:flex-end}
 @media (max-width:380px){main{padding:13px 9px}.card{padding:12px}.grid{gap:6px}.btn{padding:9px}.pills{gap:4px}.recordtop{flex-direction:column}}
+
+/* Google Chrome, iOS tarayıcıları ve sınırlı dosya önizlemeleri. */
+#appRuntime{width:100%;background:#fff4e3;color:#744710;padding:11px max(12px,env(safe-area-inset-left)) 11px max(12px,env(safe-area-inset-right));font-size:13px;line-height:1.5;border-bottom:1px solid #f2d7ab}
+#appRuntime[hidden]{display:none!important}
+#appRuntime strong{color:#68400d}
+.fallbackDialog{position:fixed;inset:50% auto auto 50%;transform:translate(-50%,-50%);z-index:100;width:min(92vw,390px);max-height:85dvh;overflow-y:auto;box-shadow:0 0 0 100vmax rgba(14,41,69,.48),0 18px 65px #0b284852}
+.share-direct{display:flex;text-align:center;margin-top:10px;text-decoration:none}.share-direct[hidden],#shareNext[hidden],#shareModeChoices[hidden]{display:none!important}
+/* Responsive full-width layout — phones, foldables, tablets and desktop. */
+:root{--page-gutter:clamp(8px,1.4vw,24px)}
+html,body{width:100%;max-width:100%;min-width:0;overflow-x:hidden}
+header{width:100%;padding-right:max(var(--page-gutter),env(safe-area-inset-right));padding-left:max(var(--page-gutter),env(safe-area-inset-left))}
+.brand{width:100%;max-width:none;min-width:0;margin:0}
+.brand>div:last-child{min-width:0}
+main{width:100%;max-width:none;min-width:0;margin:0;padding:clamp(9px,1.4vw,22px) max(var(--page-gutter),env(safe-area-inset-right)) clamp(9px,1.4vw,22px) max(var(--page-gutter),env(safe-area-inset-left))}
+section.view, #courseIndex, #courseDetail,.card,.chart,.tablewrap{width:100%;max-width:100%;min-width:0}
+.card{overflow-wrap:break-word}
+.section-title{flex-wrap:wrap;min-width:0}
+.row,.item,.recordtop{min-width:0}
+.row>.grow{min-width:0}
+.entry-create{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px}
+.entry-create>.grow{width:100%;min-width:0}
+.entry-create>.btn{min-width:0;max-width:100%}
+.grid>div{min-width:0}
+.grid input{min-width:0;max-width:100%}
+nav{width:100%;right:0;padding-left:max(var(--page-gutter),env(safe-area-inset-left));padding-right:max(var(--page-gutter),env(safe-area-inset-right))}
+nav .navin{width:100%;max-width:none;min-width:0;margin:0}
+nav button{min-width:0}
+@media (max-width:360px){
+  .entry-create{grid-template-columns:minmax(0,1fr)}
+  .entry-create>.btn{width:100%}
+  .card{padding:12px}
+  .stats{gap:5px}
+  .stat strong{font-size:18px}
+}
+/* Prevent iOS focusing inputs from enlarging the whole viewport. */
+@media (hover:none) and (pointer:coarse){input,select{font-size:16px}}
+
+/* İstatistik: mobilde iki küçük grafik aynı sayfaya sığar. */
+#statsView .card{padding:clamp(10px,1.8vw,16px)}
+#statsView .section-title{margin-bottom:5px}
+#statsView .stats{margin-top:9px!important;margin-bottom:6px;gap:6px}
+#statsView .stat{padding:6px 5px;border-radius:8px}
+#statsView .stat strong{font-size:18px;line-height:1.2}
+#statsView .stat span{font-size:10px}
+#statsView #accuracy{margin:3px 0 5px}
+.charts-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:8px 0 12px}
+.charts-pair>.chart{margin:0;min-width:0;max-width:100%;padding:8px 7px 5px;border-radius:9px;overflow:hidden}
+.charts-pair .chart h3{margin:0 0 2px;font-size:13px;line-height:1.3}
+.chart-graphic{min-width:0;max-width:100%;overflow:hidden}
+.chart-graphic svg{display:block;width:100%;height:125px;max-width:100%;overflow:visible}
+.chart-graphic .hint{padding:0 4px 2px;font-size:10px;line-height:1.4}
+.chart-graphic .empty{padding:12px 5px;font-size:12px}
+@media (max-width:700px){
+ .charts-pair{grid-template-columns:minmax(0,1fr);gap:7px;margin-top:7px}
+ .charts-pair>.chart{padding:6px 7px 3px}
+ .chart-graphic svg{height:111px}
+ .chart-graphic .hint{font-size:10px}
+ #statsView .sub{margin-bottom:7px}
+ #statsView label{margin-top:7px;margin-bottom:4px}
+}
+.share-mode-choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.share-mode-choices .btn{white-space:normal;text-align:center;line-height:1.25;min-height:50px}
+#shareDialog .modal{max-height:85dvh;overflow-y:auto}
+#shareDialog #shareProgress{margin:0 0 7px}
+#shareDialog .share-help{font-size:12px;margin:8px 0 6px;color:#526e87}
+#shareDialog .share-direct{white-space:normal}
+@media (max-width:330px){.share-mode-choices{grid-template-columns:1fr}}
+
+/* MASAÜSTÜ DÜZENİ: üst menü, yan yana bölümler ve okunur grafikler. */
+#appRuntime[hidden]{display:none!important}
+@media (min-width: 900px){
+  :root{--page-gutter:clamp(18px,2.1vw,42px)}
+  body{padding-bottom:32px;font-size:15px}
+  header{padding:20px var(--page-gutter);box-shadow:none}
+  header .brand{max-width:1450px;margin:0 auto}
+  .mark{width:58px;height:58px;font-size:17px}
+  .brand h1{font-size:24px}
+  .brand p{font-size:13px}
+  nav{position:sticky;top:0;bottom:auto;left:0;right:0;width:100%;z-index:30;
+      padding:8px var(--page-gutter);border-top:0;border-bottom:1px solid #ccdfef;
+      box-shadow:0 4px 12px rgba(20,63,100,.07);background:rgba(255,255,255,.97)}
+  nav .navin{max-width:1450px;margin:0 auto;justify-content:flex-start;gap:10px}
+  nav button{flex:0 0 auto;min-width:160px;min-height:44px;flex-direction:row;
+      gap:10px;padding:10px 16px;font-size:14px;border-radius:9px}
+  nav button span{font-size:19px}
+  main{width:100%;max-width:1450px;margin:0 auto;padding:26px var(--page-gutter) 35px}
+  .card{padding:23px;border-radius:12px;margin-bottom:0}
+  .section-title{font-size:19px}
+  .sub{font-size:13px}
+  input,select{min-height:46px}
+  .btn{min-height:43px}
+  #courseIndex{display:grid;grid-template-columns:minmax(0,.83fr) minmax(0,1.17fr);gap:20px;align-items:start}
+  #courseDetail:not([hidden]){display:grid;grid-template-columns:minmax(0,.83fr) minmax(0,1.17fr);gap:20px;align-items:start}
+  #courseDetail #backCourses{grid-column:1/-1;justify-self:start;margin-bottom:-8px!important}
+  #courseIndex .card,#courseDetail .card{min-width:0}
+  #settingsView.active{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+  #settingsView .card{min-width:0}
+  #statsView .card{padding:24px}
+  .charts-pair{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:15px 0 20px}
+  .charts-pair>.chart{padding:15px 18px 12px;border-radius:11px}
+  .charts-pair .chart h3{font-size:16px;margin-bottom:10px}
+  .chart-graphic svg{height:235px}
+  .chart-graphic .hint{font-size:12px}
+  .stats{max-width:640px}
+  #statsView .stat{padding:12px 8px}
+  #statsView .stat strong{font-size:24px}
+  #statsView .stat span{font-size:12px}
+  #statsView .tablewrap{max-height:420px;overflow:auto}
+  .record{padding:14px}
+  dialog{width:min(92vw,450px)}
+  .backup-actions{flex-wrap:wrap}
+}
+@media (min-width:900px) and (max-width:1130px){
+  #courseIndex,#courseDetail:not([hidden]){grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+  .charts-pair{gap:12px}
+}
+@media (max-width:899px){
+  .backup-card{margin-top:14px}
+  .backup-actions>*{flex:1}
+}
 </style></head><body>
 <header><div class="brand"><div class="mark">TEST</div><div><h1>Test Soru Takip</h1><p>Ders, soru ve başarı takibi</p></div></div></header>
+<div id="appRuntime" role="alert" hidden></div>
+<nav aria-label="Ana menü"><div class="navin"><button id="navCourses" class="active" data-view="courses"><span>▤</span>Dersler</button><button id="navStats" data-view="stats"><span>▥</span>İstatistik</button><button id="navSettings" data-view="settings"><span>⚙</span>Ayarlar</button></div></nav>
 <main>
 <section id="coursesView" class="view active">
  <div id="courseIndex">
   <div class="card"><h2 class="section-title">Derslerim</h2><p class="sub">Ders ekleyin, yaptığınız testlerin doğru ve yanlışlarını kaydedin.</p>
-    <label for="newCourse">Ders adı</label><div class="row"><input id="newCourse" class="grow" type="text" maxlength="80" placeholder="Örn. Matematik" autocomplete="off"><button class="btn primary" id="addCourse">+ Ders Ekle</button></div>
+    <label for="newCourse">Ders adı</label><div class="row entry-create"><input id="newCourse" class="grow" type="text" maxlength="80" placeholder="Örn. Matematik" autocomplete="off"><button class="btn primary" id="addCourse">+ Ders Ekle</button></div>
   </div><div class="card"><h2 class="section-title">Eklenen dersler <span id="courseCount" class="muted" style="font-size:12px"></span></h2><div id="courseList"></div></div>
  </div>
  <div id="courseDetail" hidden>
@@ -33,26 +155,96 @@ dialog{border:1px solid #cfdeeb;border-radius:15px;padding:0;width:min(92vw,390p
  </div>
 </section>
 <section id="statsView" class="view"><div class="card"><h2 class="section-title">İstatistik</h2><p class="sub">Grafikler test tarihindeki toplam doğru ve yanlış sayılarını gösterir.</p><label for="statsFilter">Ders</label><select id="statsFilter"></select><div class="stats" style="margin-top:14px"><div class="stat"><strong id="totalQuestions">0</strong><span>Soru</span></div><div class="stat"><strong id="totalCorrect">0</strong><span>Doğru</span></div><div class="stat"><strong id="totalWrong">0</strong><span>Yanlış</span></div></div><div id="accuracy" class="sub"></div>
-<div class="chart"><h3 style="color:#12865d">Doğru grafiği</h3><div id="correctGraph"></div></div>
-<div class="chart"><h3 style="color:#d5524c">Yanlış grafiği</h3><div id="wrongGraph"></div></div>
+<div class="charts-pair" aria-label="Doğru ve yanlış grafikleri">
+<div class="chart"><h3 style="color:#12865d">Doğru grafiği</h3><div id="correctGraph" class="chart-graphic"></div></div>
+<div class="chart"><h3 style="color:#d5524c">Yanlış grafiği</h3><div id="wrongGraph" class="chart-graphic"></div></div>
+</div>
 <div class="tablewrap" id="statsTable"></div>
-<p class="sub" style="margin:13px 0 7px">Paylaşım, Ayarlar’a eklenen <strong>tüm numaralar</strong> için hazırlanır. Her numara WhatsApp’ta sırayla açılır. Gönderimi WhatsApp’ta onaylayın.</p><button class="btn primary full" id="shareStats" style="margin-top:10px">↗ İstatistikleri WhatsApp ile Paylaş</button></div></section>
-<section id="settingsView" class="view"><div class="card"><h2 class="section-title">Ayarlar</h2><p class="sub">WhatsApp paylaşımı için telefon numaralarını cihazınıza kaydedin. Numaralar 0 ile başlamalıdır.</p><label for="newPhone">Telefon gir</label><div class="row"><input type="tel" id="newPhone" class="grow" inputmode="tel" maxlength="11" placeholder="05XXXXXXXXX"><button id="addPhone" class="btn primary">+ Ekle</button></div><p class="sub" style="margin-top:10px">Türkiye cep telefonu biçimi: 05XXXXXXXXX (11 rakam).</p></div><div class="card"><h2 class="section-title">Kayıtlı telefonlar</h2><div id="phoneList"></div></div><div class="card"><h2 class="section-title">Veri güvenliği</h2><p class="sub" style="margin-bottom:0">Ders ve telefon kayıtları bu cihazda saklanır. Uygulamayı kaldırmanız veya uygulama verilerini silmeniz kayıtları silebilir. Paylaş düğmesine bastığınızda kayıtlı tüm numaralar için sırayla WhatsApp açılır; her mesajın gönderimini WhatsApp'ta ayrı ayrı onaylarsınız.</p></div></section>
+<p class="sub" style="margin:13px 0 7px">Paylaşım, Ayarlar’a eklenen <strong>tüm numaralar</strong> için hazırlanır. <strong>WhatsApp uygulaması</strong> veya <strong>WhatsApp Web</strong> seçebilirsiniz; mesajlar ilgili yerde ayrı ayrı gönderilir.</p><button class="btn primary full" id="shareStats" style="margin-top:10px">↗ İstatistikleri WhatsApp ile Paylaş</button></div></section>
+<section id="settingsView" class="view"><div class="card"><h2 class="section-title">Ayarlar</h2><p class="sub">WhatsApp paylaşımı için telefon numaralarını cihazınıza kaydedin. Numaralar 0 ile başlamalıdır.</p><label for="newPhone">Telefon gir</label><div class="row entry-create"><input type="tel" id="newPhone" class="grow" inputmode="tel" maxlength="11" placeholder="05XXXXXXXXX"><button id="addPhone" class="btn primary">+ Ekle</button></div><p class="sub" style="margin-top:10px">Türkiye cep telefonu biçimi: 05XXXXXXXXX (11 rakam).</p></div><div class="card"><h2 class="section-title">Kayıtlı telefonlar</h2><div id="phoneList"></div></div><div class="card"><h2 class="section-title">Veri güvenliği</h2><p class="sub" style="margin-bottom:0">Ders ve telefon kayıtları bu cihazda saklanır. Uygulamayı kaldırmanız veya uygulama verilerini silmeniz kayıtları silebilir. Paylaşırken kayıtlı tüm numaralar sırayla kullanılır; WhatsApp uygulamasını veya WhatsApp Web’i seçebilirsiniz. Her mesajın gönderimini WhatsApp’ta ayrı ayrı onaylamanız gerekir.</p></div><div class="card backup-card"><h2 class="section-title">Kayıt yedeği</h2>
+<p class="sub">Ders, test ve telefon bilgilerinizi JSON dosyası olarak cihazınıza kaydedebilir, gerektiğinde geri yükleyebilirsiniz.</p>
+<div class="row backup-actions"><button id="exportBackup" type="button" class="btn primary">↓ Yedek İndir</button><button id="importBackup" type="button" class="btn ghost">↑ Yedekten Yükle</button></div>
+<input type="file" id="backupFile" accept="application/json,.json" hidden aria-label="Yedek dosyası seç"/>
+<p class="sub" style="margin:10px 0 0">Kayıtlar uygulamada saklanır. Yedek dosyası seçtiğiniz konuma kaydedilir; başka bir yere otomatik gönderilmez.</p>
+</div></section>
 </main>
-<nav aria-label="Ana menü"><div class="navin"><button id="navCourses" class="active" data-view="courses"><span>▤</span>Dersler</button><button id="navStats" data-view="stats"><span>▥</span>İstatistik</button><button id="navSettings" data-view="settings"><span>⚙</span>Ayarlar</button></div></nav>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <dialog id="shareDialog"><div class="modal">
-<h2>Tüm numaralara WhatsApp paylaşımı</h2>
+<h2>WhatsApp paylaşımı</h2>
 <p id="shareProgress" class="sub" aria-live="polite"></p>
-<p class="sub">Her numara için mesaj WhatsApp'ta açılır. Mesajı WhatsApp'ta <strong>Gönder</strong> düğmesiyle iletin. Ardından uygulamaya dönerek sıradaki numaraya geçin. Gönderim durumunu uygulama otomatik doğrulayamaz.</p>
-<div class="row" style="justify-content:flex-end;margin-top:16px"><button class="btn ghost" id="shareCancel" type="button">Kapat</button><button class="btn primary" id="shareNext" type="button">Sonraki numarayı aç</button></div>
+<div class="share-mode-choices" id="shareModeChoices">
+<button class="btn primary" id="shareAppMode" type="button">WhatsApp Uygulaması</button>
+<button class="btn ghost" id="shareWebMode" type="button">WhatsApp Web</button>
+</div>
+<p id="shareMethodHelp" class="share-help">Kayıtlı numaraların hepsine sırayla paylaşmak için yöntem seçin. WhatsApp Web için tarayıcıda oturum açılmış olmalıdır. Bilgisayarda WhatsApp Web hesabınız açık olmalıdır.</p>
+<div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn ghost" id="shareCancel" type="button">İptal / Kapat</button><button class="btn primary" id="shareNext" type="button" hidden>Sonraki numarayı aç</button></div>
+<a id="shareDirectLink" class="btn ghost share-direct" href="https://wa.me/" target="_blank" rel="noopener noreferrer" hidden>↗ Bağlantıdan aç (pencere engellendiyse)</a>
 </div></dialog>
 <dialog id="confirmDialog"><div class="modal"><h2 id="confirmTitle">Onay</h2><p id="confirmText"></p><div class="row"><button class="btn ghost" type="button" id="confirmCancel">İptal</button><button class="btn danger" type="button" id="confirmYes">Sil</button></div></div></dialog>
 <script>
 (function(){'use strict';
-const KEY='tst_data_v1', $=id=>document.getElementById(id);let data=load(),selectedCourse=null,active='courses',toastTimer,shareQueue=null,shareIndex=-1;
-function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&Array.isArray(x.courses)&&Array.isArray(x.entries)&&Array.isArray(x.phones))return x;}catch(e){}return{courses:[],entries:[],phones:[]}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(data));return true}catch(e){toast('Cihazda kayıt yapılamadı. Depolama alanını kontrol edin.');return false}}
+const KEY='tst_data_v1', $=id=>document.getElementById(id);
+let storageArea=null, storageMode='memory', selectedCourse=null, active='courses', toastTimer, shareQueue=null, shareIndex=-1;
+let data=load();
+function blankData(){return{courses:[],entries:[],phones:[]}}
+function validData(x){return x&&Array.isArray(x.courses)&&Array.isArray(x.entries)&&Array.isArray(x.phones)}
+function hasNativeStorage(){return !!(window.webkit&&window.webkit.messageHandlers&&window.webkit.messageHandlers.appStorage)}
+function findStorage(){
+  for(const type of ['localStorage','sessionStorage']){
+    try{
+      const store=window[type], probe=KEY+'_probe';
+      store.setItem(probe,'1');
+      if(store.getItem(probe)!=='1')continue;
+      store.removeItem(probe);
+      storageMode=type==='localStorage'?'local':'session';
+      return store;
+    }catch(e){}
+  }
+  storageMode='memory';
+  return null;
+}
+function load(){
+  // Xcode ile oluşturulan iOS uygulamasındaki kalıcı veri köprüsünü de destekler.
+  if(hasNativeStorage()){
+    storageMode='native';
+    try{const saved=window.__testSoruTakipSavedData;if(validData(saved))return saved;}catch(e){}
+    return blankData();
+  }
+  storageArea=findStorage();
+  try{const value=storageArea&&storageArea.getItem(KEY);const parsed=value?JSON.parse(value):null;if(validData(parsed))return parsed;}catch(e){}
+  return blankData();
+}
+function refreshRuntimeNotice(){
+  // Masaüstü HTML sürümünde başlangıç / yerel dosya uyarısı gösterilmez.
+  // Herhangi bir hata varsa kullanıcıya yalnızca gerçek işlem hatası iletilir.
+}
+function save(){
+  try{
+    const value=JSON.stringify(data);
+    if(storageMode==='native'){
+      window.webkit.messageHandlers.appStorage.postMessage(value);
+      return true;
+    }
+    if(storageArea){storageArea.setItem(KEY,value);return true;}
+  }catch(e){
+    // Kalıcı depolama sonradan erişilemez olursa geçici moda geç.
+    storageArea=null;
+    storageMode='memory';
+    refreshRuntimeNotice();
+  }
+  // Önizleme ortamında kayıt bellekte tutulur; kullanıcıya kalıcı olmadığı bildirilir.
+  refreshRuntimeNotice();
+  return true;
+}
+function showDialog(dialog){
+  if(typeof dialog.showModal==='function')dialog.showModal();
+  else{dialog.setAttribute('open','');dialog.classList.add('fallbackDialog');}
+}
+function hideDialog(dialog){
+  if(typeof dialog.close==='function'&&dialog.open)dialog.close();
+  else{dialog.removeAttribute('open');dialog.dispatchEvent(new Event('close'));}
+  dialog.classList.remove('fallbackDialog');
+}
 function id(){return String(Date.now())+'-'+Math.random().toString(36).slice(2,9)}
 function escapeText(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3400)}
@@ -73,11 +265,11 @@ function doubleDelete(thing,action){
   $('confirmTitle').textContent='Silme onayı';
   $('confirmText').textContent=thing+' silinsin mi?';
   $('confirmYes').textContent='Sil';
-  try{dialog.showModal()}catch(e){pendingDelete=null;toast('Silme onayı açılamadı.')}
+  try{showDialog(dialog)}catch(e){pendingDelete=null;toast('Silme onayı açılamadı.')}
 }
 function cancelDelete(){
   pendingDelete=null;
-  if($('confirmDialog').open)$('confirmDialog').close();
+  if($('confirmDialog').open)hideDialog($('confirmDialog'));
 }
 $('confirmCancel').addEventListener('click',cancelDelete);
 $('confirmDialog').addEventListener('cancel',()=>{pendingDelete=null});
@@ -93,7 +285,7 @@ $('confirmYes').addEventListener('click',()=>{
   }
   const action=pendingDelete.action;
   pendingDelete=null;
-  $('confirmDialog').close();
+  hideDialog($('confirmDialog'));
   const snapshot=JSON.stringify(data);
   try{
     action();
@@ -118,44 +310,192 @@ function addPhone(){const v=$('newPhone').value.replace(/[\s()-]/g,'');if(!/^05\
 function startShareAll(text){
   if(!data.phones.length){toast('Önce Ayarlar kısmından telefon ekleyin.');switchView('settings');return}
   if(shareQueue){toast('Önce mevcut paylaşım sırasını tamamlayın veya kapatın.');return}
-  shareQueue={phones:data.phones.slice(),text:text};
+  shareQueue={phones:data.phones.slice(),text:text,mode:null};
   shareIndex=-1;
-  const modal=$('shareDialog');
-  modal.showModal();
+  $('shareProgress').textContent=shareQueue.phones.length+' kayıtlı numara için paylaşım yöntemi seçin.';
+  $('shareModeChoices').hidden=false;
+  $('shareMethodHelp').textContent='WhatsApp Uygulaması veya WhatsApp Web’i seçin. Web sürümünü kullanmak için web.whatsapp.com oturumu gerekir.';
+  $('shareNext').hidden=true;
+  $('shareDirectLink').hidden=true;
+  showDialog($('shareDialog'));
+}
+function chooseShareMode(mode){
+  if(!shareQueue||shareQueue.mode)return;
+  shareQueue.mode=mode;
+  $('shareModeChoices').hidden=true;
+  $('shareNext').hidden=false;
+  $('shareMethodHelp').textContent=mode==='web'
+    ? 'WhatsApp Web her numarayı tarayıcıda açar. Bilgisayarda WhatsApp Web oturumunuzun açık olduğundan emin olun. Her mesajı kendiniz gönderin ve buraya geri dönün.'
+    : 'Her numara WhatsApp uygulamasında sırayla açılır. Mesajı kendiniz gönderip buraya geri dönün.';
   openNextRecipient();
 }
 function openNextRecipient(){
-  if(!shareQueue)return;
+  if(!shareQueue||!shareQueue.mode)return;
   const next=shareIndex+1;
   if(next>=shareQueue.phones.length){
     closeShare();
-    toast('Tüm numaralar için paylaşım açıldı. Gönderimleri WhatsApp’tan kontrol edin.');
+    toast('Tüm numaralar için paylaşım bağlantıları açıldı. Gönderimleri WhatsApp’tan kontrol edin.');
     return;
   }
   shareIndex=next;
   const phone=shareQueue.phones[shareIndex];
+  $('shareDirectLink').hidden=true;
   $('shareProgress').textContent='Numara '+(shareIndex+1)+' / '+shareQueue.phones.length+': '+phone;
   $('shareNext').textContent=shareIndex===shareQueue.phones.length-1?'Tamamla':'Sonraki numarayı aç';
-  openWhatsApp(phone,shareQueue.text);
+  openWhatsApp(phone,shareQueue.text,shareQueue.mode);
 }
-function closeShare(){if($('shareDialog').open)$('shareDialog').close();shareQueue=null;shareIndex=-1}
+function closeShare(){if($('shareDialog').open)hideDialog($('shareDialog'));shareQueue=null;shareIndex=-1}
 function shareEntry(e){
   const text=['Test Soru Takip','Ders: '+courseName(e.courseId),'Tarih/Saat: '+dateText(e.date),'Soru adedi: '+e.questions,'Doğru: '+e.correct,'Yanlış: '+e.wrong].join('\n');
   startShareAll(text);
 }
-function openWhatsApp(phone,text){
+function openWhatsApp(phone,text,mode){
   const international='90'+phone.substring(1);
-  try{if(window.AndroidBridge&&typeof AndroidBridge.shareWhatsApp==='function'){AndroidBridge.shareWhatsApp(international,text);return}}catch(e){}
-  const url='https://wa.me/'+international+'?text='+encodeURIComponent(text);
-  window.open(url,'_blank','noopener');
+  const encoded=encodeURIComponent(text);
+  const url=mode==='web'
+    ? 'https://web.whatsapp.com/send?phone='+international+'&text='+encoded
+    : 'https://wa.me/'+international+'?text='+encoded;
+  const direct=$('shareDirectLink');
+  direct.href=url;
+  direct.textContent=mode==='web'?'↗ WhatsApp Web’de aç (engellendiyse dokunun)':'↗ WhatsApp’ta aç (engellendiyse dokunun)';
+  direct.hidden=false;
+  // Web seçildiğinde yerel uygulama köprülerini çağırma.
+  if(mode!=='web'){
+    try{if(window.webkit&&window.webkit.messageHandlers&&window.webkit.messageHandlers.whatsapp){window.webkit.messageHandlers.whatsapp.postMessage({phone:international,text:text});return}}catch(e){}
+    try{if(window.AndroidBridge&&typeof AndroidBridge.shareWhatsApp==='function'){AndroidBridge.shareWhatsApp(international,text);return}}catch(e){}
+  }
+  // Tarayıcı yeni pencereyi engellerse aynı bağlantı kullanıcı tıklamasıyla açılır.
+  try{window.open(url,'_blank','noopener,noreferrer');}catch(e){}
 }
 function filteredEntries(){const f=$('statsFilter').value;return data.entries.filter(e=>!f||e.courseId===f)}
 function daily(entries){const m=new Map();entries.forEach(e=>{const k=dateKey(e.date);if(!m.has(k))m.set(k,{date:k,correct:0,wrong:0,questions:0});const d=m.get(k);d.correct+=e.correct;d.wrong+=e.wrong;d.questions+=e.questions});return Array.from(m.values()).sort((a,b)=>a.date.localeCompare(b.date))}
-function renderChart(target,days,key,color){const node=$(target);if(!days.length){node.innerHTML='<div class="empty">Grafik için test kaydı ekleyin.</div>';return}const w=Math.max(320,days.length*64+45),h=210,padL=37,padR=10,top=13,bottom=57,plotW=w-padL-padR,plotH=h-top-bottom,max=Math.max(1,...days.map(x=>x[key]));let svg='<svg role="img" aria-label="'+(key==='correct'?'Doğru':'Yanlış')+' sayıları tarih grafiği" viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg">';for(let i=0;i<5;i++){const val=Math.round((max/4)*i),y=top+plotH-i*plotH/4;svg+='<line x1="'+padL+'" y1="'+y+'" x2="'+(w-padR)+'" y2="'+y+'" stroke="#e8eff6"/><text x="'+(padL-5)+'" y="'+(y+4)+'" text-anchor="end" font-size="10" fill="#708da3">'+val+'</text>'}const spacing=plotW/days.length;days.forEach((d,i)=>{const x=padL+spacing*i+spacing/2;const bh=(d[key]/max)*(plotH-5);svg+='<rect x="'+(x-14)+'" y="'+(top+plotH-bh)+'" width="28" height="'+bh+'" rx="4" fill="'+color+'"/><text x="'+x+'" y="'+Math.max(11,top+plotH-bh-5)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="'+color+'">'+d[key]+'</text><text x="'+x+'" y="'+(top+plotH+18)+'" text-anchor="middle" font-size="10" fill="#648197" transform="rotate(-40 '+x+' '+(top+plotH+18)+')">'+shortDate(d.date)+'</text>'});svg+='</svg>';node.innerHTML='<div style="overflow-x:auto"><div style="min-width:100%;width:'+w+'px;max-width:none">'+svg+'</div></div><div class="hint">Yatay eksen: Tarih · Dikey eksen: Soru adedi</div>'}
+function renderChart(target,days,key,color){
+  const node=$(target);
+  if(!days.length){node.innerHTML='<div class="empty">Grafik için test kaydı ekleyin.</div>';return}
+  // Genişlik ekrandan hesaplanır; tarih sayısı arttığında SVG genişletilmez.
+  // Çok sayıda günde yalnızca bazı tarih etiketleri yazılır, bütün sütunlar korunur.
+  const width=node.clientWidth||node.parentElement.clientWidth||300;
+  const w=Math.max(225,Math.round(width-4)),h=126,left=27,right=5,top=14,bottom=27;
+  const plotW=w-left-right,plotH=h-top-bottom;
+  const max=Math.max(1,...days.map(d=>d[key]));
+  const spacing=plotW/days.length;
+  const labelInterval=Math.max(1,Math.ceil(days.length/5));
+  const valVisible=days.length<=7&&spacing>=28;
+  let svg='<svg role="img" aria-label="'+(key==='correct'?'Doğru':'Yanlış')+' sayıları tarih grafiği" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">';
+  for(let i=0;i<=2;i++){
+    const v=Math.round(max*i/2),y=top+plotH-i*plotH/2;
+    svg+='<line x1="'+left+'" y1="'+y+'" x2="'+(w-right)+'" y2="'+y+'" stroke="#e4edf5"/>';
+    svg+='<text x="'+(left-3)+'" y="'+(y+3)+'" text-anchor="end" font-size="9" fill="#617b91">'+v+'</text>';
+  }
+  days.forEach((d,i)=>{
+    const x=left+(i+.5)*spacing;
+    const height=d[key]/max*(plotH-8);
+    const bw=Math.max(1,Math.min(22,spacing*.62));
+    const y=top+plotH-height;
+    svg+='<rect x="'+(x-bw/2).toFixed(2)+'" y="'+y.toFixed(2)+'" width="'+bw.toFixed(2)+'" height="'+height.toFixed(2)+'" rx="'+Math.min(3,bw/4)+'" fill="'+color+'"><title>'+d.date+': '+d[key]+' adet</title></rect>';
+    if(valVisible){svg+='<text x="'+x+'" y="'+Math.max(9,y-3)+'" text-anchor="middle" font-size="9" font-weight="bold" fill="'+color+'">'+d[key]+'</text>'}
+    if(i%labelInterval===0||i===days.length-1){
+      // Birbirine çok yakın tarih metinlerini çizme.
+      if(i===days.length-1&&i>0&&i%labelInterval!==0&&spacing*(i-Math.floor(i/labelInterval)*labelInterval)<29)return;
+      svg+='<text x="'+x+'" y="'+(h-7)+'" text-anchor="middle" font-size="9" fill="#617b91">'+shortDate(d.date).slice(0,5)+'</text>';
+    }
+  });
+  svg+='</svg>';
+  node.innerHTML=svg+'<div class="hint">Tarihe göre adet · '+days.length+' tarih</div>';
+}
 function renderStats(){const filter=$('statsFilter'),prior=filter.value;filter.innerHTML='<option value="">Tüm dersler</option>';data.courses.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;filter.appendChild(o)});if(data.courses.some(c=>c.id===prior))filter.value=prior;const rows=filteredEntries(),days=daily(rows);$('totalQuestions').textContent=rows.reduce((x,e)=>x+e.questions,0);$('totalCorrect').textContent=rows.reduce((x,e)=>x+e.correct,0);$('totalWrong').textContent=rows.reduce((x,e)=>x+e.wrong,0);const q=+($('totalQuestions').textContent),r=+($('totalCorrect').textContent);$('accuracy').textContent=q?'Doğru oranı: %'+(100*r/q).toFixed(1):'Henüz kayıt yok.';renderChart('correctGraph',days,'correct','#1a9a70');renderChart('wrongGraph',days,'wrong','#e06a62');$('statsTable').innerHTML=days.length?'<table><thead><tr><th>Tarih</th><th>Soru</th><th>Doğru</th><th>Yanlış</th></tr></thead><tbody>'+days.map(d=>'<tr><td>'+shortDate(d.date)+'</td><td>'+d.questions+'</td><td>'+d.correct+'</td><td>'+d.wrong+'</td></tr>').join('')+'</tbody></table>':'<div class="empty">Gösterilecek sonuç bulunmuyor.</div>'}
 function shareStats(){const rows=filteredEntries(),days=daily(rows);if(!days.length){toast('Paylaşmak için önce test kaydı ekleyin.');return}const name=$('statsFilter').value?courseName($('statsFilter').value):'Tüm dersler';const total=key=>rows.reduce((s,e)=>s+e[key],0),q=total('questions'),c=total('correct'),w=total('wrong');let msg=['TEST SORU TAKİP — İSTATİSTİK','Ders: '+name,'Toplam soru: '+q,'Toplam doğru: '+c,'Toplam yanlış: '+w,'Doğru oranı: %'+(100*c/q).toFixed(1),'','DOĞRU GRAFİĞİ (Tarih | Adet)'];const cm=Math.max(1,...days.map(x=>x.correct));days.forEach(d=>msg.push(shortDate(d.date)+' | '+d.correct+' '+ '▇'.repeat(Math.round(d.correct/cm*12))));msg.push('','YANLIŞ GRAFİĞİ (Tarih | Adet)');const wm=Math.max(1,...days.map(x=>x.wrong));days.forEach(d=>msg.push(shortDate(d.date)+' | '+d.wrong+' '+'▇'.repeat(Math.round(d.wrong/wm*12))));msg.push('','Test Soru Takip uygulamasından paylaşıldı.');startShareAll(msg.join('\n'))}
+function downloadBackup(){
+  try{
+    const payload={format:'TestSoruTakip',version:1,exportedAt:new Date().toISOString(),
+      courses:data.courses,entries:data.entries,phones:data.phones};
+    const json=JSON.stringify(payload,null,2);
+    const fileName='Test_Soru_Takip_Yedek_'+new Date().toISOString().slice(0,10)+'.json';
+    // Android dosya kaydetme penceresi: indirme taklidi yapma, gerçekten dosya seçtir.
+    if(window.AndroidBridge&&typeof AndroidBridge.saveBackupJson==='function'){
+      AndroidBridge.saveBackupJson(fileName,json);
+      return;
+    }
+    const blob=new Blob([json],{type:'application/json;charset=utf-8'});
+    const url=URL.createObjectURL(blob),link=document.createElement('a');
+    link.href=url;link.download=fileName;
+    document.body.appendChild(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+    toast('Yedek dosyası indirildi.');
+  }catch(e){toast('Yedek indirilemedi.');}
+}
+function validateBackup(value){
+  const x=value&&value.format==='TestSoruTakip'?value:value;
+  if(!validData(x))return false;
+  if(x.courses.length>2000||x.entries.length>50000||x.phones.length>1000)return false;
+  if(!x.courses.every(c=>c&&typeof c.id==='string'&&typeof c.name==='string'))return false;
+  if(!x.entries.every(e=>e&&typeof e.id==='string'&&typeof e.courseId==='string'
+      &&typeof e.date==='string'&&Number.isSafeInteger(e.questions)&&Number.isSafeInteger(e.correct)
+      &&Number.isSafeInteger(e.wrong)&&e.questions>0&&e.correct>=0&&e.wrong>=0
+      &&e.correct+e.wrong<=e.questions))return false;
+  if(!x.phones.every(p=>typeof p==='string'&&/^05\d{9}$/.test(p)))return false;
+  return true;
+}
+function processBackupText(text){
+  try{
+    if(typeof text!=='string'||text.length>4*1024*1024){toast('Yedek dosyası çok büyük.');return;}
+    const incoming=JSON.parse(text);
+    if(!validateBackup(incoming)){toast('Yedek biçimi geçersiz.');return;}
+    if(!window.confirm('Mevcut ders, test ve telefon kayıtları yedekteki kayıtlarla değiştirilsin mi?'))return;
+    const previous=JSON.stringify(data);
+    data={courses:incoming.courses,entries:incoming.entries,phones:incoming.phones};
+    if(!save()){data=JSON.parse(previous);renderAll();toast('Yedek kaydedilemedi.');return;}
+    selectedCourse=null;$('courseDetail').hidden=true;$('courseIndex').hidden=false;
+    renderAll();toast('Yedek başarıyla yüklendi.');
+  }catch(e){toast('Yedek dosyası açılamadı.');}
+}
+function loadBackupFile(){
+  const input=$('backupFile'),file=input.files&&input.files[0];
+  input.value='';
+  if(!file)return;
+  if(file.size>4*1024*1024){toast('Yedek dosyası çok büyük.');return;}
+  const reader=new FileReader();
+  reader.onerror=()=>toast('Yedek dosyası okunamadı.');
+  reader.onload=()=>processBackupText(String(reader.result));
+  reader.readAsText(file,'UTF-8');
+}
+function importBackup(){
+  if(window.AndroidBridge&&typeof AndroidBridge.openBackupPicker==='function'){
+    AndroidBridge.openBackupPicker();
+  }else $('backupFile').click();
+}
+window.testSoruTakipOnBackupFile=processBackupText;
+window.testSoruTakipBackupNotice=function(message){toast(String(message||'İşlem tamamlanamadı.'));};
 function switchView(view){active=view;['courses','stats','settings'].forEach(v=>{$(v+'View').classList.toggle('active',view===v);$('nav'+v[0].toUpperCase()+v.slice(1)).classList.toggle('active',view===v)});if(view==='stats')renderStats();if(view==='settings')renderPhones();window.scrollTo(0,0)}
 function renderAll(){renderCourses();if(selectedCourse)renderEntries();renderPhones();renderStats()}
-$('addCourse').onclick=addCourse;$('newCourse').addEventListener('keydown',e=>{if(e.key==='Enter')addCourse()});$('backCourses').onclick=backCourses;$('saveEntry').onclick=saveEntry;$('addPhone').onclick=addPhone;$('newPhone').addEventListener('keydown',e=>{if(e.key==='Enter')addPhone()});$('statsFilter').addEventListener('change',renderStats);$('shareStats').onclick=shareStats;$('shareCancel').onclick=closeShare;$('shareNext').onclick=openNextRecipient;$('shareDialog').addEventListener('close',()=>{shareQueue=null;shareIndex=-1});document.querySelectorAll('nav button').forEach(btn=>btn.onclick=()=>switchView(btn.dataset.view));$('entryDate').value=nowInput();renderAll();
+try{
+  $('addCourse').onclick=addCourse;
+  $('newCourse').addEventListener('keydown',e=>{if(e.key==='Enter')addCourse()});
+  $('backCourses').onclick=backCourses;
+  $('saveEntry').onclick=saveEntry;
+  $('exportBackup').onclick=downloadBackup;
+  $('importBackup').onclick=importBackup;
+  $('backupFile').addEventListener('change',loadBackupFile);
+  $('addPhone').onclick=addPhone;
+  $('newPhone').addEventListener('keydown',e=>{if(e.key==='Enter')addPhone()});
+  $('statsFilter').addEventListener('change',renderStats);
+  $('shareStats').onclick=shareStats;
+  $('shareCancel').onclick=closeShare;
+  $('shareNext').onclick=openNextRecipient;
+  $('shareAppMode').onclick=()=>chooseShareMode('app');
+  $('shareWebMode').onclick=()=>chooseShareMode('web');
+  $('shareDialog').addEventListener('close',()=>{shareQueue=null;shareIndex=-1});
+  window.addEventListener('tst-storage-error',()=>toast('Kayıt tarayıcıya yazılamadı. Depolamayı kontrol edin.'));
+  window.addEventListener('resize',()=>{if(active==='stats')renderStats();});
+  document.querySelectorAll('nav button').forEach(btn=>btn.onclick=()=>switchView(btn.dataset.view));
+  $('entryDate').value=nowInput();
+  // Chrome for iOS (CriOS) da dahil olmak üzere tüm web tarayıcıları için
+  // doğrudan DOM olayları kullanılır; WKWebView köprüsü zorunlu değildir.
+  renderAll();
+  refreshRuntimeNotice();
+}catch(e){
+  $('appRuntime').hidden=false;
+  $('appRuntime').textContent='Uygulama başlatılamadı: '+String(e&&e.message||e)+'. Tarayıcıyı yenileyerek tekrar deneyin.';
+}
 })();
 </script></body></html>
