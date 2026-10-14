@@ -95,7 +95,7 @@ public final class MainActivity extends Activity {
             if(number==null||!number.matches("90[0-9]{10}")||text==null)return;
             final String encoded;
             try{encoded=URLEncoder.encode(text,"UTF-8");}
-            catch(UnsupportedEncodingException e){return;}
+            catch(java.io.UnsupportedEncodingException e){return;}
             runOnUiThread(()->{
                 Uri deepLink=Uri.parse("whatsapp://send?phone="+number+"&text="+encoded);
                 Uri appLink=Uri.parse("https://wa.me/"+number+"?text="+encoded);
