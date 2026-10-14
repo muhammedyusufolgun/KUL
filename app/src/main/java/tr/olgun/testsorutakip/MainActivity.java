@@ -68,7 +68,7 @@ public final class MainActivity extends Activity {
             if(json==null || json.getBytes(StandardCharsets.UTF_8).length>MAX_BACKUP_BYTES){
                 runOnUiThread(()->notifyJs("Yedek boyutu geçersiz."));return;
             }
-            final String name=(suggestedName!=null&&suggestedName.matches("Test_Soru_Takip_Yedek_[0-9]{4}-[0-9]{2}-[0-9]{2}\\\\.json"))
+            final String name=(suggestedName!=null&&suggestedName.matches("Test_Soru_Takip_Yedek_[0-9]{4}-[0-9]{2}-[0-9]{2}\\.json"))
                 ? suggestedName : "Test_Soru_Takip_Yedek.json";
             runOnUiThread(()->{
                 pendingBackupJson=json;
