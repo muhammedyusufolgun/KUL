@@ -80,7 +80,7 @@ jobs:
               if re.search(r'<color name="ic_launcher_background">.*?</color>',txt):
                   txt=re.sub(r'<color name="ic_launcher_background">.*?</color>',f'<color name="ic_launcher_background">{yellow}</color>',txt)
               else:
-                  txt=txt.replace("</resources>",f'    <color name="ic_launcher_background">{yellow}</color>\\n</resources>')
+                  txt=txt.replace("</resources>",f'    <color name="ic_launcher_background">{yellow}</color>\n</resources>')
               colors.write_text(txt)
           else:
               colors.write_text(f'<resources><color name="ic_launcher_background">{yellow}</color></resources>')
@@ -98,7 +98,7 @@ jobs:
           PY
       - name: Resolve Kotlin duplicate classes
         run: |
-          printf '\\nconfigurations.configureEach { exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk8" }\\n' >> android/app/build.gradle
+          printf '\nconfigurations.configureEach { exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk8" }\n' >> android/app/build.gradle
       - name: Build APK
         run: |
           cd android
