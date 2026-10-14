@@ -21,7 +21,7 @@ dialog{border:1px solid #cfdeeb;border-radius:15px;padding:0;width:min(92vw,390p
 #appRuntime[hidden]{display:none!important}
 #appRuntime strong{color:#68400d}
 .fallbackDialog{position:fixed;inset:50% auto auto 50%;transform:translate(-50%,-50%);z-index:100;width:min(92vw,390px);max-height:85dvh;overflow-y:auto;box-shadow:0 0 0 100vmax rgba(14,41,69,.48),0 18px 65px #0b284852}
-.share-direct{display:flex;text-align:center;margin-top:10px;text-decoration:none}.share-direct[hidden],#shareNext[hidden],#shareModeChoices[hidden]{display:none!important}
+.share-direct{display:flex;text-align:center;margin-top:10px;text-decoration:none}#shareNext[hidden]{display:none!important}
 /* Responsive full-width layout — phones, foldables, tablets and desktop. */
 :root{--page-gutter:clamp(8px,1.4vw,24px)}
 html,body{width:100%;max-width:100%;min-width:0;overflow-x:hidden}
@@ -75,12 +75,9 @@ nav button{min-width:0}
  #statsView .sub{margin-bottom:7px}
  #statsView label{margin-top:7px;margin-bottom:4px}
 }
-.share-mode-choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
-.share-mode-choices .btn{white-space:normal;text-align:center;line-height:1.25;min-height:50px}
 #shareDialog .modal{max-height:85dvh;overflow-y:auto}
 #shareDialog #shareProgress{margin:0 0 7px}
 #shareDialog .share-help{font-size:12px;margin:8px 0 6px;color:#526e87}
-#shareDialog .share-direct{white-space:normal}
 @media (max-width:330px){.share-mode-choices{grid-template-columns:1fr}}
 
 /* MASAÜSTÜ DÜZENİ: üst menü, yan yana bölümler ve okunur grafikler. */
@@ -160,8 +157,8 @@ nav button{min-width:0}
 <div class="chart"><h3 style="color:#d5524c">Yanlış grafiği</h3><div id="wrongGraph" class="chart-graphic"></div></div>
 </div>
 <div class="tablewrap" id="statsTable"></div>
-<p class="sub" style="margin:13px 0 7px">Paylaşım, Ayarlar’a eklenen <strong>tüm numaralar</strong> için hazırlanır. <strong>WhatsApp uygulaması</strong> veya <strong>WhatsApp Web</strong> seçebilirsiniz; mesajlar ilgili yerde ayrı ayrı gönderilir.</p><button class="btn primary full" id="shareStats" style="margin-top:10px">↗ İstatistikleri WhatsApp ile Paylaş</button></div></section>
-<section id="settingsView" class="view"><div class="card"><h2 class="section-title">Ayarlar</h2><p class="sub">WhatsApp paylaşımı için telefon numaralarını cihazınıza kaydedin. Numaralar 0 ile başlamalıdır.</p><label for="newPhone">Telefon gir</label><div class="row entry-create"><input type="tel" id="newPhone" class="grow" inputmode="tel" maxlength="11" placeholder="05XXXXXXXXX"><button id="addPhone" class="btn primary">+ Ekle</button></div><p class="sub" style="margin-top:10px">Türkiye cep telefonu biçimi: 05XXXXXXXXX (11 rakam).</p></div><div class="card"><h2 class="section-title">Kayıtlı telefonlar</h2><div id="phoneList"></div></div><div class="card"><h2 class="section-title">Veri güvenliği</h2><p class="sub" style="margin-bottom:0">Ders ve telefon kayıtları bu cihazda saklanır. Uygulamayı kaldırmanız veya uygulama verilerini silmeniz kayıtları silebilir. Paylaşırken kayıtlı tüm numaralar sırayla kullanılır; WhatsApp uygulamasını veya WhatsApp Web’i seçebilirsiniz. Her mesajın gönderimini WhatsApp’ta ayrı ayrı onaylamanız gerekir.</p></div><div class="card backup-card"><h2 class="section-title">Kayıt yedeği</h2>
+<p class="sub" style="margin:13px 0 7px">Paylaşım, Ayarlar’a eklenen <strong>tüm numaralar</strong> için hazırlanır. Paylaş düğmesine basınca mesaj doğrudan <strong>WhatsApp uygulamasında</strong> hazırlanır. Birden çok numara için gönderimden sonra sıradaki numaraya geçilir.</p><button class="btn primary full" id="shareStats" style="margin-top:10px">↗ İstatistikleri WhatsApp ile Paylaş</button></div></section>
+<section id="settingsView" class="view"><div class="card"><h2 class="section-title">Ayarlar</h2><p class="sub">WhatsApp paylaşımı için telefon numaralarını cihazınıza kaydedin. Numaralar 0 ile başlamalıdır.</p><label for="newPhone">Telefon gir</label><div class="row entry-create"><input type="tel" id="newPhone" class="grow" inputmode="tel" maxlength="11" placeholder="05XXXXXXXXX"><button id="addPhone" class="btn primary">+ Ekle</button></div><p class="sub" style="margin-top:10px">Türkiye cep telefonu biçimi: 05XXXXXXXXX (11 rakam).</p></div><div class="card"><h2 class="section-title">Kayıtlı telefonlar</h2><div id="phoneList"></div></div><div class="card"><h2 class="section-title">Veri güvenliği</h2><p class="sub" style="margin-bottom:0">Ders ve telefon kayıtları bu cihazda saklanır. Uygulamayı kaldırmanız veya uygulama verilerini silmeniz kayıtları silebilir. Paylaş düğmesi, kayıtlı numaraların WhatsApp sohbetlerini doğrudan açar. Alıcı seçimi veya WhatsApp Web seçimi yapılmaz. Her mesajın gönderimini WhatsApp’ta ayrı ayrı onaylamanız gerekir.</p></div><div class="card backup-card"><h2 class="section-title">Kayıt yedeği</h2>
 <p class="sub">Ders, test ve telefon bilgilerinizi JSON dosyası olarak cihazınıza kaydedebilir, gerektiğinde geri yükleyebilirsiniz.</p>
 <div class="row backup-actions"><button id="exportBackup" type="button" class="btn primary">↓ Yedek İndir</button><button id="importBackup" type="button" class="btn ghost">↑ Yedekten Yükle</button></div>
 <input type="file" id="backupFile" accept="application/json,.json" hidden aria-label="Yedek dosyası seç"/>
@@ -170,15 +167,10 @@ nav button{min-width:0}
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <dialog id="shareDialog"><div class="modal">
-<h2>WhatsApp paylaşımı</h2>
+<h2>WhatsApp ile paylaşım</h2>
 <p id="shareProgress" class="sub" aria-live="polite"></p>
-<div class="share-mode-choices" id="shareModeChoices">
-<button class="btn primary" id="shareAppMode" type="button">WhatsApp Uygulaması</button>
-<button class="btn ghost" id="shareWebMode" type="button">WhatsApp Web</button>
-</div>
-<p id="shareMethodHelp" class="share-help">Kayıtlı numaraların hepsine sırayla paylaşmak için yöntem seçin. WhatsApp Web için tarayıcıda oturum açılmış olmalıdır. Bilgisayarda WhatsApp Web hesabınız açık olmalıdır.</p>
-<div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn ghost" id="shareCancel" type="button">İptal / Kapat</button><button class="btn primary" id="shareNext" type="button" hidden>Sonraki numarayı aç</button></div>
-<a id="shareDirectLink" class="btn ghost share-direct" href="https://wa.me/" target="_blank" rel="noopener noreferrer" hidden>↗ Bağlantıdan aç (pencere engellendiyse)</a>
+<p id="shareMethodHelp" class="share-help">İlk numaranın sohbeti doğrudan WhatsApp uygulamasında açılır. Mesajı WhatsApp’ta gönderdikten sonra buraya dönüp sıradaki numaraya geçin. Gönderim otomatik yapılmaz.</p>
+<div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn ghost" id="shareCancel" type="button">Kapat</button><button class="btn primary" id="shareNext" type="button">Sonraki numarayı aç</button></div>
 </div></dialog>
 <dialog id="confirmDialog"><div class="modal"><h2 id="confirmTitle">Onay</h2><p id="confirmText"></p><div class="row"><button class="btn ghost" type="button" id="confirmCancel">İptal</button><button class="btn danger" type="button" id="confirmYes">Sil</button></div></div></dialog>
 <script>
@@ -308,64 +300,50 @@ function renderPhones(){const dst=$('phoneList');dst.innerHTML='';if(!data.phone
 }
 function addPhone(){const v=$('newPhone').value.replace(/[\s()-]/g,'');if(!/^05\d{9}$/.test(v)){toast('Telefon 05 ile başlamalı ve 11 rakam olmalı.');return}if(data.phones.includes(v)){toast('Telefon zaten kayıtlı.');return}data.phones.push(v);if(save()){$('newPhone').value='';renderPhones();toast('Telefon eklendi.')}}
 function startShareAll(text){
-  if(!data.phones.length){toast('Önce Ayarlar kısmından telefon ekleyin.');switchView('settings');return}
-  if(shareQueue){toast('Önce mevcut paylaşım sırasını tamamlayın veya kapatın.');return}
-  shareQueue={phones:data.phones.slice(),text:text,mode:null};
+  if(!data.phones.length){toast('Paylaşım için Ayarlar bölümünden telefon ekleyin.');switchView('settings');return}
+  if(shareQueue){toast('Önce mevcut WhatsApp paylaşımını tamamlayın veya kapatın.');return}
+  shareQueue={phones:data.phones.slice(),text:String(text)};
   shareIndex=-1;
-  $('shareProgress').textContent=shareQueue.phones.length+' kayıtlı numara için paylaşım yöntemi seçin.';
-  $('shareModeChoices').hidden=false;
-  $('shareMethodHelp').textContent='WhatsApp Uygulaması veya WhatsApp Web’i seçin. Web sürümünü kullanmak için web.whatsapp.com oturumu gerekir.';
-  $('shareNext').hidden=true;
-  $('shareDirectLink').hidden=true;
-  showDialog($('shareDialog'));
-}
-function chooseShareMode(mode){
-  if(!shareQueue||shareQueue.mode)return;
-  shareQueue.mode=mode;
-  $('shareModeChoices').hidden=true;
-  $('shareNext').hidden=false;
-  $('shareMethodHelp').textContent=mode==='web'
-    ? 'WhatsApp Web her numarayı tarayıcıda açar. Bilgisayarda WhatsApp Web oturumunuzun açık olduğundan emin olun. Her mesajı kendiniz gönderin ve buraya geri dönün.'
-    : 'Her numara WhatsApp uygulamasında sırayla açılır. Mesajı kendiniz gönderip buraya geri dönün.';
+  if(shareQueue.phones.length>1){
+    showDialog($('shareDialog'));
+  }
+  // Doğrudan ilk telefon için WhatsApp açılır; uygulama/web seçim ekranı yok.
   openNextRecipient();
 }
 function openNextRecipient(){
-  if(!shareQueue||!shareQueue.mode)return;
+  if(!shareQueue)return;
   const next=shareIndex+1;
   if(next>=shareQueue.phones.length){
     closeShare();
-    toast('Tüm numaralar için paylaşım bağlantıları açıldı. Gönderimleri WhatsApp’tan kontrol edin.');
+    toast('Tüm numaralar için WhatsApp açıldı. Gönderimleri WhatsApp üzerinden kontrol edin.');
     return;
   }
   shareIndex=next;
   const phone=shareQueue.phones[shareIndex];
-  $('shareDirectLink').hidden=true;
-  $('shareProgress').textContent='Numara '+(shareIndex+1)+' / '+shareQueue.phones.length+': '+phone;
-  $('shareNext').textContent=shareIndex===shareQueue.phones.length-1?'Tamamla':'Sonraki numarayı aç';
-  openWhatsApp(phone,shareQueue.text,shareQueue.mode);
+  if(shareQueue.phones.length>1){
+    $('shareProgress').textContent='Numara '+(shareIndex+1)+' / '+shareQueue.phones.length+': '+phone;
+    $('shareNext').textContent=shareIndex===shareQueue.phones.length-1?'Tamamla':'Sonraki numarayı aç';
+  }
+  openWhatsApp(phone,shareQueue.text);
+  if(shareQueue && shareQueue.phones.length===1){shareQueue=null;shareIndex=-1;}
 }
 function closeShare(){if($('shareDialog').open)hideDialog($('shareDialog'));shareQueue=null;shareIndex=-1}
 function shareEntry(e){
   const text=['Test Soru Takip','Ders: '+courseName(e.courseId),'Tarih/Saat: '+dateText(e.date),'Soru adedi: '+e.questions,'Doğru: '+e.correct,'Yanlış: '+e.wrong].join('\n');
   startShareAll(text);
 }
-function openWhatsApp(phone,text,mode){
+function openWhatsApp(phone,text){
   const international='90'+phone.substring(1);
-  const encoded=encodeURIComponent(text);
-  const url=mode==='web'
-    ? 'https://web.whatsapp.com/send?phone='+international+'&text='+encoded
-    : 'https://wa.me/'+international+'?text='+encoded;
-  const direct=$('shareDirectLink');
-  direct.href=url;
-  direct.textContent=mode==='web'?'↗ WhatsApp Web’de aç (engellendiyse dokunun)':'↗ WhatsApp’ta aç (engellendiyse dokunun)';
-  direct.hidden=false;
-  // Web seçildiğinde yerel uygulama köprülerini çağırma.
-  if(mode!=='web'){
-    try{if(window.webkit&&window.webkit.messageHandlers&&window.webkit.messageHandlers.whatsapp){window.webkit.messageHandlers.whatsapp.postMessage({phone:international,text:text});return}}catch(e){}
-    try{if(window.AndroidBridge&&typeof AndroidBridge.shareWhatsApp==='function'){AndroidBridge.shareWhatsApp(international,text);return}}catch(e){}
-  }
-  // Tarayıcı yeni pencereyi engellerse aynı bağlantı kullanıcı tıklamasıyla açılır.
-  try{window.open(url,'_blank','noopener,noreferrer');}catch(e){}
+  // Android APK: doğrudan yüklü WhatsApp uygulamasına yönlendir; web veya uygulama sorulmaz.
+  try{
+    if(window.AndroidBridge && typeof AndroidBridge.shareWhatsApp==='function'){
+      AndroidBridge.shareWhatsApp(international,text);
+      return;
+    }
+  }catch(e){toast('WhatsApp uygulaması açılamadı.');return}
+  // HTML dosyası tek başına tarayıcıdan açılırsa genel WhatsApp bağlantısını kullan.
+  try{window.location.href='https://wa.me/'+international+'?text='+encodeURIComponent(text)}
+  catch(e){toast('WhatsApp bağlantısı açılamadı.');}
 }
 function filteredEntries(){const f=$('statsFilter').value;return data.entries.filter(e=>!f||e.courseId===f)}
 function daily(entries){const m=new Map();entries.forEach(e=>{const k=dateKey(e.date);if(!m.has(k))m.set(k,{date:k,correct:0,wrong:0,questions:0});const d=m.get(k);d.correct+=e.correct;d.wrong+=e.wrong;d.questions+=e.questions});return Array.from(m.values()).sort((a,b)=>a.date.localeCompare(b.date))}
@@ -482,8 +460,6 @@ try{
   $('shareStats').onclick=shareStats;
   $('shareCancel').onclick=closeShare;
   $('shareNext').onclick=openNextRecipient;
-  $('shareAppMode').onclick=()=>chooseShareMode('app');
-  $('shareWebMode').onclick=()=>chooseShareMode('web');
   $('shareDialog').addEventListener('close',()=>{shareQueue=null;shareIndex=-1});
   window.addEventListener('tst-storage-error',()=>toast('Kayıt tarayıcıya yazılamadı. Depolamayı kontrol edin.'));
   window.addEventListener('resize',()=>{if(active==='stats')renderStats();});
