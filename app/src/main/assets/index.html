@@ -47,7 +47,7 @@ dialog{border:1px solid #cfdeeb;border-radius:15px;padding:0;width:min(92vw,390p
 <p class="sub">Her numara için mesaj WhatsApp'ta açılır. Mesajı WhatsApp'ta <strong>Gönder</strong> düğmesiyle iletin. Ardından uygulamaya dönerek sıradaki numaraya geçin. Gönderim durumunu uygulama otomatik doğrulayamaz.</p>
 <div class="row" style="justify-content:flex-end;margin-top:16px"><button class="btn ghost" id="shareCancel" type="button">Kapat</button><button class="btn primary" id="shareNext" type="button">Sonraki numarayı aç</button></div>
 </div></dialog>
-<dialog id="confirmDialog"><div class="modal"><h2 id="confirmTitle">Onay</h2><p id="confirmText"></p><div class="row"><button class="btn ghost" id="confirmCancel">İptal</button><button class="btn danger" id="confirmYes">Sil</button></div></div></dialog>
+<dialog id="confirmDialog"><div class="modal"><h2 id="confirmTitle">Onay</h2><p id="confirmText"></p><div class="row"><button class="btn ghost" type="button" id="confirmCancel">İptal</button><button class="btn danger" type="button" id="confirmYes">Sil</button></div></div></dialog>
 <script>
 (function(){'use strict';
 const KEY='tst_data_v1', $=id=>document.getElementById(id);let data=load(),selectedCourse=null,active='courses',toastTimer,shareQueue=null,shareIndex=-1;
@@ -62,8 +62,50 @@ function dateText(dt){const d=new Date(dt);return isNaN(d)?dt:d.toLocaleString('
 function dateKey(dt){return String(dt).slice(0,10)}
 function shortDate(k){const v=k.split('-');return v[2]+'.'+v[1]+'.'+v[0].slice(-2)}
 function courseName(courseId){const c=data.courses.find(c=>c.id===courseId);return c?c.name:'Silinmiş ders'}
-function ask(title,desc,yesLabel){return new Promise(resolve=>{const dialog=$('confirmDialog');$('confirmTitle').textContent=title;$('confirmText').textContent=desc;$('confirmYes').textContent=yesLabel||'Sil';let done=false;function finish(v){if(done)return;done=true;dialog.removeEventListener('close',closed);$('confirmCancel').removeEventListener('click',cancel);$('confirmYes').removeEventListener('click',yes);if(dialog.open)dialog.close();resolve(v)}function closed(){finish(false)}function cancel(){finish(false)}function yes(){finish(true)}dialog.addEventListener('close',closed);$('confirmCancel').addEventListener('click',cancel);$('confirmYes').addEventListener('click',yes);try{dialog.showModal()}catch(e){finish(false)}})}
-async function doubleDelete(thing,action){if(!await ask('Silme onayı',thing+' silinsin mi?','Sil'))return;if(!await ask('Emin misiniz?',thing+' kalıcı olarak silinecek. Bu işlem geri alınamaz.','Evet, sil'))return;action();if(save()){renderAll();toast('Kayıt silindi.')}}
+// Tek bir onay penceresinde iki aşama: ilk "Sil", ardından "Emin misiniz?".
+// İki dialogu peş peşe kapatıp açmak, gecikmiş `close` olayı nedeniyle
+// ikinci onayı istemsiz olarak iptal ediyordu.
+let pendingDelete=null;
+function doubleDelete(thing,action){
+  const dialog=$('confirmDialog');
+  if(pendingDelete||dialog.open)return;
+  pendingDelete={thing,action,stage:1};
+  $('confirmTitle').textContent='Silme onayı';
+  $('confirmText').textContent=thing+' silinsin mi?';
+  $('confirmYes').textContent='Sil';
+  try{dialog.showModal()}catch(e){pendingDelete=null;toast('Silme onayı açılamadı.')}
+}
+function cancelDelete(){
+  pendingDelete=null;
+  if($('confirmDialog').open)$('confirmDialog').close();
+}
+$('confirmCancel').addEventListener('click',cancelDelete);
+$('confirmDialog').addEventListener('cancel',()=>{pendingDelete=null});
+$('confirmDialog').addEventListener('close',()=>{pendingDelete=null});
+$('confirmYes').addEventListener('click',()=>{
+  if(!pendingDelete)return;
+  if(pendingDelete.stage===1){
+    pendingDelete.stage=2;
+    $('confirmTitle').textContent='Emin misiniz?';
+    $('confirmText').textContent=pendingDelete.thing+' kalıcı olarak silinecek. Bu işlem geri alınamaz.';
+    $('confirmYes').textContent='Evet, sil';
+    return;
+  }
+  const action=pendingDelete.action;
+  pendingDelete=null;
+  $('confirmDialog').close();
+  const snapshot=JSON.stringify(data);
+  try{
+    action();
+    if(!save())data=JSON.parse(snapshot);
+    else toast('Kayıt silindi.');
+    renderAll();
+  }catch(err){
+    data=JSON.parse(snapshot);
+    renderAll();
+    toast('Silme işlemi tamamlanamadı.');
+  }
+});
 function addCourse(){const v=$('newCourse').value.trim().replace(/\s+/g,' ');if(!v){toast('Ders adı girin.');return}if(data.courses.some(x=>x.name.toLocaleLowerCase('tr-TR')===v.toLocaleLowerCase('tr-TR'))){toast('Bu ders zaten eklenmiş.');return}data.courses.push({id:id(),name:v});if(save()){$('newCourse').value='';renderCourses();toast('Ders eklendi.')}}
 function renderCourses(){$('courseCount').textContent=data.courses.length+' ders';const dst=$('courseList');dst.innerHTML='';if(!data.courses.length){dst.innerHTML='<div class="empty"><strong>Henüz ders eklenmedi.</strong>Yukarıdan ilk dersinizi ekleyin.</div>';return}data.courses.forEach(c=>{const count=data.entries.filter(e=>e.courseId===c.id).length;const elt=document.createElement('div');elt.className='item';elt.innerHTML='<button class="open" type="button"><div class="item-name">'+escapeText(c.name)+'</div><div class="item-desc">'+count+' test kaydı • Aç ›</div></button><button class="btn danger small" type="button">Ders Sil</button>';elt.querySelector('.open').onclick=()=>openCourse(c.id);elt.querySelector('.danger').onclick=()=>doubleDelete('“'+c.name+'” dersi ve dersin '+count+' test kaydı',()=>{data.entries=data.entries.filter(e=>e.courseId!==c.id);data.courses=data.courses.filter(x=>x.id!==c.id);if(selectedCourse===c.id)backCourses()});dst.appendChild(elt)})}
 function openCourse(courseId){selectedCourse=courseId;$('courseIndex').hidden=true;$('courseDetail').hidden=false;$('entryDate').value=nowInput();['entryQuestions','entryCorrect','entryWrong'].forEach(i=>$(i).value='');renderEntries();window.scrollTo(0,0)}
