@@ -149,6 +149,36 @@ async function runFlow(){
   assert.equal(opts[1].checked,true);
   assert.equal(get('data.questions[0].selected'),1);
  });
+ verify('Initially selecting one option increases progress',()=>{
+  assert.equal(e('progressLabel').textContent,'İlerleme: 1 / 3');
+  assert.equal(e('questions').querySelector('[data-clear-answer="0"]').classList.contains('hidden'),false);
+ });
+ opts[1].click();
+ verify('Tapping the selected option again completely removes the answer',()=>{
+  assert.equal(get('data.questions[0].selected'),null);
+  assert.equal(opts.filter(x=>x.checked).length,0);
+  assert.equal(e('progressLabel').textContent,'İlerleme: 0 / 3');
+  assert.equal(e('questions').querySelector('[data-clear-answer="0"]').classList.contains('hidden'),true);
+ });
+ opts[2].click();
+ verify('A previously cleared question can be answered again',()=>{
+  assert.equal(get('data.questions[0].selected'),2);
+  assert.equal(opts.filter(x=>x.checked).length,1);
+  assert.equal(opts[2].checked,true);
+  assert.equal(e('progressLabel').textContent,'İlerleme: 1 / 3');
+ });
+ e('questions').querySelector('[data-clear-answer="0"]').click();
+ verify('Seçimi Kaldır button clears the answer and decreases progress',()=>{
+  assert.equal(get('data.questions[0].selected'),null);
+  assert.equal(opts.filter(x=>x.checked).length,0);
+  assert.equal(e('progressLabel').textContent,'İlerleme: 0 / 3');
+ });
+ opts[3].click();opts[0].click();
+ verify('Changing answers repeatedly leaves only the latest choice',()=>{
+  assert.equal(get('data.questions[0].selected'),0);
+  assert.deepEqual(Array.from(opts,x=>x.checked),[true,false,false,false]);
+  assert.equal(e('progressLabel').textContent,'İlerleme: 1 / 3');
+ });
  e('finishBtn').click();
  verify('Test Bitir closes the test and calculates results',()=>{
   assert.equal(get('data.running'),false);
@@ -173,6 +203,11 @@ async function runFlow(){
   e('toggleAnswersBtn').click();
   e('toggleAnswersBtn').click();
  }
+ verify('Every new test begins with no option checked',()=>{
+  assert.equal(get('data.questions.every(q=>q.selected===null)'),true);
+  assert.equal(w.document.querySelectorAll('input[type="radio"]:checked').length,0);
+  assert.equal(e('progressLabel').textContent,'İlerleme: 0 / 3');
+ });
  verify('Test start/finish and answer show/hide repeat without rematching',()=>{
   assert.equal(get('data.finished'),true);
   assert.equal(get('data.running'),false);
