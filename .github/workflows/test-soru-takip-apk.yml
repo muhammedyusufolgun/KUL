@@ -24,8 +24,10 @@ jobs:
         shell: bash
         run: |
           export ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          SDKM=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n1)
+          test -n "$SDKM"
+          yes | "$SDKM" --licenses >/dev/null || true
+          "$SDKM" "platforms;android-35" "build-tools;35.0.0"
       - name: Gradle 8.10.2
         uses: gradle/actions/setup-gradle@v4
         with:
