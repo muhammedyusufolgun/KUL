@@ -1,0 +1,100 @@
+name: Build Soru Hazirlama Asistani iOS
+
+on:
+  push:
+    branches: [ios-app]
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios.yml"
+      - "index.html"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ios-build:
+    runs-on: macos-15
+    timeout-minutes: 50
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Xcode information
+        run: |
+          xcodebuild -version
+          sw_vers
+
+      - name: Install iOS project generator and icon dependency
+        run: |
+          brew install xcodegen
+          python3 -m venv /tmp/soru-ios-venv
+          /tmp/soru-ios-venv/bin/python -m pip install --quiet Pillow
+
+      - name: Prepare iOS web interface and yellow S icon
+        run: |
+          /tmp/soru-ios-venv/bin/python ios/scripts/prepare-ios-web.py
+          bash ios/scripts/prepare-web.sh
+          test -s ios/SoruHazirlamaAsistani/Web/index.html
+          for f in pdf.min.js pdf.worker.min.js mammoth.browser.min.js xlsx.full.min.js; do
+            test -s "ios/SoruHazirlamaAsistani/Web/lib/$f"
+          done
+
+      - name: Generate Xcode project
+        run: |
+          cd ios
+          xcodegen generate --spec project.yml
+          test -f SoruHazirlamaAsistani.xcodeproj/project.pbxproj
+
+      - name: Build iOS Simulator application without signing
+        run: |
+          xcodebuild -project ios/SoruHazirlamaAsistani.xcodeproj \
+            -scheme SoruHazirlamaAsistani \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath ios/buildsim \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+          test -d ios/buildsim/Build/Products/Release-iphonesimulator/SoruHazirlamaAsistani.app
+
+      - name: Build unsigned physical-device binary
+        continue-on-error: true
+        run: |
+          xcodebuild -project ios/SoruHazirlamaAsistani.xcodeproj \
+            -scheme SoruHazirlamaAsistani \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath ios/builddevice \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Prepare iOS download packages
+        run: |
+          mkdir -p ios/out
+          ditto -c -k --sequesterRsrc --keepParent \
+            ios/buildsim/Build/Products/Release-iphonesimulator/SoruHazirlamaAsistani.app \
+            ios/out/Soru-Hazirlama-Asistani-iOS-Simulator.app.zip
+          if [ -d ios/builddevice/Build/Products/Release-iphoneos/SoruHazirlamaAsistani.app ]; then
+            mkdir -p ios/out/Payload
+            cp -R ios/builddevice/Build/Products/Release-iphoneos/SoruHazirlamaAsistani.app ios/out/Payload/
+            (cd ios/out && zip -q -r Soru-Hazirlama-Asistani-IMZASIZ.ipa Payload)
+            rm -rf ios/out/Payload
+          fi
+          (cd ios && zip -q -r out/Soru-Hazirlama-Asistani-iOS-Xcode.zip \
+            project.yml README.md \
+            SoruHazirlamaAsistani \
+            SoruHazirlamaAsistani.xcodeproj \
+            scripts \
+            -x '*/__pycache__/*')
+          ls -lah ios/out
+          test -s ios/out/Soru-Hazirlama-Asistani-iOS-Xcode.zip
+
+      - name: Upload iOS output
+        uses: actions/upload-artifact@v4
+        with:
+          name: Soru-Hazirlama-Asistani-iOS
+          path: ios/out/*
+          if-no-files-found: error
+          retention-days: 30
