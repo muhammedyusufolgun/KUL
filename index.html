@@ -62,11 +62,11 @@ function parseQuestions(text,answerText){
  for(const b of blocks){
   const opts=[],stem=[];
   for(const line of b.lines){
-   const marks=[...line.matchAll(/(?:^|\\s)([A-E])\\s*[).:-]\\s*/gi)];
-   if(/^\\s*A\\s*[).:-]/i.test(line)&&marks.length>1){
+   const marks=[...line.matchAll(/(?:^|\s)([A-E])\s*[).:-]\s*/gi)];
+   if(/^\s*A\s*[).:-]/i.test(line)&&marks.length>1){
     for(let k=0;k<marks.length;k++){const mark=marks[k],start=mark.index+mark[0].length,end=k+1<marks.length?marks[k+1].index:line.length;opts.push({letter:mark[1].toUpperCase(),text:line.slice(start,end).trim()})}
    }else{
-    const m=line.match(/^\\s*([A-E])\\s*[).:-]\\s*(.*)$/i);
+    const m=line.match(/^\s*([A-E])\s*[).:-]\s*(.*)$/i);
     if(m)opts.push({letter:m[1].toUpperCase(),text:m[2]});else stem.push(line)
    }
   }
