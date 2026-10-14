@@ -250,7 +250,7 @@ const previousLoad=loadRecord;
 loadRecord=function(i){
  if(data.running)return;
  const record=readRecords()[i];if(!record)return;
- const questions=[],skipped=[];
+ const questions=[],skipped=Array.isArray(record.skippedQuestions)?record.skippedQuestions.map(item=>({n:item.n??null,reason:String(item.reason||'Okunamayan soru')})):[];
  for(const item of (record.questions||[])){
    const v=strictQuestion(item);
    if(v.ok)questions.push(v.question);
