@@ -275,4 +275,4 @@ $('loadBtn').onclick=()=>{if($('savedSelect').value===''){notify('Açmak için k
 function deleteRecord(i){const records=readRecords();if(!records[i])return;const name=records[i].name;if(!confirm('“'+name+'” kaydı kalıcı olarak silinsin mi?'))return;records.splice(i,1);writeRecords(records);notify('Kayıt silindi.')}
 $('deleteBtn').onclick=()=>{if($('savedSelect').value===''){notify('Silmek için kayıt seçin.');return}deleteRecord(+$('savedSelect').value)};
 renderSaved();updateProgress();renderManualAnswers();
-</script></body></html>
+</script><script src="quiz-fixes.js"></script></body></html>
