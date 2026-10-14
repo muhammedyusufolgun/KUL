@@ -42,6 +42,12 @@ const imageQuestions=[
 const imageAnswers='1-B\n2-C';
 const report=parseReport(imageQuestions,imageAnswers);
 
+verify('Screen order is upload, matching report, save panel, test',()=>{
+ const children=[...w.document.querySelector('main.wrap').children];
+ assert.ok(children.indexOf(e('uploadCard'))<children.indexOf(e('recordCard')));
+ assert.ok(children.indexOf(e('recordCard'))<children.indexOf(e('questions').closest('section')));
+ assert.equal(e('recordCard').classList.contains('hidden'),true);
+});
 verify('OCR report accepts only complete questions',()=>{
  assert.equal(report.questions.length,3);
  assert.deepEqual(Array.from(report.questions,q=>q.n),[1,2,5]);
