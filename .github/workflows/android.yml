@@ -87,6 +87,17 @@ jobs:
           else:
               strings.write_text('<resources><string name="app_name">Soru Hazırlama Asistanı</string></resources>')
           PY
+      - name: Keep Android WebView colors in light mode
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path("android/app/src/main/AndroidManifest.xml")
+          s = p.read_text()
+          s = re.sub(r'<application\\b(?![^>]*android:forceDarkAllowed)', '<application android:forceDarkAllowed="false"', s, count=1)
+          p.write_text(s)
+          print("Android WebView force-dark disabled")
+          PY
       - name: Resolve Kotlin duplicate classes
         run: |
           printf '\nconfigurations.configureEach { exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk8" }\n' >> android/app/build.gradle
