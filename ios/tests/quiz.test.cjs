@@ -2,6 +2,7 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
+const vm=require('node:vm');
 const {JSDOM}=require('jsdom');
 
 const root=path.resolve(__dirname,'..');
@@ -18,7 +19,10 @@ w.HTMLCanvasElement.prototype.getContext=()=>({
  clearRect(){},fillRect(){},fillText(){},
  set fillStyle(_x){},set font(_x){}
 });
-w.eval(base[1]);w.eval(repair);
+const context=dom.getInternalVMContext();
+vm.runInContext(base[1],context,{filename:'base-app.js'});
+vm.runInContext(repair,context,{filename:'quiz-fixes.js'});
+const get=expr=>vm.runInContext(expr,context);
 const e=id=>w.document.getElementById(id);
 const {parseReport,strictQuestion,keyData}=w.__quizDiagnostics;
 let passed=0;
@@ -77,12 +81,12 @@ verify('Four or five nonempty unique answers are accepted',()=>{
 
 async function runFlow(){
  // Fake camera/file input: on-device Vision returns the recognized text.
- w.eval('ocrFile=async file=>file.mockText');
- w.eval('data.questionFiles=[{name:"sorular.png",type:"image/png",mockText: '+JSON.stringify(imageQuestions)+'}]; data.answerFiles=[{name:"cevaplar.jpg",type:"image/jpeg",mockText: '+JSON.stringify(imageAnswers)+'}]');
+ get('ocrFile=async file=>file.mockText');
+ get('data.questionFiles=[{name:"sorular.png",type:"image/png",mockText: '+JSON.stringify(imageQuestions)+'}]; data.answerFiles=[{name:"cevaplar.jpg",type:"image/jpeg",mockText: '+JSON.stringify(imageAnswers)+'}]');
  await e('extractBtn').onclick();
  verify('Separate question and answer photos match automatically',()=>{
-  assert.equal(w.eval('data.questions.length'),3);
-  assert.equal(w.eval('data.questions.filter(q=>q.matchSource==="auto").length'),2);
+  assert.equal(get('data.questions.length'),3);
+  assert.equal(get('data.questions.filter(q=>q.matchSource==="auto").length'),2);
   assert.equal(e('startBtn').disabled,true);
  });
  verify('Only unmatched answer is presented for manual input',()=>{
@@ -95,13 +99,13 @@ async function runFlow(){
  field.value='Z';field.dispatchEvent(new w.Event('input',{bubbles:true}));
  verify('Invalid letters are rejected at typing time',()=>{
   assert.equal(field.value,'');
-  assert.equal(w.eval('data.questions[2].correct'),null);
+  assert.equal(get('data.questions[2].correct'),null);
  });
  field.value='E';field.dispatchEvent(new w.Event('input',{bubbles:true}));
  e('manualAnswers').querySelector('[data-apply-letter]').click();
  verify('Manually entered valid letter completes final unmatched answer',()=>{
-  assert.equal(w.eval('data.questions[2].correctLetter'),'E');
-  assert.equal(w.eval('data.questions[2].matchSource'),'manual');
+  assert.equal(get('data.questions[2].correctLetter'),'E');
+  assert.equal(get('data.questions[2].matchSource'),'manual');
   assert.equal(e('startBtn').disabled,false);
   assert.equal(e('recordCard').classList.contains('hidden'),false);
   assert.equal(e('recordEditRow').classList.contains('hidden'),false);
@@ -116,13 +120,13 @@ async function runFlow(){
  e('testName').value='iOS Fotoğraf Denemesi';
  e('saveBtn').click();
  verify('Saving becomes possible only after complete matching',()=>{
-  assert.equal(w.eval('readRecords().length'),1);
-  assert.equal(w.eval('readRecords()[0].questions.length'),3);
+  assert.equal(get('readRecords().length'),1);
+  assert.equal(get('readRecords()[0].questions.length'),3);
  });
  e('startBtn').click();
  verify('Test starts without reasking to match and resets answers',()=>{
-  assert.equal(w.eval('data.running'),true);
-  assert.equal(w.eval('data.questions.every(q=>q.selected===null)'),true);
+  assert.equal(get('data.running'),true);
+  assert.equal(get('data.questions.every(q=>q.selected===null)'),true);
   assert.equal(e('finishBtn').disabled,false);
   assert.equal(e('recordCard').classList.contains('hidden'),true);
  });
@@ -137,40 +141,40 @@ async function runFlow(){
  verify('Only one answer remains selected in each question',()=>{
   assert.equal(opts.filter(x=>x.checked).length,1);
   assert.equal(opts[1].checked,true);
-  assert.equal(w.eval('data.questions[0].selected'),1);
+  assert.equal(get('data.questions[0].selected'),1);
  });
  e('finishBtn').click();
  verify('Test Bitir closes the test and calculates results',()=>{
-  assert.equal(w.eval('data.running'),false);
-  assert.equal(w.eval('data.finished'),true);
+  assert.equal(get('data.running'),false);
+  assert.equal(get('data.finished'),true);
   assert.equal(e('startBtn').disabled,false);
   assert.equal(e('toggleAnswersBtn').disabled,false);
  });
  e('toggleAnswersBtn').click();
  verify('Cevapları Göster reveals correct and wrong colors',()=>{
-  assert.equal(w.eval('data.answersVisible'),true);
+  assert.equal(get('data.answersVisible'),true);
   assert.ok(w.document.querySelectorAll('.opt.correct').length>=3);
  });
  e('toggleAnswersBtn').click();
  verify('Cevapları Gizle hides answer colors again',()=>{
-  assert.equal(w.eval('data.answersVisible'),false);
+  assert.equal(get('data.answersVisible'),false);
   assert.equal(w.document.querySelectorAll('.opt.correct').length,0);
  });
  for(let n=0;n<3;n++){
   e('startBtn').click();
-  assert.equal(w.eval('data.questions.every(q=>q.selected===null)'),true);
+  assert.equal(get('data.questions.every(q=>q.selected===null)'),true);
   e('finishBtn').click();
   e('toggleAnswersBtn').click();
   e('toggleAnswersBtn').click();
  }
  verify('Test start/finish and answer show/hide repeat without rematching',()=>{
-  assert.equal(w.eval('data.finished'),true);
-  assert.equal(w.eval('data.running'),false);
-  assert.equal(w.eval('data.questions.length'),3);
+  assert.equal(get('data.finished'),true);
+  assert.equal(get('data.running'),false);
+  assert.equal(get('data.questions.length'),3);
  });
- w.eval('loadRecord(0)');
+ get('loadRecord(0)');
  verify('Saved test reopens with no previous choices selected',()=>{
-  assert.equal(w.eval('data.questions.every(q=>q.selected===null)'),true);
+  assert.equal(get('data.questions.every(q=>q.selected===null)'),true);
   assert.equal(e('startBtn').disabled,false);
  });
  w.close();
