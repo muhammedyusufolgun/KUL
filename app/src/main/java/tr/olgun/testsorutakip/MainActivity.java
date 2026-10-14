@@ -91,27 +91,30 @@ public final class MainActivity extends Activity {
             });
         }
 
-        @JavascriptInterface public void shareWhatsApp(String number, String text) {
-            if (number == null || !number.matches("90[0-9]{10}") || text == null) return;
-            String uri;
-            try { uri = "https://wa.me/" + number + "?text=" + URLEncoder.encode(text, "UTF-8"); }
-            catch (java.io.UnsupportedEncodingException e) { return; }
-            runOnUiThread(() -> {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                try {
-                    intent.setPackage("com.whatsapp");
-                    startActivity(intent);
-                } catch (Exception e) {
-                    try {
-                        intent.setPackage("com.whatsapp.w4b");
-                        startActivity(intent);
-                    } catch (Exception e2) {
-                        try { intent.setPackage(null); startActivity(intent); }
-                        catch (Exception ignored) { }
+        @JavascriptInterface public void shareWhatsApp(String number,String text){
+            if(number==null||!number.matches("90[0-9]{10}")||text==null)return;
+            final String encoded;
+            try{encoded=URLEncoder.encode(text,"UTF-8");}
+            catch(UnsupportedEncodingException e){return;}
+            runOnUiThread(()->{
+                Uri deepLink=Uri.parse("whatsapp://send?phone="+number+"&text="+encoded);
+                Uri appLink=Uri.parse("https://wa.me/"+number+"?text="+encoded);
+                String[] packages={"com.whatsapp","com.whatsapp.w4b"};
+                for(String pkg:packages){
+                    for(Uri uri:new Uri[]{deepLink,appLink}){
+                        try{
+                            Intent intent=new Intent(Intent.ACTION_VIEW,uri);
+                            intent.setPackage(pkg);
+                            startActivity(intent);
+                            return;
+                        }catch(android.content.ActivityNotFoundException ignored){}
+                        catch(Exception ignored){}
                     }
                 }
+                notifyJs("WhatsApp uygulaması bulunamadı. Telefonunuza WhatsApp yükleyin.");
             });
         }
+
     }
     @Override protected void onActivityResult(int requestCode,int resultCode,Intent resultData){
         super.onActivityResult(requestCode,resultCode,resultData);
