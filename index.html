@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#facc15"><meta name="color-scheme" content="light"><title>Soru Hazırlama Asistanı</title>
 <style>
-:root{--yellow:#facc15;--ink:#1f2937;--muted:#64748b;--line:#e2e8f0;--green:#dcfce7;--greenb:#86efac;--red:#ffe4e6;--redb:#fda4af}*{box-sizing:border-box}body{margin:0;background:#f8fafc;color:var(--ink);font:15px "Segoe UI",Arial,sans-serif}.head{background:var(--yellow);padding:16px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px #0001}.appicon{width:62px;height:62px;background:var(--yellow);border:0;border-radius:14px;display:grid;place-items:center;font-size:30px;font-weight:900;color:#111827;flex-shrink:0}.head h1{font-size:20px;margin:0}.head p{margin:4px 0 0;font-size:12px}.wrap{max-width:980px;margin:auto;padding:14px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:13px;box-shadow:0 3px 12px #0f172a08}.card h2{font-size:17px;margin:0 0 12px}.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:180px}.field label{font-size:12px;font-weight:700;color:#475569}input[type=text],select{width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:11px;font:inherit;background:white}.btn,.pick{border:1px solid #cbd5e1;background:white;color:#1f2937;border-radius:8px;padding:10px 13px;font:600 14px inherit;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;min-height:42px}.btn.primary{background:#1f2937;color:white;border-color:#1f2937}.btn.yellow{background:#fef08a;border-color:#eab308}.btn:disabled{opacity:.45;cursor:not-allowed}.hint{font-size:12px;color:var(--muted);line-height:1.5}.hidden{display:none!important}.pick-label{position:relative;overflow:hidden}.native-picker{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2}.status{padding:10px;border-radius:8px;background:#f1f5f9;font-size:13px;margin-top:10px;white-space:pre-wrap}.saved{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding:10px 0}.saved:last-child{border-bottom:0}.saved .name{flex:1;min-width:0;overflow-wrap:anywhere}.q{border:1px solid var(--line);border-radius:10px;padding:13px;margin:12px 0;background:white}.qtitle{display:flex;gap:9px;align-items:flex-start;font-weight:700;line-height:1.5}.num{background:#fef08a;border-radius:50%;min-width:29px;height:29px;display:grid;place-items:center}.opts{display:grid;gap:7px;margin:12px 0 0 38px}.opt{display:flex;gap:8px;align-items:flex-start;padding:10px;border:1px solid #dbe3ea;border-radius:8px;line-height:1.4}.opt input{margin-top:3px}.opt.correct{background:var(--green);border-color:var(--greenb)}.opt.wrong{background:var(--red);border-color:var(--redb)}.answer{margin:10px 0 0 38px;background:var(--green);border:1px solid var(--greenb);padding:10px;border-radius:8px;line-height:1.5}.answer.wrong{background:var(--red);border-color:var(--redb)}.answer.unmatched{background:#fff7ed;border-color:#fdba74}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.metric{background:#f8fafc;border:1px solid var(--line);border-radius:8px;text-align:center;padding:10px}.metric b{display:block;font-size:20px}.metric span{font-size:11px;color:var(--muted)}progress{width:100%;height:12px;accent-color:#eab308}canvas{max-width:100%;height:150px}.filelist{font-size:12px;color:#475569;margin-top:7px;overflow-wrap:anywhere}@media(max-width:540px){.wrap{padding:9px}.head{padding:12px}.head h1{font-size:18px}.metrics{grid-template-columns:repeat(2,1fr)}.field{min-width:100%}.btn,.pick{flex:1}.q{padding:10px}.opts{margin-left:0}.answer{margin-left:0}}
+:root{--yellow:#facc15;--ink:#1f2937;--muted:#64748b;--line:#e2e8f0;--green:#dcfce7;--greenb:#86efac;--red:#ffe4e6;--redb:#fda4af}*{box-sizing:border-box}body{margin:0;background:#f8fafc;color:var(--ink);font:15px "Segoe UI",Arial,sans-serif}.head{background:var(--yellow);padding:16px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px #0001}.appicon{width:62px;height:62px;background:var(--yellow);border:0;border-radius:14px;display:grid;place-items:center;font-size:30px;font-weight:900;color:#111827;flex-shrink:0}.head h1{font-size:20px;margin:0}.head p{margin:4px 0 0;font-size:12px}.wrap{max-width:980px;margin:auto;padding:14px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:13px;box-shadow:0 3px 12px #0f172a08}.card h2{font-size:17px;margin:0 0 12px}.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:180px}.field label{font-size:12px;font-weight:700;color:#475569}input[type=text],select{width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:11px;font:inherit;background:white}.btn,.pick{border:1px solid #cbd5e1;background:white;color:#1f2937;border-radius:8px;padding:10px 13px;font:600 14px inherit;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;min-height:42px}.btn.primary{background:#1f2937;color:white;border-color:#1f2937}.btn.yellow{background:#fef08a;border-color:#eab308}.btn.start-test{background:#dcfce7;border-color:#86efac;color:#14532d}.btn.finish-test{background:#fef9c3;border-color:#fde047;color:#713f12}.btn.answers-test{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}.letter-input{width:68px!important;min-width:68px;text-align:center;font-size:19px!important;font-weight:800!important;text-transform:uppercase}.matching-row{padding:11px 0;border-bottom:1px solid #e2e8f0}.matching-row:last-child{border-bottom:0}.matching-fields{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}.matching-fields .btn{min-width:94px}.status.success{background:#f0fdf4;border:1px solid #86efac}.missing-choice{padding:9px;margin-top:8px;border:1px dashed #f59e0b;border-radius:8px;background:#fffbeb}.btn:disabled{opacity:.45;cursor:not-allowed}.hint{font-size:12px;color:var(--muted);line-height:1.5}.hidden{display:none!important}.pick-label{position:relative;overflow:hidden}.native-picker{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2}.status{padding:10px;border-radius:8px;background:#f1f5f9;font-size:13px;margin-top:10px;white-space:pre-wrap}.saved{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding:10px 0}.saved:last-child{border-bottom:0}.saved .name{flex:1;min-width:0;overflow-wrap:anywhere}.q{border:1px solid var(--line);border-radius:10px;padding:13px;margin:12px 0;background:white}.qtitle{display:flex;gap:9px;align-items:flex-start;font-weight:700;line-height:1.5}.num{background:#fef08a;border-radius:50%;min-width:29px;height:29px;display:grid;place-items:center}.opts{display:grid;gap:7px;margin:12px 0 0 38px}.opt{display:flex;gap:8px;align-items:flex-start;padding:10px;border:1px solid #dbe3ea;border-radius:8px;line-height:1.4}.opt input{margin-top:3px}.opt.correct{background:var(--green);border-color:var(--greenb)}.opt.wrong{background:var(--red);border-color:var(--redb)}.answer{margin:10px 0 0 38px;background:var(--green);border:1px solid var(--greenb);padding:10px;border-radius:8px;line-height:1.5}.answer.wrong{background:var(--red);border-color:var(--redb)}.answer.unmatched{background:#fff7ed;border-color:#fdba74}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.metric{background:#f8fafc;border:1px solid var(--line);border-radius:8px;text-align:center;padding:10px}.metric b{display:block;font-size:20px}.metric span{font-size:11px;color:var(--muted)}progress{width:100%;height:12px;accent-color:#eab308}canvas{max-width:100%;height:150px}.filelist{font-size:12px;color:#475569;margin-top:7px;overflow-wrap:anywhere}@media(max-width:540px){.wrap{padding:9px}.head{padding:12px}.head h1{font-size:18px}.metrics{grid-template-columns:repeat(2,1fr)}.field{min-width:100%}.btn,.pick{flex:1}.q{padding:10px}.opts{margin-left:0}.answer{margin-left:0}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
@@ -10,14 +10,14 @@
 </head><body>
 <header class="head"><div class="appicon">S</div><div><h1>Soru Hazırlama Asistanı</h1><p>Dosya ve fotoğraflardan test oluşturma</p></div></header>
 <main class="wrap">
-<section class="card" id="recordCard"><h2>1. Test kaydı</h2><div class="row" id="recordEditRow"><div class="field"><label>Test adı</label><input id="testName" type="text" placeholder="Örn. İş Güvenliği Deneme 1"></div><button class="btn yellow" id="saveBtn">Kaydet</button></div><div class="row" style="margin-top:10px"><div class="field"><label>Kayıtlı testler</label><select id="savedSelect"><option value="">Kayıt seçin</option></select></div><button class="btn" id="loadBtn">Aç</button><button class="btn" id="deleteBtn">Sil</button></div><p class="hint">Kayıtlar bu cihazın uygulama verilerinde saklanır; uygulama verilerini temizlemek kayıtları da silebilir.</p><div id="savedList"></div></section>
-<section class="card" id="uploadCard"><h2>2. Soruları ve cevapları yükle</h2><div class="row"><label class="btn yellow pick-label">📄 Soru dosyası<input class="native-picker" id="filesInput" type="file" multiple accept=".pdf,.txt,.docx,.xlsx"></label><label class="btn yellow pick-label">📄 Cevap dosyası<input class="native-picker" id="answerFilesInput" type="file" multiple accept=".pdf,.txt,.docx,.xlsx"></label><label class="btn yellow pick-label">🖼️ Soru fotoğrafları<input class="native-picker" id="questionPhotos" type="file" multiple accept="image/*"></label><label class="btn yellow pick-label">🖼️ Cevap fotoğrafları<input class="native-picker" id="answerPhotos" type="file" multiple accept="image/*"></label></div><div class="filelist" id="fileList">Henüz dosya veya fotoğraf eklenmedi.</div><div class="row" style="margin-top:12px"><button class="btn primary" id="extractBtn">Metinleri oku ve eşleştir</button><button class="btn" id="clearUploadBtn">Yüklemeleri temizle</button></div><div id="manualAnswers" class="status hidden"></div><div class="status" id="importStatus">Dosyaları yükleyin. Fotoğraflar OCR ile okunur; cevap anahtarı ayrı dosya veya fotoğraf olarak eklenebilir.</div><p class="hint">Desteklenen dosyalar: PDF, TXT, DOCX, XLSX. Birden fazla fotoğraf seçilebilir. OCR sonucu ve cevap eşleşmeleri doğruluk açısından kontrol edilmelidir.</p></section>
-<section class="card"><h2>3. Test</h2><div class="row"><button class="btn primary" id="startBtn" disabled>▶ Test başla</button><button class="btn yellow" id="finishBtn" disabled>Bitir / Cevaplar</button><button class="btn" id="toggleAnswersBtn">Cevapları göster</button></div><div style="margin:12px 0"><div class="row" style="justify-content:space-between"><b id="progressLabel">İlerleme: 0 / 0</b><b id="timer">Süre: 00:00</b></div><progress id="progress" value="0" max="100"></progress></div><div id="metrics" class="metrics hidden"><div class="metric"><b id="correctCount">0</b><span>Doğru</span></div><div class="metric"><b id="wrongCount">0</b><span>Yanlış</span></div><div class="metric"><b id="rate">0%</b><span>Başarı oranı</span></div><div class="metric"><b id="unanswered">0</b><span>Cevapsız</span></div></div><canvas id="chart" class="hidden" width="640" height="180"></canvas><div id="questions"><p class="hint">Önce dosya veya fotoğraf ekleyip metinleri okuyun.</p></div></section>
+<section class="card" id="recordCard"><h2>1. Test kaydı</h2><div class="row hidden" id="recordEditRow"><div class="field"><label>Test adı</label><input id="testName" type="text" placeholder="Örn. İş Güvenliği Deneme 1"></div><button class="btn yellow" id="saveBtn">Kaydet</button></div><div class="row" style="margin-top:10px"><div class="field"><label>Kayıtlı testler</label><select id="savedSelect"><option value="">Kayıt seçin</option></select></div><button class="btn" id="loadBtn">Aç</button><button class="btn" id="deleteBtn">Sil</button></div><p class="hint">Kayıtlar bu cihazın uygulama verilerinde saklanır; uygulama verilerini temizlemek kayıtları da silebilir.</p><div id="savedList"></div></section>
+<section class="card" id="uploadCard"><h2>2. Soruları ve cevapları yükle</h2><div class="row"><label class="btn yellow pick-label">📄 Soru dosyası<input class="native-picker" id="filesInput" type="file" multiple accept=".pdf,.txt,.docx,.xlsx"></label><label class="btn yellow pick-label">📄 Cevap dosyası<input class="native-picker" id="answerFilesInput" type="file" multiple accept=".pdf,.txt,.docx,.xlsx"></label><label class="btn yellow pick-label">🖼️ Soru fotoğrafları<input class="native-picker" id="questionPhotos" type="file" multiple accept="image/*"></label><label class="btn yellow pick-label">🖼️ Cevap fotoğrafları<input class="native-picker" id="answerPhotos" type="file" multiple accept="image/*"></label></div><div class="filelist" id="fileList">Henüz dosya veya fotoğraf eklenmedi.</div><div class="row" style="margin-top:12px"><button class="btn primary" id="extractBtn">Metinleri oku ve eşleştir</button><button class="btn" id="clearUploadBtn">Yüklemeleri temizle</button></div><div id="manualAnswers" class="status hidden"></div><div id="matchingSummary" class="status success hidden"><b id="matchingCount"></b> Soruların doğru şıkları tamamlandı. Testi kaydedebilir veya başlatabilirsiniz. <button type="button" class="btn" id="editMatchingBtn">Şık Harflerini Düzenle</button></div><div class="status" id="importStatus">Dosyaları yükleyin. Fotoğraflar OCR ile okunur; cevap anahtarı ayrı dosya veya fotoğraf olarak eklenebilir.</div><p class="hint">Desteklenen dosyalar: PDF, TXT, DOCX, XLSX. Birden fazla fotoğraf seçilebilir. OCR sonucu ve cevap eşleşmeleri doğruluk açısından kontrol edilmelidir.</p></section>
+<section class="card"><h2>3. Test</h2><div class="row"><button class="btn start-test" id="startBtn" disabled>Test Başla</button><button class="btn finish-test" id="finishBtn" disabled>Test Bitir</button><button class="btn answers-test" id="toggleAnswersBtn" disabled>Cevapları Göster</button></div><div style="margin:12px 0"><div class="row" style="justify-content:space-between"><b id="progressLabel">İlerleme: 0 / 0</b><b id="timer">Süre: 00:00</b></div><progress id="progress" value="0" max="100"></progress></div><div id="metrics" class="metrics hidden"><div class="metric"><b id="correctCount">0</b><span>Doğru</span></div><div class="metric"><b id="wrongCount">0</b><span>Yanlış</span></div><div class="metric"><b id="rate">0%</b><span>Başarı oranı</span></div><div class="metric"><b id="unanswered">0</b><span>Cevapsız</span></div></div><canvas id="chart" class="hidden" width="640" height="180"></canvas><div id="questions"><p class="hint">Önce dosya veya fotoğraf ekleyip metinleri okuyun.</p></div></section>
 </main>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
-const data={questionFiles:[],answerFiles:[],questions:[],answersVisible:false,running:false,finished:false,startAt:0,timerId:null,sourceNames:[],currentSavedName:''};
+const data={questionFiles:[],answerFiles:[],questions:[],answersVisible:false,running:false,finished:false,startAt:0,timerId:null,sourceNames:[],currentSavedName:'',editingAnswers:false,manualOptionFor:null,pendingLetters:{}};
 const DB='soruAsistaniRecordsV2';
 function notify(m){$('importStatus').textContent=m}
 // Keep the app's light corporate palette even when Android uses a dark system theme.
@@ -35,7 +35,31 @@ $('answerPhotos').onchange=e=>{data.answerFiles.push(...e.target.files);data.sou
 $('clearUploadBtn').onclick=()=>{data.questionFiles=[];data.answerFiles=[];data.sourceNames=[];filesText();notify('Yükleme listesi temizlendi.')};
 async function extractFile(file){const ext=file.name.split('.').pop().toLowerCase();if(ext==='txt')return await file.text();if(ext==='pdf'){if(!window.pdfjsLib)throw Error('PDF okuyucu yüklenemedi.');pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;let out='';for(let i=1;i<=pdf.numPages;i++){const p=await pdf.getPage(i);const c=await p.getTextContent();let line='',prevY=null;for(const item of c.items){const y=Math.round((item.transform&&item.transform[5])||0);if(prevY!==null&&Math.abs(y-prevY)>3){out+=line.trim()+'\n';line=''}line+=item.str+' ';prevY=y}out+=line.trim()+'\n'}return out}if(ext==='docx'){if(!window.mammoth)throw Error('Word okuyucu yüklenemedi.');return (await mammoth.extractRawText({arrayBuffer:await file.arrayBuffer()})).value}if(ext==='xlsx'){if(!window.XLSX)throw Error('Excel okuyucu yüklenemedi.');const w=XLSX.read(await file.arrayBuffer(),{type:'array'});return w.SheetNames.map(n=>XLSX.utils.sheet_to_csv(w.Sheets[n])).join('\n')}throw Error('Desteklenmeyen dosya: '+file.name)}
 async function ocrFile(file){if(!window.Tesseract)throw Error('OCR bileşeni yüklenemedi. İnternet bağlantısını kontrol edin.');const result=await Tesseract.recognize(file,'tur+eng',{logger:m=>{if(m.status==='recognizing text')notify('Fotoğraf okunuyor: '+file.name+' · %'+Math.round((m.progress||0)*100))}});return result.data.text}
-$('extractBtn').onclick=async()=>{if(!data.questionFiles.length&&!data.answerFiles.length){notify('Önce dosya veya fotoğraf yükleyin.');return}const qtexts=[],atexts=[];try{let n=0,total=data.questionFiles.length+data.answerFiles.length;for(const f of data.questionFiles){n++;notify('Soru kaynağı okunuyor ('+n+'/'+total+'): '+f.name);qtexts.push(await (/^image\//.test(f.type)?ocrFile(f):extractFile(f)))}for(const f of data.answerFiles){n++;notify('Cevap kaynağı okunuyor ('+n+'/'+total+'): '+f.name);atexts.push(await (/^image\//.test(f.type)?ocrFile(f):extractFile(f)))}const qt=qtexts.join('\n'),at=atexts.join('\n');data.questions=parseQuestions(qt,at);if(!data.questions.length){notify('Metin okundu ancak soru yapısı tanınamadı. Soruların 1. ... biçiminde, seçeneklerin A) ... biçiminde ve cevap anahtarının 1-A / 1. A biçiminde olduğundan emin olun.');return}data.answersVisible=false;data.running=false;data.finished=false;data.currentSavedName='';$('testName').value='';$('startBtn').disabled=false;$('finishBtn').disabled=true;$('toggleAnswersBtn').textContent='Cevapları göster';$('metrics').classList.add('hidden');$('chart').classList.add('hidden');renderQuestions();renderManualAnswers();notify(data.questions.length+' soru tanındı. Eşleşmeyen cevapları aşağıdan her soru için manuel seçin.');}catch(e){notify('İçe aktarma hatası: '+e.message)}};
+$('extractBtn').onclick=async()=>{
+ if(!data.questionFiles.length){notify('Önce soru dosyası veya fotoğrafı yükleyin.');return}
+ const qtexts=[],atexts=[];
+ try{
+  let n=0,total=data.questionFiles.length+data.answerFiles.length;
+  for(const f of data.questionFiles){
+   n++;notify('Soru kaynağı okunuyor ('+n+'/'+total+'): '+f.name);
+   qtexts.push(await (/^image\//.test(f.type)?ocrFile(f):extractFile(f)))
+  }
+  for(const f of data.answerFiles){
+   n++;notify('Cevap kaynağı okunuyor ('+n+'/'+total+'): '+f.name);
+   atexts.push(await (/^image\//.test(f.type)?ocrFile(f):extractFile(f)))
+  }
+  data.questions=parseQuestions(qtexts.join('\n'),atexts.join('\n'));
+  if(!data.questions.length){notify('Soru yapısı tanınamadı. Soruların 1. ..., şıkların A) ... biçiminde olduğunu kontrol edin.');return}
+  clearInterval(data.timerId);data.running=false;data.finished=false;data.answersVisible=false;
+  data.editingAnswers=false;data.manualOptionFor=null;data.pendingLetters={};data.currentSavedName='';
+  $('testName').value='';$('timer').textContent='Süre: 00:00';
+  $('recordCard').classList.remove('hidden');$('uploadCard').classList.remove('hidden');
+  $('metrics').classList.add('hidden');$('chart').classList.add('hidden');
+  $('toggleAnswersBtn').textContent='Cevapları Göster';
+  renderQuestions();renderManualAnswers();
+  notify(allAnswersMatched()?'Tüm cevaplar eşleştirildi. Test adını girip kaydedebilir veya testi başlatabilirsiniz.':data.questions.length+' soru okundu. Eksik doğru cevapların harflerini A–E olarak yazıp Eşleştir düğmesine basın.');
+ }catch(e){notify('İçe aktarma hatası: '+e.message)}
+};
 function parseQuestions(text,answerText){
  const answerMap={},sequential=[];
  const answerLines=(String(answerText||'')+'\n'+String(text||'')).replace(/\r/g,'').split('\n');
@@ -77,32 +101,79 @@ function parseQuestions(text,answerText){
  if(sequential.length===parsed.length)parsed.forEach((q,i)=>{if(!q.correctLetter)q.correctLetter=sequential[i]});
  return parsed.map(q=>{const oi=q.correctLetter?q.letters.indexOf(q.correctLetter):-1;return {...q,correct:oi>=0?oi:null}})
 }
-function allAnswersMatched(){return data.questions.length>0&&data.questions.every(q=>Number.isInteger(q.correct)&&q.correct>=0&&q.correct<q.options.length&&q.options.length>=2)}
-function renderManualAnswers(){
- const box=$('manualAnswers');
- if(!data.questions.length){box.classList.add('hidden');$('startBtn').disabled=true;return}
- const missing=data.questions.filter(q=>!Number.isInteger(q.correct)||q.correct<0||q.correct>=q.options.length||q.options.length<2).length;
- box.classList.remove('hidden');
- box.innerHTML='<b>Cevapları kontrol et ve eşleştir</b><p>Cevap anahtarından tanınan şıklar önceden seçilir. Her sorunun şıkkını kontrol edin; bulunamayan şıkkı seçin veya okunamayan seçenek metnini elle ekleyin. Test ancak bütün soruların en az iki seçeneği ve geçerli doğru cevabı olduğunda başlayabilir.</p>'+
- data.questions.map((q,i)=>'<div class="saved" style="display:block"><b>'+(i+1)+'. '+esc(q.text.slice(0,160))+'</b><div class="row" style="margin-top:7px"><select data-answer="'+i+'" style="flex:1;min-width:150px"><option value="">Doğru şıkkı seçin</option>'+q.options.map((o,j)=>'<option value="'+j+'" '+(q.correct===j?'selected':'')+'>'+esc(q.letters[j]||String.fromCharCode(65+j))+') '+esc(o.slice(0,100))+'</option>').join('')+'</select></div><div class="row" style="margin-top:7px"><input type="text" data-new-choice="'+i+'" placeholder="Eksik şık metnini elle yazın" style="flex:1;min-width:150px"><button type="button" class="btn" data-add-choice="'+i+'">Şık ekle ve doğru cevap yap</button></div><small>'+(q.options.length<2?'Test için en az iki seçenek girilmelidir.':q.correct===null?'Doğru cevap seçilmedi.':'Doğru cevap eşleştirildi.')+'</small></div>').join('')+
- '<p><b>'+ (data.questions.length-missing)+' / '+data.questions.length+'</b> sorunun cevabı eksiksiz eşleşti.'+(missing?' Kalan '+missing+' soruyu tamamlayın.':' Artık teste başlayabilirsiniz.')+'</p>';
- box.querySelectorAll('[data-answer]').forEach(el=>el.onchange=()=>{
-  const q=data.questions[+el.dataset.answer],j=el.value===''?-1:+el.value;
-  q.correct=j<0?null:j;
-  q.correctLetter=j<0?null:(q.letters[j]||String.fromCharCode(65+j));
-  renderManualAnswers();renderQuestions()
- });
- box.querySelectorAll('[data-add-choice]').forEach(btn=>btn.onclick=()=>{
-  const i=+btn.dataset.addChoice,inp=box.querySelector('[data-new-choice="'+i+'"]');
-  const value=inp.value.trim(),q=data.questions[i];
-  if(!value){notify('Önce eksik şıkkın metnini yazın.');return}
-  if(q.options.length>=5){notify('Bir soruya en fazla beş şık eklenebilir. Mevcut şıklardan doğru olanı seçin.');return}
-  const j=q.options.length;
-  q.options.push(value);q.letters.push(String.fromCharCode(65+j));q.correct=j;q.correctLetter=q.letters[j];
-  renderManualAnswers();renderQuestions()
- });
- $('startBtn').disabled=!allAnswersMatched();
+function isMatched(q){
+ return !!q && Array.isArray(q.options) && Array.isArray(q.letters) && q.options.length>=2 &&
+ Number.isInteger(q.correct) && q.correct>=0 && q.correct<q.options.length && !!String(q.options[q.correct]||'').trim() &&
+ String(q.letters[q.correct]||'').toUpperCase()===String(q.correctLetter||'').toUpperCase();
 }
+function allAnswersMatched(){return data.questions.length>0&&data.questions.every(isMatched)}
+function updateTestControls(){
+ const ready=allAnswersMatched();
+ $('startBtn').disabled=!ready||data.running;
+ $('finishBtn').disabled=!data.running;
+ $('toggleAnswersBtn').disabled=!ready||data.running;
+ $('recordEditRow').classList.toggle('hidden',!ready||data.running||data.editingAnswers);
+}
+function renderManualAnswers(){
+ const box=$('manualAnswers'),summary=$('matchingSummary');
+ const total=data.questions.length,missing=data.questions.map((q,i)=>({q,i})).filter(x=>!isMatched(x.q));
+ if(!total||data.running){box.classList.add('hidden');summary.classList.add('hidden');updateTestControls();return}
+ if(!missing.length&&!data.editingAnswers){
+  box.classList.add('hidden');summary.classList.remove('hidden');
+  $('matchingCount').textContent=total+' / '+total+' eşleşme tamam.';
+  updateTestControls();return
+ }
+ summary.classList.add('hidden');box.classList.remove('hidden');
+ const rows=(data.editingAnswers?data.questions.map((q,i)=>({q,i})):missing);
+ box.innerHTML='<b>Doğru şık harflerini elle girin</b><p>Menüden cevap seçmeniz gerekmez. Eksik her sorunun kutusuna A, B, C, D veya E yazın ve <b>Eşleştir</b> düğmesine basın.</p>'+
+ rows.map(({q,i})=>{
+  const letters=q.letters.map(x=>String(x).toUpperCase()).join(', ')||'Şık okunamadı';
+  const needsChoice=q.options.length<2||data.manualOptionFor===i;
+  const prefill=esc(data.pendingLetters[i]||q.correctLetter||'');
+  return '<div class="matching-row"><b>'+esc(String(q.n||i+1))+'. '+esc(q.text.slice(0,150))+'</b><div class="hint">Okunan şıklar: '+esc(letters)+'</div>'+
+   '<div class="matching-fields"><label for="letter-'+i+'">Doğru harf:</label><input id="letter-'+i+'" class="letter-input" type="text" maxlength="1" autocapitalize="characters" autocomplete="off" inputmode="text" data-letter="'+i+'" value="'+prefill+'" placeholder="A-E"><button type="button" class="btn yellow" data-apply-letter="'+i+'">Eşleştir</button><span class="hint">'+(isMatched(q)?'Eşleşti':'Eşleşmedi')+'</span></div>'+
+   (needsChoice?'<div class="missing-choice"><b>Eksik soru şıkkını elle tamamla</b><p class="hint">Kaynakta seçenek okunmadıysa harfini ve metnini aşağıya girin.</p><div class="matching-fields"><input class="letter-input" type="text" maxlength="1" autocomplete="off" data-extra-letter="'+i+'" value="'+esc(data.pendingLetters[i]||'')+'" placeholder="A-E" aria-label="Eksik şık harfi"><input type="text" data-extra-text="'+i+'" placeholder="Şık metnini girin" style="flex:1;min-width:150px"><button type="button" class="btn" data-add-extra="'+i+'">Şıkkı Ekle</button></div></div>':'')+
+   '</div>';
+ }).join('')+
+ '<p><b>'+(total-missing.length)+' / '+total+'</b> cevap eşleştirildi.'+(missing.length?' Kalan '+missing.length+' soru için şık harfi girin.':'')+'</p>'+
+ (data.editingAnswers?'<button type="button" class="btn start-test" id="confirmMatchingBtn">Eşleştirmeyi Tamamla</button>':'');
+ box.querySelectorAll('[data-apply-letter]').forEach(btn=>btn.onclick=()=>{
+  const i=+btn.dataset.applyLetter,q=data.questions[i];
+  const letter=String(box.querySelector('[data-letter="'+i+'"]').value||'').trim().toUpperCase();
+  if(!/^[A-E]$/.test(letter)){notify('Sadece A, B, C, D veya E harflerinden birini girin.');return}
+  const index=q.letters.findIndex(x=>String(x).toUpperCase()===letter);
+  if(index<0){
+   data.manualOptionFor=i;data.pendingLetters[i]=letter;
+   notify('Girilen '+letter+' şıkkı soru seçeneklerinde bulunamadı. Aşağıdaki eksik şık alanına şık metnini ekleyin.');
+   renderManualAnswers();return
+  }
+  q.correct=index;q.correctLetter=letter;delete data.pendingLetters[i];data.manualOptionFor=null;
+  if(allAnswersMatched()&&!data.editingAnswers)notify('Tüm cevaplar eşleştirildi. Kaydetme alanı açıldı.');
+  renderManualAnswers();renderQuestions()
+ });
+ box.querySelectorAll('[data-letter]').forEach(inp=>inp.onkeydown=e=>{
+  if(e.key==='Enter'){e.preventDefault();box.querySelector('[data-apply-letter="'+inp.dataset.letter+'"]').click()}
+ });
+ box.querySelectorAll('[data-add-extra]').forEach(btn=>btn.onclick=()=>{
+  const i=+btn.dataset.addExtra,q=data.questions[i];
+  const letter=String(box.querySelector('[data-extra-letter="'+i+'"]').value||'').trim().toUpperCase();
+  const optionText=String(box.querySelector('[data-extra-text="'+i+'"]').value||'').trim();
+  if(!/^[A-E]$/.test(letter)||!optionText){notify('Eksik şıkkın A–E harfini ve metnini girin.');return}
+  if(q.options.length>=5){notify('Bir soruda en fazla 5 şık bulunabilir.');return}
+  let idx=q.letters.findIndex(x=>String(x).toUpperCase()===letter);
+  if(idx>=0){q.options[idx]=optionText}else{q.letters.push(letter);q.options.push(optionText);idx=q.options.length-1}
+  q.correct=idx;q.correctLetter=letter;data.manualOptionFor=null;delete data.pendingLetters[i];
+  if(allAnswersMatched()&&!data.editingAnswers)notify('Tüm cevaplar eşleştirildi. Kaydetme alanı açıldı.');
+  renderManualAnswers();renderQuestions()
+ });
+ const done=$('confirmMatchingBtn');
+ if(done)done.onclick=()=>{
+  if(!allAnswersMatched()){notify('Önce eksik soruların cevaplarını tamamlayın.');return}
+  data.editingAnswers=false;renderManualAnswers();notify('Eşleştirmeler tamamlandı. Kaydetme alanı açıldı.')
+ };
+ updateTestControls();
+}
+$('editMatchingBtn').onclick=()=>{if(data.running)return;data.editingAnswers=true;renderManualAnswers()};
 function renderQuestions(){
  const list=$('questions');
  if(!data.questions.length){list.innerHTML='<p class="hint">Henüz soru yok.</p>';return}
@@ -111,7 +182,7 @@ function renderQuestions(){
    let cls='opt';
    if(data.answersVisible&&q.correct===j)cls+=' correct';
    if(data.answersVisible&&q.selected===j&&q.correct!==j)cls+=' wrong';
-   return '<label class="'+cls+'"><input type="radio" name="q'+i+'" value="'+j+'" '+(q.selected===j?'checked':'')+' '+(data.finished?'disabled':'')+'><span><b>'+esc(q.letters[j]||String.fromCharCode(65+j))+')</b> '+esc(o)+'</span></label>'
+   return '<label class="'+cls+'"><input type="radio" name="q'+i+'" value="'+j+'" '+(q.selected===j?'checked':'')+' '+(!data.running?'disabled':'')+'><span><b>'+esc(q.letters[j]||String.fromCharCode(65+j))+')</b> '+esc(o)+'</span></label>'
   }).join(''):'<p class="hint">Bu soruda seçenekler tanınmadı. Kaynak metni kontrol edin.</p>';
   let answerRow='';
   if(data.answersVisible){
@@ -123,20 +194,59 @@ function renderQuestions(){
   }
   return '<article class="q"><div class="qtitle"><span class="num">'+(i+1)+'</span><span>'+esc(q.text)+'</span></div><div class="opts">'+opts+'</div>'+answerRow+'</article>'
  }).join('');
- list.querySelectorAll('input[type=radio]').forEach(inp=>inp.onchange=()=>{if(!data.finished){const i=+inp.name.slice(1);data.questions[i].selected=+inp.value;updateProgress()}});
+ list.querySelectorAll('input[type=radio]').forEach(inp=>inp.onchange=()=>{if(data.running){const i=+inp.name.slice(1);data.questions[i].selected=+inp.value;updateProgress()}});
  updateProgress()
 }
 function updateProgress(){const total=data.questions.length,answered=data.questions.filter(q=>q.selected!==null).length;$('progressLabel').textContent='İlerleme: '+answered+' / '+total;$('progress').value=total?answered/total*100:0}
-$('startBtn').onclick=()=>{if(!data.questions.length)return;if(!allAnswersMatched()){notify('Önce bütün soruların şıklarını ve doğru cevaplarını eşleştirin.');renderManualAnswers();return}if(!confirm('Cevapların tamamını kontrol ettiniz mi? Test başlatılsın mı?'))return;clearInterval(data.timerId);data.questions.forEach(q=>q.selected=null);data.running=true;data.finished=false;data.answersVisible=false;data.startAt=Date.now();$('recordCard').classList.add('hidden');$('uploadCard').classList.add('hidden');$('startBtn').disabled=true;$('finishBtn').disabled=false;$('metrics').classList.add('hidden');$('chart').classList.add('hidden');$('toggleAnswersBtn').textContent='Cevapları göster';data.timerId=setInterval(()=>{const s=Math.floor((Date.now()-data.startAt)/1000);$('timer').textContent='Süre: '+String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},1000);renderQuestions();window.scrollTo({top:$('questions').offsetTop,behavior:'smooth'})};
-$('finishBtn').onclick=()=>{if(!data.questions.length)return;data.running=false;data.finished=true;clearInterval(data.timerId);data.answersVisible=true;$('recordCard').classList.remove('hidden');$('uploadCard').classList.remove('hidden');$('startBtn').disabled=false;$('finishBtn').disabled=true;$('toggleAnswersBtn').textContent='Cevapları gizle';const scored=data.questions.filter(q=>q.correct!==null),correct=scored.filter(q=>q.selected===q.correct).length,wrong=scored.filter(q=>q.selected!==null&&q.selected!==q.correct).length,unanswered=data.questions.filter(q=>q.selected===null).length,rate=scored.length?Math.round(correct/scored.length*100):0;$('correctCount').textContent=correct;$('wrongCount').textContent=wrong;$('rate').textContent=rate+'%';$('unanswered').textContent=unanswered;$('metrics').classList.remove('hidden');drawChart(correct,wrong,unanswered);$('chart').classList.remove('hidden');renderQuestions();if(!data.currentSavedName&&allAnswersMatched()&&confirm('Test tamamlandı. Eşleştirilmiş bu testi sonraki denemeler için kaydetmek ister misiniz?')){if(!$('testName').value.trim())$('testName').value=(prompt('Testin adını yazın:','Yeni Test')||'').trim();if($('testName').value.trim())saveCurrent(true);else notify('Test kaydedilmedi. İsterseniz test adını girip Kaydet düğmesine basabilirsiniz.')}};
-$('toggleAnswersBtn').onclick=()=>{if(!data.questions.length){notify('Önce bir test yükleyin.');return}data.answersVisible=!data.answersVisible;$('toggleAnswersBtn').textContent=data.answersVisible?'Cevapları gizle':'Cevapları göster';renderQuestions()};
+$('startBtn').onclick=()=>{
+ if(data.running||!allAnswersMatched()){notify('Önce tüm soruların doğru şıklarını eşleştirin.');return}
+ clearInterval(data.timerId);data.questions.forEach(q=>q.selected=null);
+ data.running=true;data.finished=false;data.answersVisible=false;data.startAt=Date.now();
+ $('recordCard').classList.add('hidden');$('uploadCard').classList.add('hidden');
+ $('metrics').classList.add('hidden');$('chart').classList.add('hidden');
+ $('toggleAnswersBtn').textContent='Cevapları Göster';$('timer').textContent='Süre: 00:00';
+ data.timerId=setInterval(()=>{const t=Math.floor((Date.now()-data.startAt)/1000);$('timer').textContent='Süre: '+String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')},1000);
+ renderQuestions();updateTestControls();window.scrollTo({top:$('questions').offsetTop,behavior:'smooth'})
+};
+$('finishBtn').onclick=()=>{
+ if(!data.running)return;
+ data.running=false;data.finished=true;clearInterval(data.timerId);data.answersVisible=false;
+ $('recordCard').classList.remove('hidden');$('uploadCard').classList.remove('hidden');
+ $('toggleAnswersBtn').textContent='Cevapları Göster';
+ const correct=data.questions.filter(q=>q.selected===q.correct).length;
+ const wrong=data.questions.filter(q=>q.selected!==null&&q.selected!==q.correct).length;
+ const unanswered=data.questions.filter(q=>q.selected===null).length;
+ const rate=data.questions.length?Math.round(correct/data.questions.length*100):0;
+ $('correctCount').textContent=correct;$('wrongCount').textContent=wrong;$('rate').textContent=rate+'%';$('unanswered').textContent=unanswered;
+ $('metrics').classList.remove('hidden');drawChart(correct,wrong,unanswered);$('chart').classList.remove('hidden');
+ renderManualAnswers();renderQuestions();updateTestControls();
+ notify('Test bitti. Sonuçlar hazır. Doğru ve yanlış şıkları görmek için Cevapları Göster düğmesine basın.')
+};
+$('toggleAnswersBtn').onclick=()=>{
+ if(data.running||!allAnswersMatched()){notify('Cevapları görmek için eşleştirmeyi tamamlayın ve varsa testi bitirin.');return}
+ data.answersVisible=!data.answersVisible;
+ $('toggleAnswersBtn').textContent=data.answersVisible?'Cevapları Gizle':'Cevapları Göster';
+ renderQuestions()
+};
 function drawChart(c,w,u){const cv=$('chart'),ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);const values=[c,w,u],labels=['Doğru','Yanlış','Cevapsız'],colors=['#86efac','#fda4af','#cbd5e1'],max=Math.max(1,...values);values.forEach((v,i)=>{const x=60+i*190,h=v/max*110;ctx.fillStyle=colors[i];ctx.fillRect(x,130-h,90,h);ctx.fillStyle='#1f2937';ctx.font='bold 18px Arial';ctx.fillText(String(v),x+36,118-h);ctx.font='14px Arial';ctx.fillText(labels[i],x+8,155)});}
 function currentRecord(){return {name:$('testName').value.trim(),questions:data.questions.map(q=>({...q,selected:null})),sourceNames:[...data.sourceNames],updatedAt:new Date().toISOString()}}
-function saveCurrent(show=true){if(!allAnswersMatched()){notify('Kaydetmeden önce bütün soruları cevaplarıyla eşleştirin.');return}const name=$('testName').value.trim();if(!name){if(show)notify('Kaydetmek için test adı girin.');return}try{const records=readRecords(),r=currentRecord(),i=records.findIndex(x=>x.name.toLocaleLowerCase('tr-TR')===name.toLocaleLowerCase('tr-TR'));if(i>=0)records[i]=r;else records.unshift(r);data.currentSavedName=name;writeRecords(records);$('savedSelect').value=String(Math.max(0,records.findIndex(x=>x.name===name)));if(show)notify('“'+name+'” kaydedildi.')}catch(e){notify('Kayıt başarısız. Tarayıcı depolama sınırı dolmuş olabilir: '+e.message)}}
+function saveCurrent(show=true){if(data.running||data.editingAnswers){notify('Test veya eşleştirme düzenlemesi sırasında kayıt yapılamaz.');return}if(!allAnswersMatched()){notify('Kaydetmeden önce bütün soruları cevaplarıyla eşleştirin.');return}const name=$('testName').value.trim();if(!name){if(show)notify('Kaydetmek için test adı girin.');return}try{const records=readRecords(),r=currentRecord(),i=records.findIndex(x=>x.name.toLocaleLowerCase('tr-TR')===name.toLocaleLowerCase('tr-TR'));if(i>=0)records[i]=r;else records.unshift(r);data.currentSavedName=name;writeRecords(records);$('savedSelect').value=String(Math.max(0,records.findIndex(x=>x.name===name)));if(show)notify('“'+name+'” kaydedildi.')}catch(e){notify('Kayıt başarısız. Tarayıcı depolama sınırı dolmuş olabilir: '+e.message)}}
 $('saveBtn').onclick=()=>saveCurrent(true);
-function loadRecord(i){const r=readRecords()[i];if(!r)return;data.currentSavedName=r.name;$('testName').value=r.name;data.questions=(r.questions||[]).map(q=>({...q,selected:null}));data.sourceNames=r.sourceNames||[];data.answersVisible=false;data.running=false;data.finished=false;clearInterval(data.timerId);$('recordCard').classList.remove('hidden');$('uploadCard').classList.remove('hidden');$('startBtn').disabled=!allAnswersMatched();$('finishBtn').disabled=true;$('metrics').classList.add('hidden');$('chart').classList.add('hidden');renderQuestions();renderManualAnswers();notify('“'+r.name+'” kaydı açıldı. Testi başlatabilirsiniz.')}
+function loadRecord(i){
+ if(data.running){notify('Testi bitirmeden başka kayıt açılamaz.');return}
+ const r=readRecords()[i];if(!r)return;
+ data.currentSavedName=r.name;$('testName').value=r.name;
+ data.questions=(r.questions||[]).map(q=>({...q,options:q.options||[],letters:q.letters||[],correct:Number.isInteger(q.correct)?q.correct:null,selected:null}));
+ data.sourceNames=r.sourceNames||[];data.answersVisible=false;data.running=false;data.finished=false;
+ data.editingAnswers=false;data.manualOptionFor=null;data.pendingLetters={};
+ clearInterval(data.timerId);$('timer').textContent='Süre: 00:00';
+ $('recordCard').classList.remove('hidden');$('uploadCard').classList.remove('hidden');
+ $('metrics').classList.add('hidden');$('chart').classList.add('hidden');
+ $('toggleAnswersBtn').textContent='Cevapları Göster';
+ renderQuestions();renderManualAnswers();notify('“'+r.name+'” açıldı. Test Başla ile istediğiniz kadar yeniden çözebilirsiniz.')
+}
 $('loadBtn').onclick=()=>{if($('savedSelect').value===''){notify('Açmak için kayıt seçin.');return}loadRecord(+$('savedSelect').value)};
 function deleteRecord(i){const records=readRecords();if(!records[i])return;const name=records[i].name;if(!confirm('“'+name+'” kaydı kalıcı olarak silinsin mi?'))return;records.splice(i,1);writeRecords(records);notify('Kayıt silindi.')}
 $('deleteBtn').onclick=()=>{if($('savedSelect').value===''){notify('Silmek için kayıt seçin.');return}deleteRecord(+$('savedSelect').value)};
-renderSaved();updateProgress();
+renderSaved();updateProgress();renderManualAnswers();
 </script></body></html>
