@@ -110,6 +110,15 @@ jobs:
           cp android/app/build/outputs/apk/debug/app-debug.apk Soru-Hazirlama-Asistani.apk
       - name: Verify APK exists
         run: test -s Soru-Hazirlama-Asistani.apk
+      - name: Sign and verify APK with Android apksigner (v1 v2 v3)
+        run: |
+          set -euo pipefail
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -type f -name apksigner | sort -V | tail -1)"
+          test -x "$APKSIGNER"
+          test -f "$HOME/.android/debug.keystore"
+          "$APKSIGNER" sign --ks "$HOME/.android/debug.keystore" --ks-key-alias androiddebugkey --ks-pass pass:android --key-pass pass:android --v1-signing-enabled true --v2-signing-enabled true --v3-signing-enabled true --out signed-final.apk Soru-Hazirlama-Asistani.apk
+          "$APKSIGNER" verify --verbose --print-certs signed-final.apk
+          mv signed-final.apk Soru-Hazirlama-Asistani.apk
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
