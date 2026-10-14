@@ -91,10 +91,10 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
           p = Path("android/app/src/main/AndroidManifest.xml")
           s = p.read_text()
-          s = re.sub(r'<application\\b(?![^>]*android:forceDarkAllowed)', '<application android:forceDarkAllowed="false"', s, count=1)
+          if "android:forceDarkAllowed=" not in s:
+              s = s.replace("<application", '<application android:forceDarkAllowed="false"', 1)
           p.write_text(s)
           print("Android WebView force-dark disabled")
           PY
