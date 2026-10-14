@@ -27,11 +27,19 @@ jobs:
         run: |
           mkdir -p www
           cp index.html www/index.html
+          cp quiz-fixes.js www/quiz-fixes.js
           npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
           npx cap init "Soru Hazırlama Asistanı" "com.asistan.soruhazirlama" --web-dir www
           npx cap add android
           npx cap sync android
+      - name: Test answer matching, OCR question validation and repeated test operations
+        run: |
+          npm install --no-save --no-package-lock jsdom@24
+          node --check quiz-fixes.js
+          node tests/quiz.test.cjs
+          test -s www/quiz-fixes.js
+          grep -q 'src="quiz-fixes.js"' www/index.html
       - name: Set app name and custom launcher icon
         run: |
           python3 -m pip install --quiet pillow
