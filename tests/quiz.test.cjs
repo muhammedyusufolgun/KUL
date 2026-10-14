@@ -177,6 +177,11 @@ async function runFlow(){
   assert.equal(get('data.questions.every(q=>q.selected===null)'),true);
   assert.equal(e('startBtn').disabled,false);
  });
+ verify('Skipped OCR question report persists after reopening saved test',()=>{
+   assert.equal(get('data.skippedQuestions.length'),2);
+   assert.match(e('skippedReport').textContent,/Soru 3/);
+   assert.match(e('skippedReport').textContent,/Soru 4/);
+ });
  w.close();
 }
 runFlow().then(()=>{console.log('\nALL '+passed+' Android logic checks passed')}).catch(e=>{console.error(e.stack);w.close();process.exitCode=1});
