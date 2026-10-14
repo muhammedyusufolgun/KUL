@@ -1,0 +1,44 @@
+name: Test Soru Takip Android APK
+on:
+  push:
+    branches:
+      - test-soru-takip
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Android SDK
+        shell: bash
+        run: |
+          export ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          SDKM=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n1)
+          test -n "$SDKM"
+          yes | "$SDKM" --licenses >/dev/null || true
+          "$SDKM" "platforms;android-35" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: APK build
+        run: gradle --no-daemon :app:assembleRelease
+      - name: Sign and verify
+        shell: bash
+        run: |
+          STOREPASS="test-soru-takip-temp-key-2026"
+          keytool -genkeypair -alias test-soru-takip -keyalg RSA -keysize 3072 -validity 10000 -keystore /tmp/test-soru-takip.keystore -storepass "$STOREPASS" -keypass "$STOREPASS" -dname 'CN=Test Soru Takip, OU=Mobile, O=Local, C=TR' -noprompt
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -f -p 4 app/build/outputs/apk/release/app-release-unsigned.apk /tmp/aligned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/test-soru-takip.keystore --ks-key-alias test-soru-takip --ks-pass "pass:$STOREPASS" --key-pass "pass:$STOREPASS" --v1-signing-enabled true --v2-signing-enabled true --v3-signing-enabled true --out Test_Soru_Takip.apk /tmp/aligned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs Test_Soru_Takip.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Test_Soru_Takip_APK
+          path: Test_Soru_Takip.apk
+          retention-days: 30
