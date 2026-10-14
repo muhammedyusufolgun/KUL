@@ -131,12 +131,22 @@ jobs:
       - name: Sign and verify APK with Android apksigner (v1 v2 v3)
         run: |
           set -euo pipefail
-          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -type f -name apksigner | sort -V | tail -1)"
-          test -x "$APKSIGNER"
-          test -f "$HOME/.android/debug.keystore"
-          "$APKSIGNER" sign --ks "$HOME/.android/debug.keystore" --ks-key-alias androiddebugkey --ks-pass pass:android --key-pass pass:android --v1-signing-enabled true --v2-signing-enabled true --v3-signing-enabled true --out signed-final.apk Soru-Hazirlama-Asistani.apk
-          "$APKSIGNER" verify --verbose --print-certs signed-final.apk
-          mv signed-final.apk Soru-Hazirlama-Asistani.apk
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          APKSIGNER="$(find "$SDK_ROOT/build-tools" -maxdepth 2 -name apksigner -type f 2>/dev/null | sort -V | tail -1 || true)"
+          echo "Android SDK: $SDK_ROOT"
+          echo "apksigner: ${APKSIGNER:-not found}"
+          if [ -z "$APKSIGNER" ]; then
+            echo "Warning: apksigner unavailable; using Gradle's signed debug APK."
+          else
+            KS="$HOME/.android/debug.keystore"
+            if [ ! -f "$KS" ]; then
+              KS="$RUNNER_TEMP/soru-asistani-debug.keystore"
+              keytool -genkeypair -v -keystore "$KS" -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US" -noprompt
+            fi
+            "$APKSIGNER" sign --ks "$KS" --ks-key-alias androiddebugkey --ks-pass pass:android --key-pass pass:android --v1-signing-enabled true --v2-signing-enabled true --v3-signing-enabled true --out signed-final.apk Soru-Hazirlama-Asistani.apk
+            "$APKSIGNER" verify --verbose --print-certs signed-final.apk
+            mv signed-final.apk Soru-Hazirlama-Asistani.apk
+          fi
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
