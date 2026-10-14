@@ -53,6 +53,13 @@ if old_ocr not in html:
  raise SystemExit('Cannot locate original OCR function')
 html = html.replace(old_ocr,new_ocr)
 html = html.replace('<meta name="color-scheme" content="light">','<meta name="color-scheme" content="light"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">')
+# Keep the validated iOS-specific parsing and matching layer in the app bundle.
+fix=WEB/'quiz-fixes.js'
+if not fix.is_file() or fix.stat().st_size<100:
+ raise SystemExit('Missing iOS matching logic: '+str(fix))
+if '</body>' not in html:
+ raise SystemExit('Missing document body')
+html=html.replace('</body>','<script src="quiz-fixes.js"></script></body>')
 (WEB/'index.html').write_text(html,encoding='utf-8')
 icon_dir=APP/'Assets.xcassets'/'AppIcon.appiconset'
 icon_dir.mkdir(parents=True, exist_ok=True)
