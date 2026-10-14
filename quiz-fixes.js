@@ -129,6 +129,12 @@ parseQuestions=function(qText,aText){
 if(!Array.isArray(data.skippedQuestions))data.skippedQuestions=[];
 data.totalDetected=data.totalDetected||0;
 data.editingAnswers=false;
+// Guide the user through source upload, matching report, then the save panel.
+const uploadCard=el('uploadCard');
+const recordCard=el('recordCard');
+uploadCard.insertAdjacentElement('afterend',recordCard);
+uploadCard.querySelector('h2').textContent='1. Soruları ve cevapları yükle';
+recordCard.querySelector('h2').textContent='2. Test kaydı';
 const summary=el('matchingSummary');
 const report=document.createElement('div');report.id='matchingReport';report.className='status hidden';
 summary.insertAdjacentElement('afterend',report);
@@ -160,7 +166,7 @@ function renderReports(){
  skippedBox.innerHTML=skipped.length?'<b>'+skipped.length+' soru/bölüm pas geçildi. Teste dahil edilmedi.</b>'+
    '<div class="mapping-roster">'+skipped.map(x=>'<div class="mapping-line">'+
    (x.n==null?'Numarası bilinmeyen bölüm':'Soru '+safe(x.n))+': '+safe(x.reason)+'</div>').join('')+'</div>':'';
- el('recordCard').classList.toggle('hidden',(!ready && total>0)||data.running);
+ el('recordCard').classList.toggle('hidden',(!ready && (total>0||readRecords().length===0))||data.running);
 }
 updateTestControls=function(){
  const ready=allAnswersMatched();
