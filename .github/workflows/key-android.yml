@@ -27,6 +27,29 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: '8.9'
+      - name: Check HTML and JavaScript
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          html = Path('Key_Android/app/src/main/assets/index.html').read_text(encoding='utf-8')
+          class Scripts(HTMLParser):
+              def __init__(self): super().__init__(); self.active=False; self.buf=[]; self.items=[]
+              def handle_starttag(self, tag, attrs):
+                  if tag == 'script': self.active=True; self.buf=[]
+              def handle_endtag(self, tag):
+                  if tag == 'script' and self.active: self.items.append(''.join(self.buf)); self.active=False
+              def handle_data(self, data):
+                  if self.active: self.buf.append(data)
+          parser = Scripts(); parser.feed(html)
+          assert parser.items, 'No script found in packaged HTML'
+          assert 'Gelişmiş seçenekler' in html and 'id="advancedDetails" hidden' in html
+          assert 'Metne görsel ekle' in html and 'textImagePreview' in html
+          Path('/tmp/key-inline.js').write_text('\n'.join(parser.items), encoding='utf-8')
+          ET.parse('Key_Android/app/src/main/AndroidManifest.xml')
+          PY
+          node --check /tmp/key-inline.js
       - name: Build and run unit tests
         working-directory: Key_Android
         run: gradle --no-daemon clean testDebugUnitTest assembleDebug
@@ -36,6 +59,25 @@ jobs:
           test -s "$APK"
           apksigner verify --verbose "$APK"
           apkanalyzer apk summary "$APK"
+      - name: Install and launch on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: |
+            adb install Key_Android/app/build/outputs/apk/debug/app-debug.apk
+            adb shell am start -n tr.olgun.key/.MainActivity
+            for i in $(seq 1 20); do
+              if adb shell pidof tr.olgun.key >/dev/null 2>&1; then break; fi
+              sleep 1
+            done
+            adb shell pidof tr.olgun.key
+            adb shell dumpsys activity activities | grep -q 'mResumedActivity.*tr.olgun.key'
+            if adb logcat -d -s AndroidRuntime:E | grep -q 'FATAL EXCEPTION'; then exit 1; fi
       - name: Upload installable APK
         uses: actions/upload-artifact@v4
         with:
