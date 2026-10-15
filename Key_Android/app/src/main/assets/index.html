@@ -143,7 +143,7 @@ body{font-size:14px;background:#d7e2eb}
 .option-guide{margin:4px 0 0}
 .extras{margin-top:10px!important;background:#fdfefe!important}
 .extras summary{font-size:12px}
-.advanced-caption{font-size:12px;color:#637e91;margin:0 0 9px}
+
 #referenceDetails{padding:0;margin-top:0}
 #referenceDetails summary{padding:12px 15px}
 .screen-footer{padding:2px 5px 0}
@@ -164,7 +164,7 @@ body{font-size:14px;background:#d7e2eb}
 .header-right{color:#17658e;font-style:italic;font-weight:500;font-size:clamp(11px,1.1vw,15px);line-height:1.4;overflow-wrap:anywhere;word-break:normal}
 /* Görünmeyen modun öğelerini CSS düzeyinde de kapat */
 .task.mode-text #visualOperation,.task.mode-text #fileField,.task.mode-text #secretFields,.task.mode-text #fileProtectionField,.task.mode-text #imageCryptField{display:none!important}
-.task.mode-image #textTools,.task.mode-image #autoBox,.task.mode-image #advancedDetails{display:none!important}
+.task.mode-image #textTools,.task.mode-image #autoBox{display:none!important}
 @media(max-width:540px){.header-right{font-size:12px!important;text-align:right!important}}
 @media print{.header{background:#f2f9fe!important;border-left:5px solid #0284c7!important}.header-right{font-size:11px!important;font-weight:500!important}}
 /* V4: Metin açıklaması ve tek görsel akışı */
@@ -175,7 +175,7 @@ body{font-size:14px;background:#d7e2eb}
 .explanation-steps span{border:1px solid #b8d9e9;border-radius:5px;background:#fff;font-weight:700;font-size:12px;padding:6px 8px}
 .explanation-steps i{color:#1582b6;font-size:14px;font-style:normal}
 .explanation-area .explanation-tip{font-size:11px;color:#5b7386}
-.right-step #advancedDetails{margin:8px 0 12px!important}
+
 .right-step .chain{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
 .right-step .chain label{font-size:12px}
 .right-step .chain select{width:100%;min-width:0}
@@ -205,7 +205,7 @@ body{font-size:14px;background:#d7e2eb}
 .task.mode-image #fileField,.task.mode-image #visualOperation,.task.mode-image #imageFlowSettings{display:block}
 .task.mode-image #imageFlowSettings{display:grid}
 #secretFields[hidden],#fileProtectionField[hidden],#imageFlowSettings[hidden],#extractedSecret[hidden]{display:none!important}
-#continueImage{font-weight:750}
+
 @media(max-width:940px){.image-flow{grid-template-columns:1fr}}
 @media(max-width:660px){.image-progress{grid-template-columns:1fr;gap:5px}.image-progress span{padding:6px 9px}.right-step .chain{grid-template-columns:1fr 1fr}.explanation-area{padding:11px}}
 @media print{.explanation-area,.image-flow,.visual-intro,.code-entry,.extracted-secret{display:none!important}}
@@ -215,16 +215,54 @@ body{font-size:14px;background:#d7e2eb}
 .solve-inline input{accent-color:#0284c7}
 @media print{.solve-inline{display:none!important}}
 .attachment-box{margin-top:9px;padding:10px;border:1px dashed #df8585;border-radius:6px;background:#fffafa}.attachment-box label{margin-bottom:5px}.attachment-box input{font-size:12px}.attachment-box .preview-box{display:block;max-height:220px}.attachment-box img{max-height:200px}
+
+/* Compact Key header and mobile-first controls */
+body{background:#ffe3e3}
+.shell{border:0;border-top:4px solid #c63d45;padding:7px;background:#ffe3e3}
+.inner{max-width:1080px;padding:8px;background:#fff7f7;border-color:#e8bcbc;gap:9px}
+.header{display:flex;align-items:center;justify-content:center;gap:10px;min-height:0;padding:6px 9px;border-color:#e5c6c6}
+button.header-title{flex:1;min-width:0;background:transparent;border:0;padding:3px;color:#7f2028;font:inherit;text-align:center;cursor:pointer}
+.header-title h1{font-size:clamp(16px,4vw,20px);line-height:1.15;letter-spacing:0;margin:0}
+.exit-button{border:1px solid #c97e83;background:#fff0f0;color:#7f2028;border-radius:6px;padding:8px 12px;font:700 12px 'Segoe UI',Arial,sans-serif;cursor:pointer;white-space:nowrap}
+.exit-button:focus-visible,button.header-title:focus-visible{outline:3px solid #d98a8f;outline-offset:2px}
+.intro{align-items:center}
+.explanation-area{margin-top:9px;padding:11px;background:#fff8f4;border-color:#e9d4c9}
+@media(max-width:660px){
+ .shell{padding:4px;border-top-width:4px}
+ .inner{min-height:calc(100vh - 8px);padding:6px;gap:7px}
+ .header{padding:5px 7px;gap:6px}
+ .header-title h1{font-size:16px}
+ .intro{align-items:center;gap:8px}
+ .exit-button{padding:8px 9px}
+ .dashboard,.task{padding:10px}
+ .layout-step{grid-template-columns:minmax(0,1fr);gap:8px}
+ .right-step{border-left:0;border-top:1px solid #e5edf3;padding:10px 0 0}
+ .left-step{padding:0}
+ .left-step textarea{min-height:138px!important}
+ .task-help{margin-bottom:9px;padding:8px 10px}
+ .input-area{padding:9px}
+ .mode-cards{gap:6px}
+ .mode-card{min-height:68px;padding:8px 4px;gap:5px}
+ .process-bar{padding:9px}
+ .actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+ .action{padding:9px 3px;font-size:11px}
+ .image-flow{grid-template-columns:1fr}
+ .flow-block{padding:10px}
+ .image-progress{grid-template-columns:1fr;gap:5px}
+ .image-progress span{padding:6px 9px}
+ #resultPane{padding:11px}
+ .explanation-area{padding:10px}
+ .attachment-box{padding:8px}
+}
+@media print{.header{display:none!important}}
 </style></head><body>
 <div class="shell"><div class="inner">
 <header class="header">
-  <div id="logoTarget" class="logo-area" title="Logoyu değiştirmek için 5 kez tıklayın"><img id="logoImg" src="logo.jpg" alt="Kurum logosu"><span id="logoFallback" class="logo-fallback" hidden>OL</span></div>
-  <div class="header-title" id="titleTarget" title="Başlığı değiştirmek için 5 kez tıklayın"><h1 id="mainTitle">Akıllı Kriptografi Aracı</h1><p id="subTitle">Metin kodlama ve tek görselde çoklu işlem</p></div>
-  <div id="institutionTarget" class="header-right" title="Bu alanı değiştirmek için 5 kez tıklayın"><span id="institutionText">https://muhammedyusufolgun.blogspot.com</span></div>
+  <button id="titleTarget" class="header-title" type="button" title="Başlangıç ekranına dön"><h1>Akıllı Kriptografi Aracı</h1></button>
 </header>
 <main>
 <section class="dashboard" aria-label="İşlem seçimi">
-  <div class="intro"><div><h2>Ne yapmak istiyorsunuz?</h2><p>Bir seçenek seçin, içeriğinizi ekleyin ve işlemi başlatın.</p></div></div>
+  <div class="intro"><div><h2>Ne yapmak istiyorsunuz?</h2><p>Bir seçenek seçin, içeriğinizi ekleyin ve işlemi başlatın.</p></div><button id="exitBtn" class="exit-button" type="button">Çıkış</button></div>
   <div class="mode-cards" role="group" aria-label="İşlem türü">
     <button class="mode-card is-active" data-mode="text" type="button" aria-pressed="true"><span class="mode-icon" aria-hidden="true">Aa</span><span><span class="mode-name">Metin</span><span class="mode-sub">Yazıyı şifrele / çöz</span></span></button>
     <button class="mode-card" data-mode="image" type="button" aria-pressed="false"><span class="mode-icon" aria-hidden="true">▧</span><span><span class="mode-name">Görsel</span><span class="mode-sub">Dönüştür, geri aç, mesaj göm</span></span></button>
@@ -235,7 +273,7 @@ body{font-size:14px;background:#d7e2eb}
   <div class="task-header"><h2><span class="step-symbol">1</span><span id="inputPrompt">Metninizi yazın</span></h2></div>
   <div class="task-help" aria-live="polite">
     <div id="howtoText"><strong>Metin:</strong> Metninizi yazın. <strong>Şifrele</strong> yöntemi uygular; <strong>Çöz</strong> bilinen kodları otomatik tanımaya çalışır.</div>
-    <div id="howtoImage" hidden><strong>Görsel:</strong> Bir dosya seçin; isterseniz içine mesaj yerleştirin ve çıktı türünü belirleyin. <strong>Şifrele</strong> seçilen çıktı türünü üretir, <strong>Çöz</strong> dosyayı veya kodu açar ve varsa gizli mesajı gösterir.</div>
+    <div id="howtoImage" hidden><strong>Görsel:</strong> Fotoğraf seçildiğinde içindeki yazı otomatik okunur ve PNG içine eklenecek mesaj alanına aktarılır. İsterseniz yalnızca bu mesajı AES ile şifreleyin.</div>
   </div>
   <div class="layout-step">
     <section class="left-step" aria-label="Giriş alanları">
@@ -245,17 +283,17 @@ body{font-size:14px;background:#d7e2eb}
       </div>
       <div id="fileField" class="input-area" hidden>
         <label id="fileLabel" for="imageFile">1. Görsel veya geri açılacak dosya</label>
-        <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Dosya seç veya sürükle bırak"><span class="cloud">▧</span><span>Görseli ya da .og2img dosyasını seçin<small>PNG, JPG, WEBP, GIF, .og2img veya kod içeren .txt</small></span></div>
+        <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Dosya seç veya sürükle bırak"><span class="cloud">▧</span><span>Fotoğrafı ya da geri açılacak dosyayı seçin<small>Fotoğraftaki metin Android uygulamasında otomatik okunur.</small></span></div>
         <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,.og2img,.txt" hidden>
         <div id="selectedFile" class="selected-file" hidden><img id="selectedPreview" alt="Seçilen dosya önizlemesi" hidden><div id="fileSymbol" class="no-thumb" hidden>DOSYA</div><div><strong id="selectedFileName"></strong><span id="selectedFileSize"></span></div></div>
         <details id="codeEntryDetails" class="code-entry"><summary>Dosyam yok, Base64 görsel kodunu yapıştıracağım</summary><label for="imageCodeInput">Koddan görsel açma</label><textarea id="imageCodeInput" rows="3" spellcheck="false" placeholder="data:image/png;base64,... veya OG2.AESGCM.1...."></textarea><p class="hint">Kodu buraya yapıştırıp <strong>Çöz</strong>'e basın. Dosya seçiliyse önce dosya kullanılır.</p></details>
         <p id="fileHint" class="hint">Bir görsel seçerek başlayın.</p>
       </div>
       <div id="imageFlowSettings" class="image-flow" hidden>
-        <div class="flow-block"><label class="flow-title" for="embedMessage">2. Görsele mesaj ekle (isteğe bağlı)</label>
-          <label class="inline-check flow-toggle"><input id="embedMessage" type="checkbox">Metin veya bağlantıyı görsel içine gizle</label>
+        <div class="flow-block"><label class="flow-title" for="embedMessage">2. Fotoğraftaki metni görsele ekle</label>
+          <label class="inline-check flow-toggle"><input id="embedMessage" type="checkbox">Fotoğraftan okunan metni PNG içine ekle</label>
           <div id="secretFields" hidden><div class="field"><label for="secretText">Gömülecek metin veya bağlantı</label><textarea id="secretText" rows="3" placeholder="Örneğin: Merhaba veya https://ornek.com"></textarea></div>
-            <label class="inline-check"><input id="lockSecret" type="checkbox">Gömülen mesaj ayrıca parola ile korunsun</label>
+            <label class="inline-check"><input id="lockSecret" type="checkbox">Görsel içindeki mesajı AES ile şifrele</label>
             <p class="hint">Mesaj PNG piksellerine yerleştirilir. PNG yeniden sıkıştırılırsa veya düzenlenirse mesaj bozulabilir.</p>
           </div>
         </div>
@@ -272,8 +310,8 @@ body{font-size:14px;background:#d7e2eb}
           <div id="imageFlowExplanation" class="flow-explain" aria-live="polite"></div>
         </div>
       </div>
-      <div id="inputField" class="input-area field"><label id="inputLabel" for="sourceText">Metin veya şifreli kod</label><textarea id="sourceText" rows="6" spellcheck="false" placeholder="Metninizi yazın veya şifreli kodu buraya yapıştırın..."></textarea><div class="attachment-box"><label for="textImageInput">Metne görsel ekle</label><input id="textImageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><div id="textImagePreview" class="preview-box" hidden><img alt="Metin alanına eklenen görsel önizlemesi"></div></div></div>
-      <section id="explanationArea" class="explanation-area" aria-live="polite"><div class="explanation-title"><span aria-hidden="true">ⓘ</span> Açıklama alanı</div><p id="explanationLead"></p><div id="explanationSteps" class="explanation-steps"></div><p id="explanationTip" class="explanation-tip"></p><div id="autoBox" class="solve-inline" hidden><label class="inline-check"><input id="autoSolve" type="checkbox" checked> Çöz işleminde kod türünü otomatik tanı</label></div></section>
+      <div id="inputField" class="input-area field"><label id="inputLabel" for="sourceText">Metin veya şifreli kod</label><textarea id="sourceText" rows="6" spellcheck="false" placeholder="Metninizi yazın veya şifreli kodu buraya yapıştırın..."></textarea><div class="attachment-box"><label for="textImageInput">Fotoğraftan metin oku ve metin alanına ekle</label><input id="textImageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><div id="textImagePreview" class="preview-box" hidden><img alt="Metin alanına eklenen görsel önizlemesi"></div></div></div>
+      
     </section>
     <section class="right-step" aria-label="Yöntem ve ayarlar">
       <div id="textTools" class="method-choice field"><label for="simpleAlgorithm">Şifrelemek için yöntem seçin</label><select id="simpleAlgorithm">
@@ -291,8 +329,8 @@ body{font-size:14px;background:#d7e2eb}
         <option value="morse">Mors alfabesi</option>
         <option value="xor">XOR — eğitim amaçlı</option>
         <option value="sha256">SHA-256 — geri çözülemez özet</option>
-        <option value="advanced">Birden fazla yöntem — gelişmiş</option>
-      </select><div class="option-guide"><span><i class="option-dot"></i> Uygun</span><span><i class="option-dot off"></i> Uyumsuz (seçilemez)</span></div><p class="hint" id="algorithmHint"></p></div>
+        
+      </select><div class="option-guide"><span><i class="option-dot"></i> Uygun</span><span><i class="option-dot off"></i> Uyumsuz (seçilemez)</span></div><p class="hint" id="algorithmHint"></p></div><section id="explanationArea" class="explanation-area" aria-live="polite"><div class="explanation-title"><span aria-hidden="true">ⓘ</span> Açıklama alanı</div><p id="explanationLead"></p><div id="explanationSteps" class="explanation-steps"></div><p id="explanationTip" class="explanation-tip"></p><div id="autoBox" class="solve-inline" hidden><label class="inline-check"><input id="autoSolve" type="checkbox" checked> Çöz işleminde kod türünü otomatik tanı</label></div></section>
       
       <span id="keyFieldsHome" hidden></span><div id="keyFields" class="key-row"><div class="field"><label for="classicKey">Anahtar kelime</label><input id="classicKey" type="text" autocomplete="off" placeholder="Anahtar kelime"></div><div class="field"><label id="passwordLabel" for="password">Parola (en az 8 karakter)</label><input id="password" type="password" autocomplete="off" placeholder="Parolanızı girin"></div></div>
       <div id="quickSettings" hidden><div class="settings-grid">
@@ -314,24 +352,13 @@ body{font-size:14px;background:#d7e2eb}
     <div class="result-toolbar"><h3><span class="step-symbol">3</span> İşlem sonucu</h3></div>
     <div id="detectedType" class="detection" hidden><b id="detectedTitle"></b><span id="detectedDetail" class="detail"></span></div>
     <div class="field"><label id="outputLabel" for="outputText">İşlem sonucu</label><textarea id="outputText" rows="5" readonly spellcheck="false" placeholder="Sonuç burada görünecek."></textarea></div>
-    <div class="links"><a id="copyResult" href="#" hidden>Sonucu kopyala</a><a id="reverseResult" href="#" hidden>Sonucu girişe taşı</a><a id="textDownload" href="#" hidden download="kriptografi_sonuc.txt">Metni indir (.txt)</a><a id="imageDownload" href="#" hidden>Görsel / dosya indir</a><a id="continueImage" href="#" hidden>↪ Bu görselle devam et</a></div>
+    <div class="links"><a id="copyResult" href="#" hidden>Sonucu kopyala</a><a id="reverseResult" href="#" hidden>Sonucu girişe taşı</a><a id="textDownload" href="#" hidden download="kriptografi_sonuc.txt">Metni indir (.txt)</a><a id="imageDownload" href="#" hidden>Görsel / dosya indir</a></div>
     <div id="previewBox" class="preview-box"><img id="previewImage" alt="Sonuç görseli"></div><div id="extractedSecret" class="extracted-secret" hidden><strong>Görselde bulunan gizli mesaj</strong><div id="extractedSecretText"></div></div>
   </section>
-  <details class="extras" id="advancedDetails" hidden><summary>Gelişmiş seçenekler — birden fazla şifreleme yöntemi uygula (isteğe bağlı)</summary><div class="extras-body">
-    <p class="advanced-caption">İşlemler yukarıdan aşağıya uygulanır. Çözüm sırasında ters sırada çalıştırılır.</p>
-    <div class="chain" id="stageList">
-      <div class="field"><label for="stage1">1. yöntem</label><select id="stage1" class="stage"><option value="none">— Yok —</option></select></div>
-      <div class="field"><label for="stage2">2. yöntem</label><select id="stage2" class="stage"><option value="none">— Yok —</option></select></div>
-      <div class="field"><label for="stage3">3. yöntem</label><select id="stage3" class="stage"><option value="none">— Yok —</option></select></div>
-      <div class="field"><label for="stage4">4. yöntem</label><select id="stage4" class="stage"><option value="none">— Yok —</option></select></div>
-      <div class="field"><label for="stage5">5. yöntem</label><select id="stage5" class="stage"><option value="none">— Yok —</option></select></div>
-      <div class="field"><label for="stage6">6. yöntem</label><select id="stage6" class="stage"><option value="none">— Yok —</option></select></div>
-    </div><p id="chainCompatibility" class="compatibility-guide">Yöntemlerin uygunluğu seçimlerinize göre güncellenir.</p>
-  </div></details>
 </section>
 </main>
 <section id="printReport" class="print-report"><h2>Kriptografi İşlem Raporu</h2><div class="print-meta"><div id="printDate"></div><div id="printMode"></div><div id="printChain"></div><div id="printStatus"></div></div><div class="print-title" id="printInputTitle">Giriş</div><div class="print-block" id="printInput"></div><div class="print-title">Çıktı</div><div class="print-block" id="printOutput"></div><img id="printImage" class="print-img" hidden alt="İşlem görseli"><div class="print-small">Parola ve anahtarlar rapora alınmaz. Uzun kodlar PDF için kısaltılır; tam veri için .txt dosyasını indirin.</div></section>
-</div></div><input id="logoPicker" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+</div></div>
 <script>
 'use strict';
 (() => {
@@ -346,42 +373,17 @@ body{font-size:14px;background:#d7e2eb}
    ['url','URL yüzde-kodlama'], ['morse','Mors / Morse'], ['xor','XOR + Hex (eğitim amaçlı)'],
    ['aes','AES-256-GCM (parola)'], ['sha256','SHA-256 özet (geri çözülemez)']
  ];
- const selStages=[1,2,3,4,5,6].map(n => $('stage'+n));
- selStages.forEach((sel,i)=>{types.forEach(([value,label])=>sel.add(new Option(label,value))); if(i===0)sel.value='aes';});
- let outputBlobURL=null, imageBlobURL=null, selectedPreviewURL=null, textAttachmentURL=null, logoBlobURL=null, busy=false, lastResult=null, intent='encrypt',lastFileProtected=false;
+ const selStages=[{get value(){return $('simpleAlgorithm').value;}}];
+ let outputBlobURL=null, imageBlobURL=null, selectedPreviewURL=null, textAttachmentURL=null, imageDownloadBlob=null, textDownloadBlob=null, busy=false, lastResult=null, intent='encrypt',lastFileProtected=false;
  let forcePasswordPrompt=false;
  const modeInfo={
    text:{badge:'Metin',description:'Metin yazın veya şifreli kod yapıştırın. Şifrelemek için yöntem seçin; çözmek için Çöz’e basın.',input:'Metin veya şifreli kod',output:'Çözülmüş metin / işlem sonucu'},
-   image:{badge:'Görsel',description:'Görselinizi seçin ve işlemi başlatın. Parolasız dönüşüm, parolalı AES veya görsel içine mesaj gömme yöntemlerinden birini kullanın.',input:'Base64 görsel kodu (kod modunda Çöz için)',output:'Görsel veya gizli mesaj sonucu'}
+   image:{badge:'Görsel',description:'Fotoğraf seçin. Yazı otomatik okunur ve PNG içine mesaj olarak eklenir; isterseniz yalnızca bu mesajı AES ile şifreleyin.',input:'Base64 görsel kodu (kod modunda Çöz için)',output:'Görsel veya gizli mesaj sonucu'}
  };
- const algorithmHints={aes:'Güvenli şifreleme. Aynı parolayla geri açılır.',caesar:'Her harfi belirlediğiniz kadar kaydırır. Gerçek güvenlik için uygun değildir.',rot13:'Harfleri 13 konum değiştirir; tekrar ROT13 uygulayınca geri açılır.',atbash:'Alfabeyi ters çevirir; tekrar uygulanınca geri açılır.',vigenere:'Bir anahtar kelime gerekir. Klasik bir yöntemdir.',affine:'Harfleri matematiksel olarak dönüştürür; eğitim içindir.',rail:'Metindeki harflerin yerlerini değiştirir.',base64:'Metni kodlar; şifreleme değildir.',hex:'Metni onaltılık koda çevirir; şifreleme değildir.',binary:'Metni 0 ve 1 dizilerine dönüştürür.',url:'Metni bağlantı içinde kullanılabilecek biçimde kodlar.',morse:'Metni Mors işaretlerine dönüştürür; bazı karakterler desteklenmez.',xor:'Anahtar gerekir. Bu örnek yöntem güvenli veri saklamak için uygun değildir.',sha256:'Tek yönlü özet çıkarır; Çöz ile geri alınamaz.',advanced:'Aşağıdaki gelişmiş bölümden 1–6 arasında adım seçin.'};
- function syncSimple(){
-   const a=$('simpleAlgorithm').value;
-   if(a==='advanced'){$('advancedDetails').open=true;}
-   else {selStages.forEach((s,i)=>s.value=i===0?a:'none');$('advancedDetails').open=false;}
-   refreshChain();
- }
+ const algorithmHints={aes:'Güvenli şifreleme. Aynı parolayla geri açılır.',caesar:'Her harfi belirlediğiniz kadar kaydırır. Gerçek güvenlik için uygun değildir.',rot13:'Harfleri 13 konum değiştirir; tekrar ROT13 uygulayınca geri açılır.',atbash:'Alfabeyi ters çevirir; tekrar uygulanınca geri açılır.',vigenere:'Bir anahtar kelime gerekir. Klasik bir yöntemdir.',affine:'Harfleri matematiksel olarak dönüştürür; eğitim içindir.',rail:'Metindeki harflerin yerlerini değiştirir.',base64:'Metni kodlar; şifreleme değildir.',hex:'Metni onaltılık koda çevirir; şifreleme değildir.',binary:'Metni 0 ve 1 dizilerine dönüştürür.',url:'Metni bağlantı içinde kullanılabilecek biçimde kodlar.',morse:'Metni Mors işaretlerine dönüştürür; bazı karakterler desteklenmez.',xor:'Anahtar gerekir. Bu örnek yöntem güvenli veri saklamak için uygun değildir.',sha256:'Tek yönlü özet çıkarır; Çöz ile geri alınamaz.'};
+ function syncSimple(){refreshChain();}
  const isClassical=id=>['caesar','rot13','atbash','vigenere','affine'].includes(id);
- function stageAllowed(index,id){
-   if(id==='none')return true;
-   const prefix=selStages.slice(0,index).map(s=>s.value);
-   if(index>0&&prefix[index-1]==='none')return false;
-   if(prefix.includes('sha256'))return false;
-   if(id==='morse'&&index>0)return false;
-   if(index>0&&['binary','morse'].includes(prefix[index-1])&&isClassical(id))return false;
-   if(id==='morse'&&index===0&&$('sourceText').value&&!Array.from($('sourceText').value.toUpperCase()).every(c=>c===' '||c==='\n'||MORSE[c]))return false;
-   return true;
- }
- function refreshChain(){
-   // Sequential, predictable stages: one missing stage disables later slots.
-   selStages.forEach((sel,index)=>{
-     for(const opt of sel.options){const blocked=!stageAllowed(index,opt.value);opt.disabled=blocked;opt.style.color=blocked?'#a4b0bb':'#213e50';opt.style.fontWeight=blocked?'400':'650';opt.title=blocked?'Önceki aşamayla uyumsuz veya sıra boş':'Uygun';}
-     if(!stageAllowed(index,sel.value))sel.value='none';
-   });
-   $('chainCompatibility').textContent='Koyu yöntemler seçilebilir; açık gri olanlar bu sırada uygun değildir. Boş aşamadan sonra seçim yapılamaz. Mors yalnızca ilk aşamada kullanılabilir; SHA-256 sonrası ek aşama seçilemez.';
-   $('chainCompatibility').classList.toggle('warn',selStages.some(s=>s.value==='sha256'));
-   updateOptions();updateExplanation();
- }
+ function refreshChain(){updateOptions();}
  function updateCompatibility(){
    const solving=intent==='solve'&&!$('autoSolve').checked,source=$('sourceText').value.trim();
    const rules={sha256:solving,base64:solving&&!!source&&!isLikelyBase64(source),hex:solving&&!!source&&!isHex(source),binary:solving&&!!source&&!isBinary(source),morse:solving&&!!source&&!isMorse(source),url:solving&&!!source&&!/%[0-9a-f]{2}/i.test(source),aes:solving&&!!source&&!source.startsWith('OG2.AESGCM.'),xor:solving&&!!source&&!isHex(source)};
@@ -395,17 +397,13 @@ body{font-size:14px;background:#d7e2eb}
    $('autoBox').hidden=$('mode').value!=='text'||!$('sourceText').value.trim();
    const digest=chain.includes('sha256');
    const aes=chain.includes('aes'),classical=chain.some(v=>isClassical(v)||['rail','morse','xor'].includes(v));
-   const multi=$('simpleAlgorithm').value==='advanced';
-   $('explanationLead').textContent= multi
-     ?'Birden fazla yöntem seçebilirsiniz. Şifrele, yöntemleri gösterilen sırayla uygular; manuel Çöz, tam ters sırayla geri alır.'
-     :(algorithmHints[chain[0]]||'Kullanacağınız yöntemi seçin.');
+   $('explanationLead').textContent=algorithmHints[chain[0]]||'Kullanacağınız yöntemi seçin.';
    const holder=$('explanationSteps');holder.replaceChildren();
    names.forEach((name,index)=>{if(index){const arrow=document.createElement('i');arrow.textContent='→';holder.append(arrow);}const tag=document.createElement('span');tag.textContent=(index+1)+'. '+name;holder.append(tag);});
    const tip=[];
    if(aes)tip.push('AES için aynı parola şifreleme ve çözme sırasında kullanılmalıdır.');
    if(digest)tip.push('SHA-256 tek yönlüdür; bu zincir geri çözülemez.');
    if(classical)tip.push('Klasik yöntemler öğrenim içindir; tek başlarına güvenli şifreleme sağlamaz.');
-   if(automatic&&$('sourceText').value.trim()&&$('simpleAlgorithm').value==='advanced')tip.push('Çöz işlemi otomatik tanıyı dener. Seçtiğiniz yöntemleri ters sırayla uygulamak için aşağıdaki otomatik tanımayı kapatın.');
    if(!names.length)tip.push('Başlamak için ilk yöntemi seçin.');
    $('explanationTip').textContent=tip.join(' ');
  }
@@ -415,7 +413,8 @@ body{font-size:14px;background:#d7e2eb}
    for(const opt of $('imageOutputType').options){const incompatible=embed&&['jpeg','webp'].includes(opt.value);opt.disabled=incompatible;opt.style.color=incompatible?'#9aa9b4':'#18394e';opt.style.fontWeight=incompatible?'400':'650';opt.title=incompatible?'JPG ve WEBP, gömülü mesajı bozabilir':'';}
    if(embed&&['jpeg','webp'].includes(output))$('imageOutputType').value='png';
    const out=$('imageOutputType').value,canEncrypt=['base64','og2img'].includes(out);
-   $('fileProtectionField').hidden=!canEncrypt;
+   if(embed){$('protectImageFile').checked=false;}
+   $('fileProtectionField').hidden=!canEncrypt||embed;
    $('protectImageCode').checked=out==='base64'&&$('protectImageFile').checked;
    const protects=$('protectImageFile').checked&&canEncrypt;
    const secretProtected=embed&&$('lockSecret').checked;
@@ -454,14 +453,14 @@ body{font-size:14px;background:#d7e2eb}
    const mode=$('mode').value,info=modeInfo[mode];
    $('task').classList.toggle('mode-image',mode==='image');
    $('task').classList.toggle('mode-text',mode==='text');
-   if(mode==='image')document.querySelector('.left-step').appendChild($('keyFields'));
+   if(mode==='image')$('imageFlowSettings').after($('keyFields'));
    else $('keyFieldsHome').after($('keyFields'));
    $('modeDescription').textContent=info.description;
    $('textTools').hidden=mode!=='text';$('autoBox').hidden=mode!=='text';$('visualOperation').hidden=mode!=='image';
    $('fileField').hidden=mode!=='image';$('imageFlowSettings').hidden=mode!=='image';
    $('inputField').hidden=mode!=='text';$('explanationArea').hidden=mode!=='text';
    $('inputLabel').textContent='Metin veya şifreli kod';$('outputLabel').textContent='İşlem sonucu';
-   $('advancedDetails').hidden=mode!=='text';
+
    $('fileHint').textContent='Şifrele: görsel seçin. Çöz: .og2img, PNG/JPG veya .txt seçin; isterseniz Base64 kod yapıştırın.';
    $('imageFile').accept='image/png,image/jpeg,image/webp,image/gif,.og2img,.txt';
    $('sourceText').placeholder='Metninizi veya şifreli kodu yapıştırın.';
@@ -479,8 +478,7 @@ body{font-size:14px;background:#d7e2eb}
  }
  document.querySelectorAll('[data-mode]').forEach(el=>el.addEventListener('click',()=>{if($('mode').value===el.dataset.mode)return;$('mode').value=el.dataset.mode;$('mode').dispatchEvent(new Event('change'));}));
  $('simpleAlgorithm').addEventListener('change',syncSimple);
- selStages.forEach(stage=>stage.addEventListener('change',()=>{$('simpleAlgorithm').value='advanced';refreshChain();}));
- $('lockSecret').addEventListener('change',updateOptions);
+ $('lockSecret').addEventListener('change',()=>{if($('lockSecret').checked)$('password').value='';updateOptions();});
  $('protectImageFile').addEventListener('change',updateOptions);
  $('embedMessage').addEventListener('change',updateOptions);
  $('imageOutputType').addEventListener('change',updateOptions);
@@ -497,13 +495,14 @@ body{font-size:14px;background:#d7e2eb}
    revoke(selectedPreviewURL);selectedPreviewURL=null;
    incomingImageProtected=false;forcePasswordPrompt=false;
    const file=$('imageFile').files[0];$('selectedFile').hidden=!file;
-   if(!file){updateOptions();return;}
+   if(!file){$('embedMessage').checked=false;$('secretText').value='';updateOptions();return;}
    $('selectedFileName').textContent=file.name;
    $('selectedFileSize').textContent=(file.size/1024).toLocaleString('tr-TR',{maximumFractionDigits:1})+' KB';
    const isImage=typeImage(file);
    $('selectedPreview').hidden=!isImage;$('fileSymbol').hidden=isImage;
-   if(isImage){selectedPreviewURL=URL.createObjectURL(file);$('selectedPreview').src=selectedPreviewURL;}
-   else $('selectedPreview').removeAttribute('src');
+   if(isImage){selectedPreviewURL=URL.createObjectURL(file);$('selectedPreview').src=selectedPreviewURL;
+     $('embedMessage').checked=true;$('secretText').value='';$('lockSecret').checked=false;$('password').value='';$('imageOutputType').value='png';$('protectImageFile').checked=false;requestNativeOcr(file,'image');}
+   else {$('selectedPreview').removeAttribute('src');$('embedMessage').checked=false;$('secretText').value='';}
    if(/\.og2img$/i.test(file.name)){
      try{const prefix=await file.slice(0,32).text();if($('imageFile').files[0]!==file)return;
        incomingImageProtected=prefix.startsWith('OG2.AESGCM.');
@@ -513,9 +512,58 @@ body{font-size:14px;background:#d7e2eb}
  }
  function setStatus(message,kind=''){$('status').textContent=message;$('status').className='status'+(kind?' '+kind:'');}
  function revoke(url){if(url)URL.revokeObjectURL(url);}
- function clearResult(){$('resultPane').hidden=true;revoke(outputBlobURL);revoke(imageBlobURL);outputBlobURL=imageBlobURL=null;$('detectedType').hidden=true;$('outputText').value='';$('textDownload').hidden=true;$('imageDownload').hidden=true;$('imageDownload').classList.remove('dl-primary');$('copyResult').hidden=true;$('reverseResult').hidden=true;$('continueImage').hidden=true;$('extractedSecret').hidden=true;$('extractedSecretText').textContent='';$('previewBox').style.display='none';$('previewImage').removeAttribute('src');lastResult=null;}
- function asDownloadText(value){const blob=new Blob([value],{type:'text/plain;charset=utf-8'});outputBlobURL=URL.createObjectURL(blob);$('textDownload').href=outputBlobURL;$('textDownload').hidden=false;}
- function asDownloadImage(blob,name){imageBlobURL=URL.createObjectURL(blob);$('imageDownload').href=imageBlobURL;$('imageDownload').download=name;$('imageDownload').textContent='⬇ Görseli indir';$('imageDownload').hidden=false;$('imageDownload').classList.add('dl-primary');$('previewImage').src=imageBlobURL;$('previewBox').style.display='block';}
+ function clearResult(){$('resultPane').hidden=true;revoke(outputBlobURL);revoke(imageBlobURL);outputBlobURL=imageBlobURL=null;imageDownloadBlob=textDownloadBlob=null;$('detectedType').hidden=true;$('outputText').value='';$('textDownload').hidden=true;$('imageDownload').hidden=true;$('imageDownload').classList.remove('dl-primary');$('copyResult').hidden=true;$('reverseResult').hidden=true;$('extractedSecret').hidden=true;$('extractedSecretText').textContent='';$('previewBox').style.display='none';$('previewImage').removeAttribute('src');lastResult=null;}
+ function asDownloadText(value){const blob=new Blob([value],{type:'text/plain;charset=utf-8'});textDownloadBlob=blob;outputBlobURL=URL.createObjectURL(blob);$('textDownload').href=outputBlobURL;$('textDownload').hidden=false;}
+ function asDownloadImage(blob,name){imageDownloadBlob=blob;imageBlobURL=URL.createObjectURL(blob);$('imageDownload').href=imageBlobURL;$('imageDownload').download=name;$('imageDownload').textContent='⬇ Görseli indir';$('imageDownload').hidden=false;$('imageDownload').classList.add('dl-primary');$('previewImage').src=imageBlobURL;$('previewBox').style.display='block';}
+
+ let ocrCounter=0,saveCounter=0;
+ const pendingOcr=new Map(),pendingSaves=new Map();
+ function requestNativeOcr(file,target){
+   if(!window.KeyAndroid||typeof window.KeyAndroid.recognizeText!=='function'){
+     setStatus('Fotoğraftan otomatik metin okuma Android uygulamasında kullanılabilir.','bad');return;
+   }
+   const id='ocr-'+(++ocrCounter),reader=new FileReader();
+   pendingOcr.set(id,{file,target});
+   setStatus('Fotoğraftaki yazı okunuyor…','busy');
+   reader.onload=()=>{if(pendingOcr.has(id))window.KeyAndroid.recognizeText(String(reader.result),id);};
+   reader.onerror=()=>{pendingOcr.delete(id);setStatus('Fotoğraf okunamadı. Yeniden seçmeyi deneyin.','bad');};
+   reader.readAsDataURL(file);
+ }
+ window.onNativeOcrResult=(id,text,error)=>{
+   const item=pendingOcr.get(id);pendingOcr.delete(id);if(!item)return;
+   const active=item.target==='image'?$('imageFile').files[0]:$('textImageInput').files[0];
+   if(active!==item.file)return;
+   if(error){setStatus('Fotoğraftaki yazı okunamadı: '+error,'bad');return;}
+   const value=(text||'').trim();
+   if(item.target==='image'){
+     $('embedMessage').checked=true;
+     $('secretText').value=value;
+     updateOptions();
+     setStatus(value?'Fotoğraftaki metin okundu ve görsele eklenecek alana aktarıldı. İsterseniz düzenleyip şifreleyin.':'Fotoğrafta okunabilir metin bulunamadı. Mesaj alanını doldurabilir veya farklı bir fotoğraf seçebilirsiniz.',value?'good':'bad');
+   }else{
+     $('sourceText').value=value;
+     refreshChain();
+     setStatus(value?'Fotoğraftaki metin okundu ve metin alanına aktarıldı. Şifreleme yöntemini seçebilirsiniz.':'Fotoğrafta okunabilir metin bulunamadı.',value?'good':'bad');
+   }
+ };
+ window.onNativeSaveResult=(id,success,message)=>{
+   pendingSaves.delete(id);
+   setStatus(message|| (success?'Dosya indirildi.':'Dosya indirilemedi.'),success?'good':'bad');
+ };
+ function connectNativeDownload(id,getBlob){
+   $(id).addEventListener('click',async event=>{
+     if(!window.KeyAndroid||typeof window.KeyAndroid.saveFile!=='function')return;
+     event.preventDefault();
+     const blob=getBlob();if(!blob){setStatus('İndirilecek dosya bulunamadı. İşlemi yeniden çalıştırın.','bad');return;}
+     const reader=new FileReader(),requestId='save-'+(++saveCounter);
+     pendingSaves.set(requestId,true);
+     reader.onload=()=>window.KeyAndroid.saveFile(String(reader.result),$(id).download||'Key.bin',blob.type||'application/octet-stream',requestId);
+     reader.onerror=()=>{pendingSaves.delete(requestId);setStatus('Dosya indirilmeye hazırlanamadı.','bad');};
+     reader.readAsDataURL(blob);
+   });
+ }
+ connectNativeDownload('imageDownload',()=>imageDownloadBlob);
+ connectNativeDownload('textDownload',()=>textDownloadBlob);
  function positiveInt(raw,name,min,max){const x=Number(raw);if(!Number.isInteger(x)||x<min||x>max)throw Error(name+' '+min+'–'+max+' arasında tam sayı olmalı.');return x;}
  const mod=(x,n)=>((x%n)+n)%n;
  function shift(text,by){return text.replace(/[A-Za-z]/g,ch=>String.fromCharCode((ch<='Z'?65:97)+mod(ch.charCodeAt(0)-(ch<='Z'?65:97)+by,26)));}
@@ -733,8 +781,8 @@ body{font-size:14px;background:#d7e2eb}
      if(data.file){lastFileProtected=!!data.protected;asDownloadImageFile(data.file,data.filename);}
      else if(data.text&&!(data.image&&mode==='image')){asDownloadText(data.text);$('copyResult').hidden=false;}
      $('reverseResult').hidden=!(mode==='text'||(mode==='image'&&$('imageOperation').value==='code'&&!data.image));
-     if(data.image){asDownloadImage(data.image,data.filename);$('continueImage').hidden=false;}
-     if(data.file){$('continueImage').hidden=false;}
+     if(data.image){asDownloadImage(data.image,data.filename);}
+     
      if(data.secret!==undefined&&data.secret!==null){$('extractedSecret').hidden=false;$('extractedSecretText').textContent=data.secret;}
      if(data.detected){$('detectedType').hidden=false;$('detectedTitle').textContent='Tespit: '+data.detected+' · '+data.confidence;$('detectedDetail').textContent=data.note||'';}
      lastResult={...data,mode,reverse};$('resultPane').hidden=false;setStatus(data.message,data.detected==='Tür belirlenemedi'?'':'good');
@@ -747,40 +795,22 @@ body{font-size:14px;background:#d7e2eb}
    }finally{busy=false;[$('solveBtn'),$('encryptBtn'),$('printBtn')].forEach(b=>b.disabled=false);}
  }
  function asDownloadImageFile(blob,name){
-   imageBlobURL=URL.createObjectURL(blob);$('imageDownload').href=imageBlobURL;$('imageDownload').download=name;
+   imageDownloadBlob=blob;imageBlobURL=URL.createObjectURL(blob);$('imageDownload').href=imageBlobURL;$('imageDownload').download=name;
    $('imageDownload').textContent='⬇ '+(lastFileProtected?'Şifreli':'Dönüştürülmüş')+' dosyayı indir (.og2img)';$('imageDownload').hidden=false;$('imageDownload').classList.add('dl-primary');
  }
  $('copyResult').addEventListener('click',async e=>{e.preventDefault();const value=$('outputText').value;if(!value)return;try{await navigator.clipboard.writeText(value);setStatus('Sonuç panoya kopyalandı.','good');}catch{try{$('outputText').focus();$('outputText').select();const ok=document.execCommand('copy');if(!ok)throw Error();setStatus('Sonuç panoya kopyalandı.','good');}catch{setStatus('Otomatik kopyalama engellendi. Metni seçip Ctrl+C kullanın.','bad');}}});
  $('reverseResult').addEventListener('click',e=>{e.preventDefault();if(!$('outputText').value)return;$('sourceText').value=$('outputText').value;refreshChain();setStatus('Sonuç girişe taşındı. Çöz düğmesine basabilirsiniz.','good');$('sourceText').focus();});
- $('continueImage').addEventListener('click',e=>{
-   e.preventDefault();if(!lastResult)return;
-   const result=lastResult,blob=result.image||result.file;
-   if(!blob)return;
-   const file=new File([blob],result.filename||'sonuc.png',{type:result.file?'application/octet-stream':blob.type});
-   const dt=new DataTransfer();dt.items.add(file);$('imageFile').files=dt.files;
-   $('imageCodeInput').value='';$('codeEntryDetails').open=false;
-   $('embedMessage').checked=false;$('secretText').value='';$('lockSecret').checked=false;$('protectImageFile').checked=false;
-   refreshSelectedFile();clearResult();setStatus('Sonuç dosyası yeni giriş olarak seçildi. Diğer işlem için ayarlarınızı belirleyebilirsiniz.','good');
-   $('fileField').scrollIntoView({behavior:'smooth',block:'center'});
- });
  $('solveBtn').addEventListener('click',()=>run(true));$('encryptBtn').addEventListener('click',()=>run(false));
  function trimPrint(txt,max){return txt.length<=max?txt:txt.slice(0,max)+'\n\n[Uzun veri PDF için kısaltıldı. Eksiksiz veri için .txt dosyasını kullanın.]';}
  function printSheet(){const mode=$('mode').value,kind=$('imageOperation').value;const chain=selStages.map(x=>types.find(a=>a[0]===x.value)?.[1]).filter(x=>x&&x!=='— İşlem yok —').join(' → ')||'Seçilmedi';const date=new Date().toLocaleString('tr-TR');$('printDate').textContent='Tarih / Saat: '+date;$('printMode').textContent='İşlem türü: '+modeInfo[mode].badge;$('printChain').textContent='Yöntem: '+(mode==='text'?chain:$('imageOutputType').selectedOptions[0]?.textContent||'Görsel işlemleri');$('printStatus').textContent='Durum: '+$('status').textContent;const imgFile=$('imageFile').files[0];let input=mode==='text'?$('sourceText').value:('Görsel dosyası: '+(imgFile?.name||'Seçilmedi')+(kind==='stego'?'\nMesaj: '+($('secretText').value?'[Mesaj girildi]':'[Boş]'):kind==='code'?'\nKod girişi: '+($('sourceText').value?'[Kod girildi]':'[Boş]'):''));
   $('printInput').textContent=trimPrint(input,10000)||'—';$('printOutput').textContent=trimPrint($('outputText').value||'[Henüz işlem yapılmadı]',16000);
   const image=$('printImage');image.hidden=!lastResult?.image;if(lastResult?.image&&imageBlobURL)image.src=imageBlobURL;else image.removeAttribute('src');
  }
- $('printBtn').addEventListener('click',()=>{printSheet();window.print();});window.addEventListener('beforeprint',printSheet);
- // Beş ardışık tıklamayla başlık, kurum ve logo değişikliği. Gizli içerik depolanmaz.
- function fiveClicks(node,fn){let clicks=[];node.addEventListener('click',()=>{const now=Date.now();clicks=clicks.filter(t=>now-t<2700);clicks.push(now);if(clicks.length>=5){clicks=[];fn();}});}
- function editText(id,store,question){const curr=$(id).textContent;const result=window.prompt(question,curr);if(result&&result.trim()){const value=result.trim().slice(0,130);$(id).textContent=value;try{localStorage.setItem(store,value);}catch{}}}
- fiveClicks($('titleTarget'),()=>editText('mainTitle','olgunui2.title','Yeni ana başlık:'));
- fiveClicks($('institutionTarget'),()=>editText('institutionText','olgunui2.blogHeader','Yeni başlık bağlantısı veya metni:'));
- fiveClicks($('logoTarget'),()=>$('logoPicker').click());
- $('logoImg').addEventListener('error',()=>{$('logoImg').hidden=true;$('logoFallback').hidden=false;});
- $('logoPicker').addEventListener('change',()=>{const file=$('logoPicker').files[0];if(!file)return;if(!typeImage(file)){setStatus('Logo için PNG / JPG / WEBP / GIF dosyası kullanın.','bad');return;}if(file.size>2*1024*1024){setStatus('Logo en fazla 2 MB olmalı.','bad');return;}revoke(logoBlobURL);logoBlobURL=URL.createObjectURL(file);$('logoImg').hidden=false;$('logoFallback').hidden=true;$('logoImg').src=logoBlobURL;setStatus('Logo değiştirildi. Yeni logo yalnızca bu sayfa açıkken kullanılır.','good');$('logoPicker').value='';});
- try{const title=localStorage.getItem('olgunui2.title'),institution=localStorage.getItem('olgunui2.blogHeader');if(title)$('mainTitle').textContent=title;if(institution)$('institutionText').textContent=institution;}catch{}
- window.addEventListener('pagehide',()=>{revoke(outputBlobURL);revoke(imageBlobURL);revoke(selectedPreviewURL);revoke(textAttachmentURL);revoke(logoBlobURL);});
+ $('printBtn').addEventListener('click',()=>{printSheet();if(window.KeyAndroid&&typeof window.KeyAndroid.printPage==='function')window.KeyAndroid.printPage();else window.print();});window.addEventListener('beforeprint',printSheet);
+ $('titleTarget').addEventListener('click',()=>window.location.reload());
+ $('exitBtn').addEventListener('click',()=>{if(window.KeyAndroid&&typeof window.KeyAndroid.exit==='function')window.KeyAndroid.exit();else window.close();});
+ window.addEventListener('pagehide',()=>{revoke(outputBlobURL);revoke(imageBlobURL);revoke(selectedPreviewURL);revoke(textAttachmentURL);});
   applyMode();syncGuides();refreshChain();
-$('textImageInput').addEventListener('change',()=>{const f=$('textImageInput').files[0],box=$('textImagePreview'),img=box.querySelector('img');if(textAttachmentURL){URL.revokeObjectURL(textAttachmentURL);textAttachmentURL=null;}if(!f){box.hidden=true;img.removeAttribute('src');return;}if(!f.type.startsWith('image/')){setStatus('Lütfen bir görsel dosyası seçin.','bad');$('textImageInput').value='';box.hidden=true;return;}if(f.size>8*1024*1024){setStatus('Görsel en fazla 8 MB olabilir.','bad');$('textImageInput').value='';box.hidden=true;return;}textAttachmentURL=URL.createObjectURL(f);img.src=textAttachmentURL;box.hidden=false;setStatus('Görsel metin alanına eklendi; önizlemesi gösteriliyor.','good');});
+$('textImageInput').addEventListener('change',()=>{const f=$('textImageInput').files[0],box=$('textImagePreview'),img=box.querySelector('img');if(textAttachmentURL){URL.revokeObjectURL(textAttachmentURL);textAttachmentURL=null;}if(!f){box.hidden=true;img.removeAttribute('src');return;}if(!f.type.startsWith('image/')){setStatus('Lütfen bir görsel dosyası seçin.','bad');$('textImageInput').value='';box.hidden=true;return;}if(f.size>8*1024*1024){setStatus('Görsel en fazla 8 MB olabilir.','bad');$('textImageInput').value='';box.hidden=true;return;}textAttachmentURL=URL.createObjectURL(f);img.src=textAttachmentURL;box.hidden=false;requestNativeOcr(f,'text');});
 })();
 </script></body></html>

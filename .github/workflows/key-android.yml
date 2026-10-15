@@ -44,8 +44,10 @@ jobs:
                   if self.active: self.buf.append(data)
           parser = Scripts(); parser.feed(html)
           assert parser.items, 'No script found in packaged HTML'
-          assert 'Gelişmiş seçenekler' in html and 'id="advancedDetails" hidden' in html
-          assert 'Metne görsel ekle' in html and 'textImagePreview' in html
+          assert 'advancedDetails' not in html and 'Birden fazla yöntem' not in html
+          assert 'requestNativeOcr' in html and 'onNativeOcrResult' in html
+          assert 'textImagePreview' in html and 'titleTarget' in html and 'exitBtn' in html
+          assert 'continueImage' not in html and 'imageDownload' in html
           Path('/tmp/key-inline.js').write_text('\n'.join(parser.items), encoding='utf-8')
           ET.parse('Key_Android/app/src/main/AndroidManifest.xml')
           PY
