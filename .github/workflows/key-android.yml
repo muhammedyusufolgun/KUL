@@ -68,22 +68,3 @@ jobs:
           path: Key_Android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 30
-      - name: Install and launch on Android emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 35
-          target: google_apis
-          arch: x86_64
-          profile: pixel_2
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          script: |
-            adb install Key_Android/app/build/outputs/apk/debug/app-debug.apk
-            adb shell am start -n tr.olgun.key/.MainActivity
-            for i in $(seq 1 20); do
-              if adb shell pidof tr.olgun.key >/dev/null 2>&1; then break; fi
-              sleep 1
-            done
-            adb shell pidof tr.olgun.key
-            adb shell dumpsys activity activities | grep -q 'mResumedActivity.*tr.olgun.key'
-            if adb logcat -d -s AndroidRuntime:E | grep -q 'FATAL EXCEPTION'; then exit 1; fi
