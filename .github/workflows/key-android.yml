@@ -53,6 +53,8 @@ jobs:
       - name: Build and run unit tests
         working-directory: Key_Android
         run: gradle --no-daemon clean testDebugUnitTest assembleDebug
+      - name: Add Android build tools to PATH
+        run: echo "$ANDROID_HOME/build-tools/35.0.0" >> "$GITHUB_PATH"
       - name: Verify APK signature and package
         run: |
           APK=Key_Android/app/build/outputs/apk/debug/app-debug.apk
