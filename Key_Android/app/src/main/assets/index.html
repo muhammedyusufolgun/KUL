@@ -273,6 +273,50 @@ button.header-title{flex:1;min-width:0;background:transparent;border:0;padding:3
  .screen-footer{padding:0 3px}
 }
 @media print{.header{display:none!important}}
+/* Mode picker stays horizontal in narrow Android WebViews too. */
+#modeCards{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:stretch;width:100%;gap:6px}
+#modeCards>.mode-card{display:flex!important;flex:1 1 0!important;width:0;min-width:0;flex-direction:row!important;align-items:center;justify-content:flex-start!important;text-align:left!important;}
+@media(max-width:660px){
+ .shell{padding:3px;border-top-width:3px}
+ .inner{min-height:0;padding:4px;gap:4px}
+ .header{padding:4px 6px}
+ .intro{gap:5px;margin-bottom:5px}
+ .intro h2{font-size:15px}
+ .intro p{margin-top:2px;font-size:10px;line-height:1.3}
+ .dashboard,.task{padding:6px}
+ .task-header{margin-bottom:5px}
+ .task-help{margin-bottom:5px;padding:6px 7px}
+ .layout-step{gap:4px}
+ .right-step{padding-top:5px}
+ .left-step textarea{min-height:108px!important}
+ .field{margin-bottom:4px}
+ label{margin-bottom:3px}
+ .hint{margin-top:3px}
+ .method-choice{padding:6px;margin-bottom:5px}
+ .method-choice select{height:38px;min-height:38px;padding:6px 8px}
+ .input-area{padding:6px;margin-bottom:5px}
+ .file-mode{margin-bottom:5px}
+ .visual-choice{padding:6px;margin-bottom:5px}
+ .dropzone{min-height:68px;padding:6px}
+ .auto-card{margin:0 0 5px;padding:6px 7px}
+ #keyFields,#quickSettings{margin-top:5px}
+ #modeCards{gap:4px}
+ #modeCards>.mode-card{min-height:44px;padding:5px 7px;gap:6px}
+ #modeCards .mode-icon{width:26px;height:26px;font-size:15px}
+ #modeCards .mode-name{font-size:12px}
+ #modeCards .mode-sub{display:none!important}
+ .process-bar{padding:6px;gap:5px;margin-top:3px}
+ .actions{gap:4px}
+ .action{padding:7px 2px}
+ #status{margin:5px 0 0;padding:6px 7px}
+ #resultPane{padding:7px;margin-top:6px}
+ .explanation-area{padding:7px;margin-top:5px}
+ .explanation-area p{margin-top:3px}
+ .explanation-steps{gap:3px;margin-top:5px}
+ .attachment-box{padding:6px;margin-top:5px}
+ .selected-file{gap:7px;margin-top:5px;padding:6px}
+ .screen-footer{padding:0 2px}
+}
 </style></head><body>
 <div class="shell"><div class="inner">
 <header class="header">
@@ -281,7 +325,7 @@ button.header-title{flex:1;min-width:0;background:transparent;border:0;padding:3
 <main>
 <section class="dashboard" aria-label="İşlem seçimi">
   <div class="intro"><div><h2>Ne yapmak istiyorsunuz?</h2><p>Bir seçenek seçin, içeriğinizi ekleyin ve işlemi başlatın.</p></div><button id="exitBtn" class="exit-button" type="button">Çıkış</button></div>
-  <div class="mode-cards" role="group" aria-label="İşlem türü">
+  <div id="modeCards" class="mode-cards" role="group" aria-label="İşlem türü">
     <button class="mode-card is-active" data-mode="text" type="button" aria-pressed="true"><span class="mode-icon" aria-hidden="true">Aa</span><span><span class="mode-name">Metin</span><span class="mode-sub">Yazıyı şifrele / çöz</span></span></button>
     <button class="mode-card" data-mode="image" type="button" aria-pressed="false"><span class="mode-icon" aria-hidden="true">▧</span><span><span class="mode-name">Görsel</span><span class="mode-sub">Dönüştür, geri aç, mesaj göm</span></span></button>
   </div>
